@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-footer.component.css']
 })
 export class MainFooterComponent implements OnInit {
+  isLoggedIn = false;
   loggedInPerson = 'admin';
   constructor() { }
 

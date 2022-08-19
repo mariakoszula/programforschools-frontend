@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="alert alert-danger" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+  <div class="col-md-12">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Logowanie</h3>
+      </div>
+      <div *ngIf="isLoading" style="text: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
+      <form  *ngIf="!isLoading" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="inputEmail">Email</label>
+            <input formControlName="email" type="email" name="email" class="form-control" id="inputEmail"
+                   placeholder="Wpisz email">
+          </div>
+          <div class="form-group">
+            <label for="inputPassword">Hasło</label>
+            <input formControlName="password" type="password" name="password" class="form-control" id="inputPassword"
+                   placeholder="Wpisz hasło">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="!authForm.valid">Zaloguj</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

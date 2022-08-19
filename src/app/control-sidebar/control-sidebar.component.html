@@ -1,7 +1,7 @@
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
-      <div class="p-3">
+      <div *ngIf="isLogin" class="p-3">
       <h5>{{ currentProgram }}</h5>
       <p>Formularze do wyboru programu</p>
     </div>

@@ -2,7 +2,10 @@
 <footer class="main-footer">
   <strong>Copyright &copy; 2022 <a href="#">rykosystem</a>.</strong>
   Wszystkie prawa zastrzeżone.
-  <div class="float-right d-none d-sm-inline-block">
+  <div *ngIf="isLoggedIn" class="float-right d-none d-sm-inline-block">
     <b>Zalogowany:</b> {{ loggedInPerson }}
+  </div>
+  <div *ngIf="!isLoggedIn" class="float-right d-none d-sm-inline-block">
+    <a routerLink="/logowanie"><b>Zaloguj się</b></a>
   </div>
 </footer>

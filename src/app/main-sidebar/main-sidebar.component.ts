@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Role, RoleUtils} from '../shared/namemapping.utils';
 
 @Component({
   selector: 'app-main-sidebar',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-sidebar.component.css']
 })
 export class MainSidebarComponent implements OnInit {
-  appName = "rykosystem";
+  appName = RoleUtils.getProgramTitle();
+  userIcon = RoleUtils.getIconName();
+  isLogin = false;
   constructor() { }
 
   ngOnInit(): void {

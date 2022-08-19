@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ControlSidebarComponent implements OnInit {
   currentProgram = "Program nr 1";
+  isLogin = false;
   constructor() { }
 
   ngOnInit(): void {
