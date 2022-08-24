@@ -1,8 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component,  OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService, AuthResponseData} from "./auth.service";
+import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
-import {HttpErrorResponse, HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-auth',
@@ -34,7 +33,6 @@ export class AuthComponent implements OnInit {
     this.isLoading = true;
     this.auth.signup(email, password).subscribe({
       next: responseData => {
-        console.log(responseData);
         this.isLoading = false;
         this.router.navigate(['/']);
       },

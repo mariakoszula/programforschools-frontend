@@ -13,13 +13,16 @@
       <div class="image">
         <img src="assets/{{userIcon}}" class="img-circle elevation-2" alt="UserImage">
       </div>
-      <div *ngIf="!isLogin" class="info">
+      <div *ngIf="!isLoggedIn" class="info">
         <a routerLink="/logowanie" class="d-block">Niezalogowano</a>
+      </div>
+      <div *ngIf="isLoggedIn" class="info">
+        <a routerLink="/uzytkownicy" class="d-block">{{ this.userName }}</a>
       </div>
     </div>
 
     <!-- Sidebar Menu -->
-    <nav *ngIf="isLogin" class="mt-2">
+    <nav *ngIf="isLoggedIn" class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  backendUrl: "TODO",
+  backendUrl: "https://rykosystem-rest-api.herokuapp.com",
   mainProgramName: 'RYKOSystem'
 };

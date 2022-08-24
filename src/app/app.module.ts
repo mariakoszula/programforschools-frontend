@@ -6,12 +6,11 @@ import { MainHeaderComponent } from './main-header/main-header.component';
 import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
 import { ControlSidebarComponent } from './control-sidebar/control-sidebar.component';
 import { MainFooterComponent } from './main-footer/main-footer.component';
-import {AuthComponent} from "./auth/auth.component";
 import {RoutingModule} from "./routing.module";
 import {ContentModule} from "./content-wrapper/content.module";
 import {ReactiveFormsModule} from "@angular/forms";
-import {LoadingSpinnerComponent} from "./shared/loading-spinner/loading-spinner.component";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptorService} from "./auth/auth-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -19,9 +18,7 @@ import {HttpClientModule} from "@angular/common/http";
     MainHeaderComponent,
     MainSidebarComponent,
     ControlSidebarComponent,
-    MainFooterComponent,
-    AuthComponent,
-    LoadingSpinnerComponent
+    MainFooterComponent
 
   ],
   imports: [
@@ -31,7 +28,13 @@ import {HttpClientModule} from "@angular/common/http";
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,6 +4,9 @@
   Wszystkie prawa zastrzeżone.
   <div *ngIf="isLoggedIn" class="float-right d-none d-sm-inline-block">
     <b>Zalogowany:</b> {{ loggedInPerson }}
+   <button type="button" class="btn btn-default btn-sm" (click)="onLogout()">
+      <i class="fas fa-sign-out-alt"></i>
+   </button>
   </div>
   <div *ngIf="!isLoggedIn" class="float-right d-none d-sm-inline-block">
     <a routerLink="/logowanie"><b>Zaloguj się</b></a>
