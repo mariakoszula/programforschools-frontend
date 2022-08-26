@@ -9,9 +9,14 @@ export class NavigationHistory {
   }
   preparePathName(): string
   {
-    if (this.exactPath == "/") return "Strona Główna";
-    else
-      return this.exactPath.charAt(1).toUpperCase() + this.exactPath.substring(2);
+    if (this.exactPath == "/"){
+      return "Strona Główna";
+    }
+    else {
+      let partsOfPath = this.exactPath.split("/");
+      let lastPart = partsOfPath[partsOfPath.length-1];
+      return lastPart.charAt(0).toUpperCase() + lastPart.substring(1);
+    }
   }
 }
 

@@ -2,25 +2,30 @@ import {environment} from "../../environments/environment"
 import {User} from "../auth/user.model";
 
 export enum Role {
-  Undefined,
   Admin,
-  Program
+  Program,
+  Finance,
+  Undefined
+}
+
+export interface CommonResponse{
+  message: string;
 }
 
 export class RoleUtils {
+  public static roles_names: string[] =  [
+    "Admin Panel",
+    "Program dla szkół",
+    "Zarządzanie finansami",
+    environment.mainProgramName
+  ];
+
   public static getIconName(role?: Role) {
     let icon = "apples.PNG";
     if (role === undefined) {
       return icon;
     }
-    switch (role) {
-      case Role.Admin:
-        icon = "admin.png";
-        break;
-      case Role.Program:
-        icon = "program_manager.png";
-        break;
-    }
+    icon = RoleUtils.frontendRoleToBackend(role) + ".png";
     return icon;
   }
 
@@ -29,38 +34,44 @@ export class RoleUtils {
     if (role === undefined) {
       return title;
     }
-    switch (role) {
-      case Role.Admin:
-        title = "AdminPanel";
-        break;
-      case Role.Program:
-        title = "Program dla szkół";
-        break;
-    }
+    title = RoleUtils.roles_names[role];
     return title;
   }
 
-  public static getStringFromRole(role: Role) {
+  public static frontendRoleToBackend(role: Role) {
     let str_role = ""
     switch (role) {
       case Role.Admin:
-        str_role = "Administrator";
+        str_role = "admin";
         break;
       case Role.Program:
-        str_role = "Manager programu do szkół";
+        str_role = "program_manager";
+        break;
+      case Role.Finance:
+        str_role = "finance_manager";
         break;
     }
     return str_role;
   }
 
-  public static getRoleFromString(role: string) {
+  public static backendRoleToFrontend(role: string) {
     let converted_role = Role.Undefined;
     switch (role) {
       case "admin":
         converted_role = Role.Admin;
         break;
+      case "program_manager":
+        converted_role = Role.Program;
+        break;
+      case "finance_manager":
+        converted_role = Role.Finance;
+        break;
     }
     return converted_role;
+  }
+
+  public static toEnum(role:string) {
+    return RoleUtils.roles_names.indexOf(role);
   }
   public static isAdmin(user: User) {
     return user.role === Role.Admin;

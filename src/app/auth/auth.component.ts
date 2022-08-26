@@ -31,7 +31,7 @@ export class AuthComponent implements OnInit {
     const email = this.authForm.value.email;
     const password = this.authForm.value.password;
     this.isLoading = true;
-    this.auth.signup(email, password).subscribe({
+    this.auth.login(email, password).subscribe({
       next: responseData => {
         this.isLoading = false;
         this.router.navigate(['/']);
