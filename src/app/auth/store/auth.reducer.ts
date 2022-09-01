@@ -51,6 +51,7 @@ export function authReducer(state = initialState, action: AuthActions): State {
       if (updated_user) {
         updated_user.username = action.userPayload.username;
         updated_user.role = RoleUtils.backendRoleToFrontend((action.userPayload.role));
+        localStorage.setItem("userData", JSON.stringify(updated_user));
       }
       return {
         ...state,

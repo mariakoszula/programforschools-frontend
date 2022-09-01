@@ -4,6 +4,9 @@ import {AuthService} from "../auth/auth.service";
 import {RoleUtils} from "../shared/namemapping.utils";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
+import {Store} from "@ngrx/store";
+import * as fromApp from "../store/app.reducer";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-users',
@@ -21,11 +24,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   constructor(private authService: AuthService, private router: Router,
-              private activeRoute: ActivatedRoute) {
+              private activeRoute: ActivatedRoute, private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user.subscribe(user => {
+    this.userSubscription = this.store.select('auth').pipe(map(authState => authState.user)).subscribe(user => {
       if (user) {
         this.current_user = user;
       }

@@ -9,8 +9,10 @@ import {
 } from "@angular/common/http";
 import {catchError, Observable, Subscription, switchMap, throwError} from "rxjs";
 import {AuthService} from "./auth.service";
-import {exhaustMap, take} from "rxjs/operators";
+import {exhaustMap, map, take} from "rxjs/operators";
 import {User} from "./user.model";
+import {Store} from "@ngrx/store";
+import * as fromApp from "../store/app.reducer"
 
 @Injectable()
 
@@ -18,11 +20,15 @@ export class AuthInterceptorService implements HttpInterceptor {
   private isTokenRefreshing = false;
   refreshTokenSub: Subscription | undefined;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private store: Store<fromApp.AppState>) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.authService.user.pipe(take(1), exhaustMap(user => {
+    return this.store.select('auth').pipe(take(1),
+      map(authState => {
+        return authState.user;
+      }),
+      exhaustMap(user => {
       if (!user || req.url.includes("refresh") || req.url.includes("login") || req.url.includes("logout")) {
         return next.handle(req);
       }

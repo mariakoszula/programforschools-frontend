@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {AuthService} from "../../auth/auth.service";
 import {Subscription} from "rxjs";
-import {RoleUtils} from "../../shared/namemapping.utils";
+import {Store} from "@ngrx/store";
+import * as fromApp from "../../store/app.reducer";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,11 +15,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   private userSubscription: Subscription | undefined;
 
-  constructor(private authService: AuthService) {
+  constructor(private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
-      this.userSubscription = this.authService.user.subscribe(user => {
+      this.userSubscription = this.store.select('auth').pipe(map(authState => authState.user)).subscribe(user => {
       this.isLoggedIn = !!user;
     });
   }

@@ -1,11 +1,11 @@
 import {Action} from "@ngrx/store";
 import {UserInterface} from "../user.model";
 
-export const LOGIN = "LOGIN";
-export const LOGOUT = "LOGOUT";
-export const UPDATE = "UPDATE";
-export const AUTO_LOGIN = "AUTO_LOGIN";
-export const REFRESH_TOKEN = "REFRESH_TOKEN";
+export const LOGIN = "[Auth] LOGIN";
+export const LOGOUT = "[Auth] LOGOUT";
+export const UPDATE = "[Auth] UPDATE";
+export const AUTO_LOGIN = "[Auth] AUTO_LOGIN";
+export const REFRESH_TOKEN = "[Auth] REFRESH_TOKEN";
 
 
 export class Login implements Action {

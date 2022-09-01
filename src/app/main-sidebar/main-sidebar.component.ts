@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Role, RoleUtils} from '../shared/namemapping.utils';
 import {AuthService} from "../auth/auth.service";
 import {Subscription} from "rxjs";
+import {Store} from "@ngrx/store";
+import * as fromApp from "../store/app.reducer";
+import {map, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-main-sidebar',
@@ -14,12 +17,13 @@ export class MainSidebarComponent implements OnInit {
   userName: string = '';
   isLoggedIn = false;
   private userSubscription: Subscription | undefined;
-
-  constructor(private authService: AuthService) {
+  constructor(private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user.subscribe(user => {
+    this.userSubscription = this.store.select('auth').pipe(map(authState=> {
+        return authState.user;
+      })).subscribe(user => {
       this.isLoggedIn = !!user;
       if (user) {
         this.appName = RoleUtils.getProgramTitle(user.role);

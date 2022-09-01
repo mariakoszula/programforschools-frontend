@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpStatusCode} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, tap, throwError} from "rxjs";
+import {BehaviorSubject, Subscription, tap, throwError} from "rxjs";
 import {User, UserInterface} from "./user.model";
 import {Router} from "@angular/router";
 import {Role, RoleUtils, CommonResponse} from "../shared/namemapping.utils";
 import * as fromApp from "../store/app.reducer"
 import * as AuthActions from "./store/auth.actions";
 import {Store} from "@ngrx/store";
+import {map, take} from "rxjs/operators";
 
 export interface AuthResponseData {
   id: string,
@@ -34,7 +35,6 @@ export interface RefreshResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  user = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {
   }
@@ -57,25 +57,15 @@ export class AuthService {
     }));
     this.userData(+ueId).subscribe({
       next: (response) => {
-        let user_updated = this.user.getValue();
-        if (!user_updated || response.email !== user_updated?.email) {
-          this.logout();
-          if (user_updated)
-            console.log("Inconsistent data received from server for user: " + user_updated?.email);
-          else
-            console.log("Inconsistent data user does not exists");
-        } else {
-          this.store.dispatch(new AuthActions.Update({ username: response.username, role: response.role }));
-          localStorage.setItem("userData", JSON.stringify(user_updated));
-        }
+        this.store.dispatch(new AuthActions.Update({username: response.username, role: response.role}));
       },
       error: (errorResponse) => {
         console.log(errorResponse);
         this.logout();
       }
     });
-
   }
+
 
   userData(id: number) {
     return this.http.get<UserResponseData>(
@@ -100,7 +90,8 @@ export class AuthService {
     );
   }
 
-  users(current_user_id: number): User[] {
+  users(current_user_id: number):
+    User[] {
     let users: User[] = [];
     this.http.get<UsersResponseData>(
       environment.backendUrl + '/users'
@@ -128,6 +119,7 @@ export class AuthService {
     return users;
   }
 
+
   handleError(errorResp: HttpErrorResponse): string {
     console.log(errorResp);
     let errorMessage = 'Wystąpił nieznany błąd!';
@@ -148,14 +140,17 @@ export class AuthService {
 
 
   logout() {
-    let user = this.user.getValue();
-    if (user) {
-      this.removeToken(user.refresh_token);
-      this.removeToken(user.access_token);
-    }
-    this.store.dispatch(new AuthActions.Logout());
-    this.router.navigate(['/logowanie']);
-    localStorage.removeItem("userData");
+    this.store.select('auth').pipe(take(1), map(authState => authState.user)).subscribe(
+      user => {
+        if (user) {
+          this.removeToken(user.refresh_token);
+          this.removeToken(user.access_token);
+        }
+        this.store.dispatch(new AuthActions.Logout());
+        this.router.navigate(['/logowanie']);
+        localStorage.removeItem("userData");
+      }
+    );
   }
 
   autoLogin() {
@@ -164,36 +159,41 @@ export class AuthService {
       return;
     const userData: UserInterface = JSON.parse(userDataJson);
     this.store.dispatch(new AuthActions.AutoLogin({
-      email: userData.email, id: userData.id, access_token: userData.access_token, refresh_token: userData.refresh_token,
-      username: userData.username, role: userData.role
+      email: userData.email,
+      id: userData.id,
+      access_token: userData.access_token,
+      refresh_token: userData.refresh_token,
+      username: userData.username,
+      role: userData.role
     }));
   }
 
   refresh() {
-    let user = this.user.getValue();
-    if (!user) {
+    const userDataJson = localStorage.getItem("userData");
+    if (!userDataJson)
       return;
-    }
+    const userData: UserInterface = JSON.parse(userDataJson);
     return this.http.post<RefreshResponseData>(
       environment.backendUrl + "/refresh",
       null,
       {
-        headers: AuthService.createAuthorizationHeader(user.refresh_token)
+        headers: AuthService.createAuthorizationHeader(userData.refresh_token)
       }).pipe(tap(
       response => {
-        if (user) {
-          this.store.dispatch(new AuthActions.RefreshToken({access_token: response.access_token}));
-          localStorage.setItem("userData", JSON.stringify(user));
-        }
-      }
-    ));
+        let user = new User(userData.email, +userData.id, response.access_token, userData.refresh_token, userData.username, userData.role);
+        this.store.dispatch(new AuthActions.RefreshToken({access_token: response.access_token}));
+        localStorage.setItem("userData", JSON.stringify(user));
+      }));
   }
 
   static authorizationToken(token: string) {
     return 'Bearer ' + token;
   }
 
-  static createAuthorizationHeader(token: string) {
+  static createAuthorizationHeader(token
+                                     :
+                                     string
+  ) {
     let header = new HttpHeaders({
       "Authorization": AuthService.authorizationToken(token)
     });
