@@ -11,6 +11,8 @@ import {ContentModule} from "./content-wrapper/content.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./auth/auth-interceptor.service";
+import * as fromApp from "./store/app.reducer"
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {AuthInterceptorService} from "./auth/auth-interceptor.service";
     RoutingModule,
     ContentModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    StoreModule.forRoot(fromApp.appReducer)
   ],
   providers: [
     {

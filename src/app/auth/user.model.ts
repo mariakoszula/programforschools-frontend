@@ -1,8 +1,15 @@
 import { Role } from '../shared/namemapping.utils'
-//TODO export class UserData?
-export class UserData {
 
+
+export interface UserInterface {
+  email: string;
+  id: string;
+  access_token: string;
+  refresh_token: string;
+  username: string;
+  role: Role
 }
+
 export class User {
   constructor(public email: string,
               public id: number,

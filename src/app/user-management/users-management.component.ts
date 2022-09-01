@@ -6,8 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-users-management',
-  template: '<router-outlet></router-outlet>'
-
+  template: '<router-outlet></router-outlet>',
 })
 
 export class UsersManagementComponent implements OnInit {

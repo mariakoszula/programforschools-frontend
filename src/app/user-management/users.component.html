@@ -1,8 +1,10 @@
 <app-alert-simple *ngIf="userInfo" [messageHead]="userInfo"></app-alert-simple>
 
+<div class="d-flex align-items-stretch flex-row flex-wrap">
 <app-user-display [user]="current_user" [isAdmin]="isAdmin"></app-user-display>
 <app-user-display (userChange)="onUserChange($event)" *ngFor="let _user of users" [user]="_user"
                   [isAdmin]="isAdmin"></app-user-display>
+</div>
 <div class="col-12">
   <a (click)="addUser()" class="btn btn-primary float-right">
     <i class="fas fa-user"></i> Dodaj użytkownika
