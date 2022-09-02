@@ -1,15 +1,15 @@
 import {Actions, createEffect, Effect, ofType} from "@ngrx/effects";
 import * as  AuthActions from "./auth.actions";
-import {catchError, Observable, of, switchMap, tap} from "rxjs";
+import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {HttpClient, HttpErrorResponse, HttpStatusCode} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {Injectable} from "@angular/core";
-import {AuthService, UserResponseData} from "../auth.service";
+import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
 import {UserInterface} from "../user.model";
 import {AppState} from "../../store/app.reducer";
-import {State} from "@ngrx/store";
+import {Store} from "@ngrx/store";
 
 export interface AuthResponseData {
   id: string,
@@ -76,10 +76,10 @@ export class AuthEffects {
 
   authRedirectAndSaveData = createEffect(() => this.action$.pipe(
       ofType(AuthActions.LOGIN_SUCCESS),
-      tap(() => {
-        console.log('authRedirectAndSaveData');
-        console.log(this.action$);
-        console.log(this.state);
+      withLatestFrom(this.store$),
+      tap(([_, state]) => {
+        console.log(state.auth.user);
+        localStorage.setItem("userData", JSON.stringify(state.auth.user));
         this.router.navigate(["/"]);
 
       })),
@@ -122,7 +122,7 @@ export class AuthEffects {
     })));
 
   constructor(private action$: Actions, private http: HttpClient, private router: Router,
-              private state: State<AppState>,
+              private store$: Store<AppState>,
               private authService: AuthService) {
   }
 }

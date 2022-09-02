@@ -51,7 +51,6 @@ export function authReducer(state = initialState, action: AuthActions): State {
       {
         updated_user = new User(state.user.email, state.user.id, state.user.access_token, state.user.refresh_token,
           action.payload.username, RoleUtils.backendRoleToFrontend((action.payload.role)));
-        localStorage.setItem("userData", JSON.stringify(updated_user)); // TODO move this to effects
       }
       return {
         ...state,

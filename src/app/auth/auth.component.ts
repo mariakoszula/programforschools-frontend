@@ -8,8 +8,7 @@ import * as AuthActions from "../auth/store/auth.actions"
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  templateUrl: './auth.component.html'
 })
 export class AuthComponent implements OnInit {
   authForm: FormGroup;
