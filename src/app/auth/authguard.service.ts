@@ -16,16 +16,17 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | UrlTree {
-        return this.store.select('auth').pipe(
-          take(1),
-          map(authState => {
-            return authState.user;
-          }),
-          map(user => {
-            const isAuth = !!user;
-            if (isAuth)  return true;
-            return this.router.createUrlTree(["/logowanie"]); }));
-    }
+    return this.store.select('auth').pipe(
+      take(1),
+      map(authState => {
+        return authState.user;
+      }),
+      map(user => {
+        const isAuth = !!user;
+        if (isAuth) return true;
+        return this.router.createUrlTree(["/logowanie"]);
+      }));
+  }
 }
 
 @Injectable({
@@ -38,16 +39,15 @@ export class AuthGuardForLogin implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | UrlTree {
-      if (!this.store.select('auth').pipe(
-        take(1),
-        map(authStatus => {
-          return authStatus.user;
-        })
-      )){
-        return true;
-      }
-      return this.router.createUrlTree(["/"]);
-     }
+    let user;
+    this.store.select('auth').subscribe(authState => {
+      user = authState.user;
+    });
+    if (!user) {
+      return true;
+    }
+    return this.router.createUrlTree(["/"]);
+  }
 }
 
 @Injectable({
@@ -60,14 +60,15 @@ export class AdminGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | UrlTree {
-        return this.store.select('auth').pipe(
-          take(1),
-          map(authState => {
-            return authState.user;
-          }),
-          map(user => {
-            const isAuth = !!user;
-            if (isAuth && RoleUtils.isAdmin(user))  return true;
-            return this.router.createUrlTree(["/"]); }));
-    }
+    return this.store.select('auth').pipe(
+      take(1),
+      map(authState => {
+        return authState.user;
+      }),
+      map(user => {
+        const isAuth = !!user;
+        if (isAuth && RoleUtils.isAdmin(user)) return true;
+        return this.router.createUrlTree(["/"]);
+      }));
+  }
 }

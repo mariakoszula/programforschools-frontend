@@ -13,6 +13,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./auth/auth-interceptor.service";
 import * as fromApp from "./store/app.reducer"
 import { StoreModule } from '@ngrx/store';
+import {EffectsModule} from "@ngrx/effects";
+import {AuthEffects} from "./auth/store/auth.effects";
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { StoreModule } from '@ngrx/store';
     ContentModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot(fromApp.appReducer)
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects])
   ],
   providers: [
     {

@@ -1,61 +1,106 @@
 import {User} from "../user.model";
-import {AuthActions, AUTO_LOGIN, LOGIN, LOGOUT, REFRESH_TOKEN, UPDATE} from "./auth.actions";
+import {
+  AUTH_ERROR,
+  AuthActions,
+  AUTO_LOGIN,
+  AUTO_LOGIN_FINISH,
+  LOGIN_BEGIN,
+  LOGIN_IN_PROGRESS,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REFRESH_TOKEN
+} from "./auth.actions";
 import {RoleUtils} from "../../shared/namemapping.utils";
 
 export interface State {
   user: User | null;
+  authError: string | null;
+  isLoading: boolean;
 }
 
 const initialState: State = {
-  user: null
+  user: null,
+  authError: null,
+  isLoading: false
 };
 
 
 export function authReducer(state = initialState, action: AuthActions): State {
   switch (action.type) {
-    case LOGIN:
-      const user = new User(
-        action.userPayload.email,
-        +action.userPayload.id,
-        action.userPayload.access_token,
-        action.userPayload.refresh_token);
+    case LOGIN_BEGIN:
       return {
-        user: user
+        ...state,
+        user: null,
+        authError: null,
+        isLoading: true
+      };
+    case LOGIN_IN_PROGRESS:
+      const user = new User(
+        action.payload.email,
+        +action.payload.id,
+        action.payload.access_token,
+        action.payload.refresh_token);
+      return {
+        user: user,
+        authError: null,
+        isLoading: true
+      };
+    case LOGIN_SUCCESS:
+      let updated_user: User | null = null;
+      if (state.user)
+      {
+        updated_user = new User(state.user.email, state.user.id, state.user.access_token, state.user.refresh_token,
+          action.payload.username, RoleUtils.backendRoleToFrontend((action.payload.role)));
+        localStorage.setItem("userData", JSON.stringify(updated_user)); // TODO move this to effects
+      }
+      return {
+        ...state,
+        user: updated_user,
+        authError: null,
+        isLoading: false
       };
     case LOGOUT:
       return {
-        user: null
+        user: null,
+        authError: null,
+        isLoading: false
       };
     case AUTO_LOGIN:
+        return {
+        user: null,
+        authError: null,
+        isLoading: false
+      };
+    case AUTO_LOGIN_FINISH:
       const autoUser = new User(
-        action.userPayload.email,
-        +action.userPayload.id,
-        action.userPayload.access_token,
-        action.userPayload.refresh_token,
-        action.userPayload.username,
-        action.userPayload.role);
+        action.payload.email,
+        +action.payload.id,
+        action.payload.access_token,
+        action.payload.refresh_token,
+        action.payload.username,
+        action.payload.role);
       return {
         ...state,
-        user: autoUser
+        user: autoUser,
+        authError: null,
+        isLoading: false
       };
     case REFRESH_TOKEN:
       let user_with_token_refreshed: User | null = state.user;
       if (user_with_token_refreshed)
-        user_with_token_refreshed.access_token = action.userPayload.access_token;
+        user_with_token_refreshed.access_token = action.payload.access_token;
       return {
         ...state,
-        user: user_with_token_refreshed
+        user: user_with_token_refreshed,
+        authError: null,
+        isLoading: false
       };
-    case UPDATE:
-      let updated_user: User | null = state.user;
-      if (updated_user) {
-        updated_user.username = action.userPayload.username;
-        updated_user.role = RoleUtils.backendRoleToFrontend((action.userPayload.role));
-        localStorage.setItem("userData", JSON.stringify(updated_user));
-      }
+    case AUTH_ERROR:
       return {
         ...state,
-        user: updated_user
+        user: null,
+        authError: action.payload,
+        isLoading: false
       };
     default:
       return state;

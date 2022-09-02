@@ -1,20 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpStatusCode} from "@angular/common/http";
+import {HttpClient, HttpHeaders, } from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, Subscription, tap, throwError} from "rxjs";
+import {tap} from "rxjs";
 import {User, UserInterface} from "./user.model";
 import {Router} from "@angular/router";
 import {Role, RoleUtils, CommonResponse} from "../shared/namemapping.utils";
 import * as fromApp from "../store/app.reducer"
 import * as AuthActions from "./store/auth.actions";
 import {Store} from "@ngrx/store";
-import {map, take} from "rxjs/operators";
 
-export interface AuthResponseData {
-  id: string,
-  access_token: string;
-  refresh_token: string;
-}
 
 export interface UserResponseData {
   id: string,
@@ -38,34 +32,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {
   }
-
-  login(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      environment.backendUrl + '/login',
-      {
-        email: email,
-        password: password
-      }
-    ).pipe(tap(respData => {
-      this.onAuthentication(email, respData.id, respData.access_token, respData.refresh_token);
-    }));
-  }
-
-  private onAuthentication(email: string, ueId: string, accessToken: string, refreshToken: string) {
-    this.store.dispatch(new AuthActions.Login({
-      email: email, id: ueId, access_token: accessToken, refresh_token: refreshToken
-    }));
-    this.userData(+ueId).subscribe({
-      next: (response) => {
-        this.store.dispatch(new AuthActions.Update({username: response.username, role: response.role}));
-      },
-      error: (errorResponse) => {
-        console.log(errorResponse);
-        this.logout();
-      }
-    });
-  }
-
 
   userData(id: number) {
     return this.http.get<UserResponseData>(
@@ -120,53 +86,13 @@ export class AuthService {
   }
 
 
-  handleError(errorResp: HttpErrorResponse): string {
-    console.log(errorResp);
-    let errorMessage = 'Wystąpił nieznany błąd!';
-    switch (errorResp.status) {
-      case HttpStatusCode.Unauthorized:
-        errorMessage = 'Podane dane do logowania są nieprawidłowe';
-        break;
-    }
-    return errorMessage;
-  }
-
-  private removeToken(token: string) {
+  removeToken(token: string) {
     this.http.delete(environment.backendUrl + "/logout",
       {
         headers: AuthService.createAuthorizationHeader(token)
       }).subscribe();
   }
 
-
-  logout() {
-    this.store.select('auth').pipe(take(1), map(authState => authState.user)).subscribe(
-      user => {
-        if (user) {
-          this.removeToken(user.refresh_token);
-          this.removeToken(user.access_token);
-        }
-        this.store.dispatch(new AuthActions.Logout());
-        this.router.navigate(['/logowanie']);
-        localStorage.removeItem("userData");
-      }
-    );
-  }
-
-  autoLogin() {
-    const userDataJson = localStorage.getItem("userData");
-    if (!userDataJson)
-      return;
-    const userData: UserInterface = JSON.parse(userDataJson);
-    this.store.dispatch(new AuthActions.AutoLogin({
-      email: userData.email,
-      id: userData.id,
-      access_token: userData.access_token,
-      refresh_token: userData.refresh_token,
-      username: userData.username,
-      role: userData.role
-    }));
-  }
 
   refresh() {
     const userDataJson = localStorage.getItem("userData");
@@ -190,10 +116,7 @@ export class AuthService {
     return 'Bearer ' + token;
   }
 
-  static createAuthorizationHeader(token
-                                     :
-                                     string
-  ) {
+  static createAuthorizationHeader(token: string ) {
     let header = new HttpHeaders({
       "Authorization": AuthService.authorizationToken(token)
     });

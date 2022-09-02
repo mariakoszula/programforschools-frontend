@@ -16,7 +16,7 @@ import {AuthGuardForLogin} from "./authguard.service";
     ReactiveFormsModule,
     SharedModule,
     RouterModule.forChild([
-      {path: '', component: AuthComponent, canActivate: [AuthGuardForLogin]},
+       {path: '', component: AuthComponent, canActivate: [AuthGuardForLogin]},
     ])
   ]
 })
