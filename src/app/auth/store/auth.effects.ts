@@ -28,12 +28,13 @@ const handleAuthenticationBegin = (email: string, userId: string, accessToken: s
 
 
 const handleError = (errorResp: HttpErrorResponse) => {
-  console.log(errorResp);
   let errorMessage = 'Wystąpił nieznany błąd!';
   switch (errorResp.status) {
     case HttpStatusCode.Unauthorized:
       errorMessage = 'Podane dane do logowania są nieprawidłowe';
       break;
+    default:
+      console.log(errorResp);
   }
   return of(new AuthActions.AuthError((errorMessage)));
 }
@@ -52,7 +53,6 @@ export class AuthEffects {
             password: authData.payload.password
           }).pipe(
           map((respData: any) => {
-            console.log(respData);
             return handleAuthenticationBegin(respData.email, respData.id, respData.access_token, respData.refresh_token);
           }),
           catchError(error => handleError(error))
@@ -78,7 +78,6 @@ export class AuthEffects {
       ofType(AuthActions.LOGIN_SUCCESS),
       withLatestFrom(this.store$),
       tap(([_, state]) => {
-        console.log(state.auth.user);
         localStorage.setItem("userData", JSON.stringify(state.auth.user));
         this.router.navigate(["/"]);
 
@@ -110,7 +109,6 @@ export class AuthEffects {
         return {type: "Dummy_action"};
       }
       const userData: UserInterface = JSON.parse(userDataJson);
-      console.log('autoLogin effect');
       return new AuthActions.AutoLoginFinish({
         email: userData.email,
         id: userData.id,

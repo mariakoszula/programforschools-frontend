@@ -47,10 +47,12 @@ export function authReducer(state = initialState, action: AuthActions): State {
       };
     case LOGIN_SUCCESS:
       let updated_user: User | null = null;
-      if (state.user)
-      {
-        updated_user = new User(state.user.email, state.user.id, state.user.access_token, state.user.refresh_token,
-          action.payload.username, RoleUtils.backendRoleToFrontend((action.payload.role)));
+      if (state.user) {
+        updated_user = {
+          ...state.user,
+          username: action.payload.username,
+          role: RoleUtils.backendRoleToFrontend((action.payload.role))
+        };
       }
       return {
         ...state,
@@ -65,7 +67,7 @@ export function authReducer(state = initialState, action: AuthActions): State {
         isLoading: false
       };
     case AUTO_LOGIN:
-        return {
+      return {
         user: null,
         authError: null,
         isLoading: false
