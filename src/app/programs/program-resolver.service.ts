@@ -6,8 +6,12 @@ import {Observable, of, switchMap} from "rxjs";
 import {map, take} from "rxjs/operators";
 import * as ProgramActions from "./store/program.action";
 import {Actions, ofType} from "@ngrx/effects";
-import {SET_MANY} from "./store/program.action";
+import {SET_ALL} from "./store/program.action";
+import {Injectable} from "@angular/core";
 
+@Injectable({
+  providedIn: 'root'
+})
 export class ProgramResolverService implements Resolve<Program[]> {
 
   constructor(private store: Store<AppState>,
@@ -24,7 +28,7 @@ export class ProgramResolverService implements Resolve<Program[]> {
         if (programs.length === 0) {
           this.store.dispatch(new ProgramActions.Fetch());
           return this.actions$.pipe(
-            ofType(SET_MANY),
+            ofType(SET_ALL),
             take(1)
           )
         } else {

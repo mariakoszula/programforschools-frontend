@@ -1,12 +1,33 @@
-<div class="row">
+<div *ngIf="!selectedProgram" class="row">
   <div *ngIf="isLoading" style="text: center;">
     <app-loading-spinner></app-loading-spinner>
   </div>
-  <div class="col-12">
-  <a (click)="addProgram()" class="btn btn-primary float-left">
-    <i class="fas fa-sign"></i> Dodaj nowy program
-  </a>
-    <br/>
-    <br/>
+  <div class="col-12 align-content-center">
+    <a (click)="addProgram()" class="btn-lg btn-info float-right curson">
+      <i class="fas fa-sign"></i> Dodaj nowy program
+    </a>
+    <form [formGroup]="programsForm" (ngSubmit)="onSelectProgram()">
+      <div class="form-group">
+        <div *ngFor="let _program of programs; let i = index" class="form-check">
+          <input formControlName="program_id" class="form-check-input" type="radio" name="program_id" [value]=i>
+          <label class="form-check-label">Program {{_program.school_year}} na semestr {{ _program.semester_no}}</label>
+        </div>
+      </div>
+      <button *ngIf="programs.length" type="submit" class="btn-sm btn-primary float-lg-right cursor"
+              [disabled]="!programsForm.valid">
+        <i class="fas fa-check-circle"></i> Zatwierdż
+      </button>
+    </form>
+  </div>
 </div>
+<div *ngIf="selectedProgram" class="row">
+  <div class="col-12 align-content-center">
+    <h3>Program na semestr {{ selectedProgram.semester_no}} roku {{ selectedProgram.school_year}} </h3>
+      <a (click)="showDetails()" class="btn-lg btn-info float-lg-start cursor">
+        <i class="fas fa-info-circle"></i> Informacje
+      </a>
+    <a (click)="loadOtherProgram()" class="btn-lg btn-primary float-lg-end cursor">
+      <i class="fas fa-list"></i> Załaduj inny program
+    </a>
+  </div>
 </div>

@@ -5,7 +5,8 @@ export const ADD = "[Program] ADD";
 export const UPDATE = "[Program] UPDATE";
 export const FETCH = "[Program] FETCH";
 export const SELECT = "[Program] SELECT";
-export const SET_MANY = "[Program] SET_MANY";
+export const SET_ALL = "[Program] SET_ALL";
+export const SAVE = "[Program] SAVE";
 
 export class Fetch implements Action {
   readonly type = FETCH;
@@ -25,11 +26,26 @@ export class Update implements Action {
   }
 }
 
-export class SetMany implements Action {
-  readonly type = SET_MANY;
+export class Save implements Action {
+  readonly type = SAVE;
+
+  constructor(public payload: Program) {
+  }
+}
+
+export class SetAll implements Action {
+  readonly type = SET_ALL;
 
   constructor(public payload: Program[]) {
   }
 }
 
-export type ProgramActions = Fetch | Add | Update | SetMany;
+
+export class Select implements Action {
+  readonly type = SELECT;
+
+  constructor(public payload: number) {
+  }
+}
+
+export type ProgramActions = Fetch | Add | Update | SetAll | Select | Save;

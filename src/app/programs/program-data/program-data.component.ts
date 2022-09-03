@@ -11,18 +11,18 @@ import {AppState} from "../../store/app.reducer";
   templateUrl: './program-data.component.html'
 })
 export class ProgramDataComponent implements OnInit {
-  @Input() isAdmin: boolean = false;
+  @Input() isAdmin: boolean = false; //TODO fix this
   program!: Program;
   id: number | undefined;
 
   constructor(private router: Router,
-              private route: ActivatedRoute,
+              private activeRoute: ActivatedRoute,
               private store: Store<AppState>) {
 
   }
 
   ngOnInit(): void {
-    this.route.params
+    this.activeRoute.params
       .pipe(
         map((param: Params) => {
           return +param['id'];
@@ -43,10 +43,9 @@ export class ProgramDataComponent implements OnInit {
   }
 
   onDelete() {
-
   }
 
   onEdit() {
-
+      this.router.navigate(['edycja'], {relativeTo: this.activeRoute});
   }
 }

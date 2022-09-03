@@ -17,7 +17,7 @@ export class CompanyEffects {
   onFetch$ = createEffect(() => {
     return this.action$.pipe(
       ofType(CompanyActions.FETCH),
-      switchMap((fetchAction: CompanyActions.Fetch) => {
+      switchMap(() => {
         return this.http.get<CompaniesResponseData>(environment.backendUrl + '/company/all')
           .pipe(
             map(responseData => {

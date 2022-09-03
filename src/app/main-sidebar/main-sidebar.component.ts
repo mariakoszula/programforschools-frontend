@@ -5,11 +5,11 @@ import {Subscription} from "rxjs";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../store/app.reducer";
 import {map, take} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-main-sidebar',
   templateUrl: './main-sidebar.component.html',
-  styleUrls: ['./main-sidebar.component.css']
 })
 export class MainSidebarComponent implements OnInit {
   appName = RoleUtils.getProgramTitle();
@@ -17,19 +17,20 @@ export class MainSidebarComponent implements OnInit {
   userName: string = '';
   isLoggedIn = false;
   private userSubscription: Subscription | undefined;
-  constructor(private store: Store<fromApp.AppState>) {
+
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.userSubscription = this.store.select('auth').pipe(map(authState=> {
-        return authState.user;
-      })).subscribe(user => {
+    this.userSubscription = this.store.select('auth').pipe(map(authState => {
+      return authState.user;
+    })).subscribe(user => {
       this.isLoggedIn = !!user;
       if (user) {
         this.appName = RoleUtils.getProgramTitle(user.role);
         this.userIcon = RoleUtils.getIconName(user.role);
         this.userName = user.username;
-      }else {
+      } else {
         this.appName = RoleUtils.getProgramTitle();
         this.userIcon = RoleUtils.getIconName();
         this.userName = "";
@@ -39,5 +40,9 @@ export class MainSidebarComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.userSubscription) this.userSubscription.unsubscribe();
+  }
+
+  displayPrograms() {
+    this.router.navigate(["programy"]);
   }
 }

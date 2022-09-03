@@ -1,3 +1,7 @@
+export interface ProgramResponse {
+  programs: Program[];
+}
+
 export class Program {
   constructor(public id: number,
               public semester_no: number,

@@ -1,4 +1,4 @@
-import {ADD, ProgramActions, UPDATE} from "./program.action";
+import {ADD, FETCH, ProgramActions, SAVE, SELECT, SET_ALL, UPDATE} from "./program.action";
 import {Program} from "../program.model";
 
 export interface State {
@@ -7,11 +7,25 @@ export interface State {
   isLoading: boolean;
 }
 
-const initialState: State = {
-  programs: [],
-  indexOfSelectedProgram: -1,
-  isLoading: false
-};
+const initialState: State = prepareInitialState();
+
+function prepareInitialState() {
+  const programDataJson = localStorage.getItem("currentProgram");
+  if (!programDataJson) {
+    return {
+      programs: [],
+      indexOfSelectedProgram: -1,
+      isLoading: false
+    };
+  } else {
+    return {
+      programs: [JSON.parse(programDataJson)],
+      indexOfSelectedProgram: 0,
+      isLoading: false
+    };
+  }
+
+}
 
 export function programReducer(state = initialState, action: ProgramActions) {
   switch (action.type) {
@@ -23,6 +37,7 @@ export function programReducer(state = initialState, action: ProgramActions) {
         isLoading: true
       };
     case UPDATE:
+    case SAVE:
       const program = state.programs.find((program, index) => {
         return program.semester_no === action.payload.semester_no && program.school_year === action.payload.school_year;
       });
@@ -33,14 +48,31 @@ export function programReducer(state = initialState, action: ProgramActions) {
           ...action.payload
         }
         const indexOfUpdate = state.programs.indexOf(program);
-        console.log(indexOfUpdate);
         updated_programs[indexOfUpdate] = updated_program;
       }
-      console.log(updated_programs);
       return {
         ...state,
         programs: updated_programs,
+        isLoading: false
+      };
+    case FETCH:
+      return {
+        ...state,
+        programs: [...state.programs],
         indexOfSelectedProgram: -1,
+        isLoading: true
+      };
+    case SET_ALL:
+      return {
+        ...state,
+        programs: [...action.payload],
+        isLoading: false
+      };
+    case SELECT:
+      return {
+        ...state,
+        programs: [...state.programs],
+        indexOfSelectedProgram: action.payload,
         isLoading: false
       };
     default:
