@@ -2,6 +2,10 @@ export interface ProgramResponse {
   programs: Program[];
 }
 
+export interface WeeksResponse {
+  weeks: Week[];
+}
+
 export class Program {
   constructor(public id: number,
               public semester_no: number,
@@ -16,7 +20,14 @@ export class Program {
               public dairy_amount: number | null,
               public fruitVeg_amount: number | null
   ) {
-
   }
+}
 
+export class Week {
+  constructor(public id: number,
+              public week_no: number,
+              public start_date: number,
+              public end_date: number,
+              public program_id: number) {
+  }
 }

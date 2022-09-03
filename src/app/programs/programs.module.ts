@@ -7,10 +7,12 @@ import {ProgramRoutingModule} from "./programs-routing.module";
 import { ProgramDataEditorComponent } from './program-add/program-data-editor.component';
 import {ProgramsComponent} from "./programs.component";
 import { ProgramDataComponent } from './program-data/program-data.component';
+import { WeekDataEditorComponent } from './weeks-add/week-data-editor.component';
+import { WeekEditComponent } from './weeks-add/week-edit/week-edit.component';
 
 
 @NgModule({
-  declarations: [ProgramlistComponent, ProgramDataEditorComponent, ProgramsComponent, ProgramDataComponent
+  declarations: [ProgramlistComponent, ProgramDataEditorComponent, ProgramsComponent, ProgramDataComponent, WeekDataEditorComponent, WeekEditComponent
     ],
   imports: [
     CommonModule,

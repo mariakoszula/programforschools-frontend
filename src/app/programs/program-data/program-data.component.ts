@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Program} from "../program.model";
+import {Program, Week} from "../program.model";
 import {map} from "rxjs/operators";
 import {switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
@@ -14,7 +14,7 @@ export class ProgramDataComponent implements OnInit {
   @Input() isAdmin: boolean = false; //TODO fix this
   program!: Program;
   id: number | undefined;
-
+  weeks: Week[] = [];
   constructor(private router: Router,
               private activeRoute: ActivatedRoute,
               private store: Store<AppState>) {
@@ -32,6 +32,9 @@ export class ProgramDataComponent implements OnInit {
           return this.store.select('programs');
         }),
         map(programState => {
+          if (programState.weeks) {
+            this.weeks = programState.weeks;
+          }
           return programState.programs.find((program, _) => {
             return program.id === this.id;
           });
@@ -47,5 +50,13 @@ export class ProgramDataComponent implements OnInit {
 
   onEdit() {
       this.router.navigate(['edycja'], {relativeTo: this.activeRoute});
+  }
+
+  onEditWeeks() {
+      this.router.navigate(['tygodnie'], {relativeTo: this.activeRoute});
+  }
+
+  onEditProduct() {
+    //TODO implement
   }
 }

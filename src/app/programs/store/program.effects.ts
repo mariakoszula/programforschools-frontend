@@ -7,7 +7,7 @@ import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
-import {Program, ProgramResponse} from "../program.model";
+import {Program, ProgramResponse, Week, WeeksResponse} from "../program.model";
 import {Router} from "@angular/router";
 
 
@@ -15,6 +15,9 @@ interface ProgramAddResponse {
   program: Program;
 }
 
+interface WeekAddResponse {
+  week: Week;
+}
 
 @Injectable()
 export class ProgramEffects {
@@ -33,6 +36,29 @@ export class ProgramEffects {
           prepareBody).pipe(
           map((respData) => {
             return new ProgramActions.Save(respData.program);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Dummy_action"});
+          }));
+      }));
+  });
+
+
+  onAddWeek$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.ADD_WEEK),
+      withLatestFrom(this.store$.select('programs')),
+      switchMap(([currentAction, currentState]) => {
+        let programData: ProgramActions.AddWeek = currentAction;
+        let prepareBody = {...programData.payload};
+        let program_id = currentState.programs[currentState.indexOfSelectedProgram].id;
+        prepareBody.program_id = program_id;
+        return this.http.post<WeekAddResponse>(
+          environment.backendUrl + '/week',
+          prepareBody).pipe(
+          map((respData) => {
+            return new ProgramActions.SaveWeek(respData.week);
           }),
           catchError(error => {
             console.log(error);
@@ -72,14 +98,35 @@ export class ProgramEffects {
         })),
     {dispatch: false});
 
-  onSelect = createEffect(() => this.action$.pipe(
+  redirectOnSaveWeek = createEffect(() =>
+      this.action$.pipe(
+        ofType(ProgramActions.SAVE_WEEK),
+        tap((actionResp: ProgramActions.SaveWeek) => {
+          this.router.navigate(["programy/" + actionResp.payload.program_id]);
+        })),
+    {dispatch: false});
+
+  onSelect$ = createEffect(() => this.action$.pipe(
     ofType(ProgramActions.SELECT),
     withLatestFrom(this.store$.select('programs')),
-    tap(([_, state]) => {
-      if (state.indexOfSelectedProgram !== -1)
-        localStorage.setItem("currentProgram", JSON.stringify(state.programs[state.indexOfSelectedProgram]));
-    })
-  ), {dispatch: false});
+    switchMap(([_, state]) => {
+      let id = null;
+      if (state.indexOfSelectedProgram !== -1) {
+        const currentProgram = state.programs[state.indexOfSelectedProgram];
+        id = currentProgram.id;
+        localStorage.setItem("currentProgram", JSON.stringify(currentProgram));
+        return this.http.get<WeeksResponse>(environment.backendUrl + '/week/all?program_id=' + id)
+          .pipe(
+            map(responseData => {
+              return new ProgramActions.SetAllWeek(responseData.weeks);
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            }))
+      }
+       return of({type: "Dummy_action"});
+    })));
 
   onFetch$ = createEffect(() => {
     return this.action$.pipe(

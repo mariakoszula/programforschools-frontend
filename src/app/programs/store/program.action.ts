@@ -1,12 +1,15 @@
 import {Action} from "@ngrx/store";
-import {Program} from "../program.model";
+import {Program, Week} from "../program.model";
 
 export const ADD = "[Program] ADD";
 export const UPDATE = "[Program] UPDATE";
 export const FETCH = "[Program] FETCH";
 export const SELECT = "[Program] SELECT";
 export const SET_ALL = "[Program] SET_ALL";
+export const SET_WEEK_ALL = "[Program] SET_WEEK_ALL";
 export const SAVE = "[Program] SAVE";
+export const ADD_WEEK = "[Program] ADD_WEEK";
+export const SAVE_WEEK = "[Program] SAVE_WEEK";
 
 export class Fetch implements Action {
   readonly type = FETCH;
@@ -40,7 +43,6 @@ export class SetAll implements Action {
   }
 }
 
-
 export class Select implements Action {
   readonly type = SELECT;
 
@@ -48,4 +50,24 @@ export class Select implements Action {
   }
 }
 
-export type ProgramActions = Fetch | Add | Update | SetAll | Select | Save;
+export class AddWeek implements Action {
+  readonly type = ADD_WEEK;
+
+  constructor(public payload: Week) {
+  }
+}
+
+export class SaveWeek implements Action {
+  readonly type = SAVE_WEEK;
+
+  constructor(public payload: Week) {
+  }
+}
+
+export class SetAllWeek implements Action {
+  readonly type = SET_WEEK_ALL;
+
+  constructor(public payload: Week[]) {
+  }
+}
+export type ProgramActions = Fetch | Add | Update | SetAll | Select | Save | AddWeek | SaveWeek | SetAllWeek;

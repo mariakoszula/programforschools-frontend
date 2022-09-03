@@ -1,10 +1,22 @@
-import {ADD, FETCH, ProgramActions, SAVE, SELECT, SET_ALL, UPDATE} from "./program.action";
-import {Program} from "../program.model";
+import {
+  ADD,
+  ADD_WEEK,
+  FETCH,
+  ProgramActions,
+  SAVE,
+  SAVE_WEEK,
+  SELECT,
+  SET_ALL,
+  SET_WEEK_ALL,
+  UPDATE
+} from "./program.action";
+import {Program, Week} from "../program.model";
 
 export interface State {
   programs: Program[];
   indexOfSelectedProgram: number;
   isLoading: boolean;
+  weeks: Week[];
 }
 
 const initialState: State = prepareInitialState();
@@ -15,13 +27,15 @@ function prepareInitialState() {
     return {
       programs: [],
       indexOfSelectedProgram: -1,
-      isLoading: false
+      isLoading: false,
+      weeks: []
     };
   } else {
     return {
       programs: [JSON.parse(programDataJson)],
       indexOfSelectedProgram: 0,
-      isLoading: false
+      isLoading: false,
+      weeks: []
     };
   }
 
@@ -35,6 +49,28 @@ export function programReducer(state = initialState, action: ProgramActions) {
         programs: [...state.programs, action.payload],
         indexOfSelectedProgram: -1,
         isLoading: true
+      };
+    case ADD_WEEK:
+      return {
+        ...state,
+        weeks: [...state.weeks, action.payload]
+      };
+    case SAVE_WEEK:
+      const weeks_updated = [...state.weeks];
+      const week = state.weeks.find((_week, index) => {
+        return _week.week_no === action.payload.week_no && _week.program_id === action.payload.program_id;
+      });
+      if (week) {
+        const week_updated = {
+          ...week,
+          ...action.payload
+        }
+        const indexOfUpdate = state.weeks.indexOf(week);
+        weeks_updated[indexOfUpdate] = week_updated;
+      }
+      return {
+        ...state,
+        weeks: weeks_updated,
       };
     case UPDATE:
     case SAVE:
@@ -67,6 +103,11 @@ export function programReducer(state = initialState, action: ProgramActions) {
         ...state,
         programs: [...action.payload],
         isLoading: false
+      };
+    case SET_WEEK_ALL:
+      return {
+        ...state,
+        weeks: [...action.payload],
       };
     case SELECT:
       return {

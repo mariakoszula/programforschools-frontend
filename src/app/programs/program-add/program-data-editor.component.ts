@@ -7,7 +7,7 @@ import {Program} from "../program.model";
 import {Subscription} from "rxjs";
 import {
   convert_date_from_backend_format,
-  convert_date_to_backend_format,
+  convert_date_to_backend_format, convert_range_dates_and_validate,
   validate_date
 } from "../../shared/date_converter.utils";
 import * as ProgramActions from "../store/program.action";
@@ -98,15 +98,8 @@ export class ProgramDataEditorComponent implements OnInit, OnDestroy {
 
   onSubmitProgram() {
     let formValues = this.programForm.getRawValue();
-    const start_date = formValues["start_date"];
-    const end_date = formValues["end_date"];
-    if (start_date && end_date && !validate_date(start_date, end_date)) {
-      this.error = "Data rozpoczęcia programu musi być wcześniejsza niż data jego zakończenia";
-      return;
-    }
-    if (start_date) formValues["start_date"] = convert_date_to_backend_format(start_date);
-    if (end_date) formValues["end_date"] = convert_date_to_backend_format(end_date);
-
+    this.error = convert_range_dates_and_validate(formValues);
+    if (this.error) return;
     if (!this.editedProgram) {
       this.store.dispatch(new ProgramActions.Add(formValues));
     } else {

@@ -1,10 +1,12 @@
-  <div class="card bg-light m-2" style="height: 250px; width:400px">
-    <div *ngIf="program" class="card-header text-muted border-bottom-0">
+<div *ngIf="program" style="align-content: center">
+  <div class="card bg-light m-2" style="width:400px">
+    <div class="card-header text-muted border-bottom-0">
       Semestr {{ program.semester_no }} rok {{ program.school_year}}
     </div>
     <div class="card-body pt-0">
       <div class="row">
         <div class="col-7">
+          <h2 class="lead"><b>Dane podstawowe</b></h2>
           <ul class="ml-4 mb-0 fa-ul text-muted">
             <li *ngIf="isAdmin" class="small"><span class="fa-li"><i class="fas fa-lg fa-sign"></i></span>
               {{ program.id }}
@@ -14,15 +16,61 @@
       </div>
     </div>
     <div class="card-footer">
-       <div class="text-left">
-          <a (click)="onEdit()" class="btn btn-sm btn-primary">
-            <i class="fas fa-edit"></i>
-          </a>
+      <div class="text-left">
+        <a (click)="onEdit()" class="btn btn-sm btn-primary">
+          <i class="fas fa-edit"></i>
+        </a>
       </div>
       <div class="text-right">
-          <a *ngIf="isAdmin" (click)="onDelete()" class="btn btn-sm btn-danger">
-            <i class="fas fa-trash"></i>
-          </a>
+        <a *ngIf="isAdmin" (click)="onDelete()" class="btn btn-sm btn-danger">
+          <i class="fas fa-trash"></i>
+        </a>
       </div>
     </div>
   </div>
+  <div class="card bg-light m-2" style="width:400px">
+    <div class="card-header text-muted border-bottom-0">
+    </div>
+    <div class="card-body pt-0">
+      <div class="row">
+        <div class="col-7">
+          <h2 class="lead"><b>Tygodnie</b></h2>
+          <ul class="ml-4 mb-0 fa-ul text-muted">
+            <li *ngFor="let week of weeks;">
+              {{week.week_no}}: {{ week.start_date }} - {{ week.end_date}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="text-left">
+        <a (click)="onEditWeeks()" class="btn btn-sm btn-primary">
+          <i class="fas fa-edit"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card bg-light m-2" style="width:400px">
+    <div class="card-header text-muted border-bottom-0">
+    </div>
+    <div class="card-body pt-0">
+      <div class="row">
+        <div class="col-7">
+          <h2 class="lead"><b>Produkty</b></h2>
+          <ul class="ml-4 mb-0 fa-ul text-muted">
+            <li> Do implementacji
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="text-left">
+        <a (click)="onEditProduct()" class="btn btn-sm btn-primary">
+          <i class="fas fa-edit"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,3 +11,14 @@ export function convert_date_from_backend_format(date: string) {
   const [day, month, year] = date.split(".");
   return `${year}.${month}.${day}`;
 }
+
+export function convert_range_dates_and_validate(fileds: any) {
+  const start_date = fileds["start_date"];
+  const end_date = fileds["end_date"];
+  if (start_date && end_date && !validate_date(start_date, end_date)) {
+    return "Data rozpoczęcia programu musi być wcześniejsza niż data jego zakończenia";
+  }
+  if (start_date) fileds["start_date"] = convert_date_to_backend_format(start_date);
+  if (end_date) fileds["end_date"] = convert_date_to_backend_format(end_date);
+  return "";
+}
