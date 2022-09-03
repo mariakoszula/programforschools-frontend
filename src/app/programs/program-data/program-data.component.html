@@ -1,0 +1,28 @@
+  <div class="card bg-light m-2" style="height: 250px; width:400px">
+    <div *ngIf="program" class="card-header text-muted border-bottom-0">
+      Semestr {{ program.semester_no }} rok {{ program.school_year}}
+    </div>
+    <div class="card-body pt-0">
+      <div class="row">
+        <div class="col-7">
+          <ul class="ml-4 mb-0 fa-ul text-muted">
+            <li *ngIf="isAdmin && program" class="small"><span class="fa-li"><i class="fas fa-lg fa-sign"></i></span>
+              {{ program.id }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+       <div class="text-left">
+          <a (click)="onEdit()" class="btn btn-sm btn-primary">
+            <i class="fas fa-edit"></i>
+          </a>
+      </div>
+      <div class="text-right">
+          <a *ngIf="isAdmin" (click)="onDelete()" class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i>
+          </a>
+      </div>
+    </div>
+  </div>

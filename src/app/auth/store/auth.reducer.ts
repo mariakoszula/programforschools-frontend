@@ -61,11 +61,6 @@ export function authReducer(state = initialState, action: AuthActions): State {
         isLoading: false
       };
     case LOGOUT:
-      return {
-        user: null,
-        authError: null,
-        isLoading: false
-      };
     case AUTO_LOGIN:
       return {
         user: null,
@@ -87,12 +82,16 @@ export function authReducer(state = initialState, action: AuthActions): State {
         isLoading: false
       };
     case REFRESH_TOKEN:
-      let user_with_token_refreshed: User | null = state.user;
-      if (user_with_token_refreshed)
-        user_with_token_refreshed.access_token = action.payload.access_token;
+      let refresh_user: User | null = null;
+      if (state.user) {
+        refresh_user = {
+          ...state.user,
+          access_token: action.payload.access_token
+        };
+      }
       return {
         ...state,
-        user: user_with_token_refreshed,
+        user: refresh_user,
         authError: null,
         isLoading: false
       };

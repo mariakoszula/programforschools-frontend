@@ -3,6 +3,7 @@
     Żeby korzystać z {{ appName }} musisz się <a routerLink="/logowanie">zalogować</a>
   </div>
   <div *ngIf="isLoggedIn">
-    <h3> Witamy w programie </h3>
+    <h4> Witamy w programie do obsługi 'Programu dla szkół' firmy: </h4>
+    <h5 *ngIf="company"> {{ company.name }}</h5>
   </div>
 </div>

@@ -1,14 +1,16 @@
 <!-- /.content-wrapper -->
 <footer class="main-footer">
-  <strong>Copyright &copy; 2022 <a href="#">rykosystem</a>.</strong>
-  Wszystkie prawa zastrzeżone.
   <div *ngIf="isLoggedIn" class="float-right d-none d-sm-inline-block">
     <b>Zalogowany:</b> {{ loggedInPerson }}
-   <button type="button" class="btn btn-default btn-sm" (click)="onLogout()">
+    <button type="button" class="btn btn-default btn-sm" (click)="onLogout()">
       <i class="fas fa-sign-out-alt"></i>
-   </button>
+    </button>
   </div>
   <div *ngIf="!isLoggedIn" class="float-right d-none d-sm-inline-block">
     <a routerLink="/logowanie"><b>Zaloguj się</b></a>
+  </div>
+  <div class="small">
+    <p *ngIf="company"> {{ company.name }}, {{ company.address }} <br/>NIP: {{ company.nip }} REGON: {{ company.regon }}</p>
+    <strong>Copyright &copy; 2022 rykosystem.</strong> Wszystkie prawa zastrzeżone.
   </div>
 </footer>
