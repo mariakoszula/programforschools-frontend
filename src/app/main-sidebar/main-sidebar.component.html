@@ -26,34 +26,48 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-<!--        <li class="nav-item menu-open">-->
-<!--          <a href="#" class="nav-link active">-->
-<!--            <i class="nav-icon fas fa-tachometer-alt"></i>-->
-<!--            <p>-->
-<!--              Strona Główna-->
-<!--              <i class="right fas fa-angle-left"></i>-->
-<!--            </p>-->
-<!--          </a>-->
-<!--          <ul class="nav nav-treeview">-->
-<!--            <li class="nav-item">-->
-<!--              <a href="#" class="nav-link active">-->
-<!--                <i class="far fa-circle nav-icon"></i>-->
-<!--                <p>Link1</p>-->
-<!--              </a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--              <a href="#" class="nav-link">-->
-<!--                <i class="far fa-circle nav-icon"></i>-->
-<!--                <p>Link2</p>-->
-<!--              </a>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </li>-->
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-clipboard-list"></i>
+            <p>
+              Dokumenty
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" routerLink="/umowy">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Umowy</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" routerLink="/rejestr">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Rejestr</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">
+                <i class="far fa-circle nav-icon" routerLinkActive="active" routerLink="/wnioski"></i>
+                <p>Wnioski</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item">
-          <a  class="nav-link cursor" (click)="displayPrograms()">
+          <a class="nav-link cursor" routerLinkActive="active" routerLink="/programy">
             <i class="nav-icon fas fa-list"></i>
             <p>
-              Program
+              Programy
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link cursor" routerLinkActive="active" routerLink="/szkoly">
+            <i class="nav-icon fas fa-list"></i>
+            <p>
+              Szkoły
             </p>
           </a>
         </li>

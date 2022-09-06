@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Lista szkół</h1>
+  </div>
+  <div class="card-body">
+    <table datatable [dtOptions]="schoolDtOptions" class="row-border hover">
+      <thead>
+      <tr>
+        <th>Lp</th>
+        <th>Skrót</th>
+        <th>Nazwa</th>
+        <th>Regon</th>
+        <th>Email</th>
+        <th>Telefon</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let school of schools; let i = index;">
+        <td>{{ i }}</td>
+        <td>{{ school.nick }}</td>
+        <td>{{ school.name }}</td>
+        <td>{{ school.regon }}</td>
+        <td>{{ school.email }}</td>
+        <td>{{ school.phone }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <a (click)="addSchool()" class="btn-lg btn-info float-right cursor">
+    <i class="fas fa-sign"></i> Dodaj szkołe
+  </a>
+</div>

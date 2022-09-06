@@ -19,6 +19,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools'
 import {environment} from "../environments/environment";
 import {ProgramEffects} from "./programs/store/program.effects";
 import {CompanyEffects} from "./companies/store/company.effects";
+import { DataTablesModule } from "angular-datatables";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,6 @@ import {CompanyEffects} from "./companies/store/company.effects";
     MainSidebarComponent,
     ControlSidebarComponent,
     MainFooterComponent
-
   ],
   imports: [
     BrowserModule,

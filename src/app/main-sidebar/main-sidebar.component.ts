@@ -41,8 +41,4 @@ export class MainSidebarComponent implements OnInit {
   ngOnDestroy() {
     if (this.userSubscription) this.userSubscription.unsubscribe();
   }
-
-  displayPrograms() {
-    this.router.navigate(["programy"]);
-  }
 }

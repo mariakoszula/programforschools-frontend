@@ -1,0 +1,23 @@
+<div class="col-lg-6">
+  <form [formGroup]="schoolForm">
+    <div class="form-group"]>
+      <label>Nick</label><input class="form-control" name="nick">
+      <label>Nazwa</label><input class="form-control" name="name">
+      <label>Adres</label><input class="form-control" name="address">
+      <label>REGON</label><input class="form-control" name="regon">
+      <label>NIP*</label><input class="form-control" name="nip">
+      <label>Email</label><input class="form-control" name="email">
+      <label>Telefon</label><input class="form-control" name="phone">
+      <label>Miasto</label><input class="form-control" name="city">
+      <label>Osoba reprezentująca</label><input class="form-control" name="responsible_person">
+      <label>Nazwa organu prowadzącego*</label><input class="form-control" name="representative">
+      <label>NIP organu prowadzącego*</label><input class="form-control" name="representative_nip">
+      <label>REGON organu prowadzącego*</label><input class="form-control"
+                                                      name="representative_regon">
+      <p class="help-block">*pola niewymagane w umowie</p>
+    </div>
+    <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!schoolForm.valid">
+      <i class="fas fa-check-circle"></i> Zatwierdź
+    </button>
+  </form>
+</div>
