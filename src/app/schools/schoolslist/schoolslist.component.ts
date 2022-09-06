@@ -1,26 +1,40 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {School} from "../school.model";
+import * as SchoolActions from "../store/schools.action";
+import {Store} from "@ngrx/store";
+import * as fromApp from "../../store/app.reducer";
+import {Subscription} from "rxjs";
+import {State} from "../store/schools.reducer";
 
 @Component({
   selector: 'app-schoolslist',
   templateUrl: './schoolslist.component.html',
 })
-export class SchoolslistComponent implements OnInit {
+export class SchoolslistComponent implements OnInit, OnDestroy {
   schools: School[] = [];
   schoolDtOptions: DataTables.Settings = {};
+  schoolsSub: Subscription | null = null;
 
   constructor(private router: Router,
-              private activeRoute: ActivatedRoute) {
+              private activeRoute: ActivatedRoute,
+              private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
+     this.store.dispatch(new SchoolActions.Fetch());
+    this.schoolsSub = this.store.select("school").subscribe(
+      (schoolState: State) => {
+        this.schools = schoolState.schools;
+      }
+    );
     this.schoolDtOptions = {
       pagingType: 'full_numbers',
       pageLength: 50,
       responsive: true,
       language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
     };
+
   }
 
   addSchool() {
@@ -29,5 +43,9 @@ export class SchoolslistComponent implements OnInit {
 
   onEdit() {
     //navigate to :id/edycja
+  }
+
+  ngOnDestroy(): void {
+    if (this.schoolsSub) this.schoolsSub.unsubscribe();
   }
 }

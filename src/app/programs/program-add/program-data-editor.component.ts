@@ -7,8 +7,7 @@ import {Program} from "../program.model";
 import {Subscription} from "rxjs";
 import {
   convert_date_from_backend_format,
-  convert_date_to_backend_format, convert_range_dates_and_validate,
-  validate_date
+  convert_range_dates_and_validate
 } from "../../shared/date_converter.utils";
 import * as ProgramActions from "../store/program.action";
 import {formatDate} from "@angular/common";
@@ -24,8 +23,7 @@ export class ProgramDataEditorComponent implements OnInit, OnDestroy {
   editedProgram: Program | null = null;
   programSub: Subscription | null = null;
 
-  constructor(private store: Store<fromApp.AppState>,
-              private activeRoute: ActivatedRoute) {
+  constructor(private store: Store<fromApp.AppState>) {
     this.isLoading = false;
     this.programForm = new FormGroup({});
   }

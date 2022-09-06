@@ -1,11 +1,11 @@
 import {Action} from "@ngrx/store";
 import {School} from "../school.model";
 
-export const ADD = "[Program] ADD";
-export const UPDATE = "[Program] UPDATE";
-export const FETCH = "[Program] FETCH";
-export const SET_ALL = "[Program] SET_ALL";
-export const SAVE = "[Program] SAVE";
+export const ADD = "[School] ADD";
+export const UPDATE = "[School] UPDATE";
+export const FETCH = "[School] FETCH";
+export const SET_ALL = "[School] SET_ALL";
+export const SAVE = "[School] SAVE";
 
 
 export class Fetch implements Action {

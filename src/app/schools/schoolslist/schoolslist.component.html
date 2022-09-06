@@ -16,7 +16,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let school of schools; let i = index;">
-        <td>{{ i }}</td>
+        <td>{{ i+1 }}</td>
         <td>{{ school.nick }}</td>
         <td>{{ school.name }}</td>
         <td>{{ school.regon }}</td>
@@ -26,7 +26,11 @@
       </tbody>
     </table>
   </div>
-  <a (click)="addSchool()" class="btn-lg btn-info float-right cursor">
+</div>
+<div class="col-12">
+    <a (click)="addSchool()" class="btn-lg btn-info float-left cursor">
     <i class="fas fa-sign"></i> Dodaj szkołe
   </a>
+<br/>
+<br/>
 </div>

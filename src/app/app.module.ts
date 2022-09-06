@@ -20,6 +20,7 @@ import {environment} from "../environments/environment";
 import {ProgramEffects} from "./programs/store/program.effects";
 import {CompanyEffects} from "./companies/store/company.effects";
 import { DataTablesModule } from "angular-datatables";
+import {SchoolsEffects} from "./schools/store/schools.effects";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { DataTablesModule } from "angular-datatables";
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects, ProgramEffects, CompanyEffects]),
+    EffectsModule.forRoot([AuthEffects, ProgramEffects, CompanyEffects, SchoolsEffects]),
     StoreDevtoolsModule.instrument({logOnly: environment.production})
   ],
   providers: [
