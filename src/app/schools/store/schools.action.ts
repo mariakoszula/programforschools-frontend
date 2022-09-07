@@ -22,7 +22,7 @@ export class Add implements Action {
 export class Update implements Action {
   readonly type = UPDATE;
 
-  constructor(public payload: School) {
+  constructor(public payload: School, public school_id: number) {
   }
 }
 

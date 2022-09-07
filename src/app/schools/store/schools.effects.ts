@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, of, switchMap, tap} from "rxjs";
+import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import * as SchoolActions from "./schools.action";
@@ -14,9 +14,10 @@ interface SchoolAddResponse {
   school: School;
 }
 
-interface SchoolsResponse{
+interface SchoolsResponse {
   schools: School[];
 }
+
 @Injectable()
 export class SchoolsEffects {
   onAdd$ = createEffect(() => {
@@ -35,7 +36,24 @@ export class SchoolsEffects {
           }));
       }));
   });
-
+  onUpdate$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(SchoolActions.UPDATE),
+      withLatestFrom(this.store$.select('school')),
+      switchMap(([currentAction, _]) => {
+        let schoolData: SchoolActions.Update = currentAction;
+        return this.http.put<SchoolAddResponse>(
+          environment.backendUrl + '/school/' + schoolData.school_id,
+          {...schoolData.payload}).pipe(
+          map((respData) => {
+            return new SchoolActions.Save(respData.school);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Dummy_action"});
+          }));
+      }));
+  });
   redirectOnSave = createEffect(() =>
       this.action$.pipe(
         ofType(SchoolActions.SAVE),

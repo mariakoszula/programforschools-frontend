@@ -1,20 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {School} from "../school.model";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {ActivatedRoute, Params} from "@angular/router";
 import * as SchoolActions from "../store/schools.action"
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-school-data-editor',
   templateUrl: './school-data-editor.component.html',
 })
-export class SchoolDataEditorComponent implements OnInit {
+export class SchoolDataEditorComponent implements OnInit, OnDestroy {
   schoolForm: FormGroup;
   isLoading: boolean;
   id: number = -1;
-  editSchool: School | null = null;
+  editSchool: School | null | undefined = null;
+  paramsSub: Subscription | null = null;
+  editSchoolSub: Subscription | null = null;
 
   constructor(private store: Store<fromApp.AppState>,
               private activeRoute: ActivatedRoute) {
@@ -24,19 +27,22 @@ export class SchoolDataEditorComponent implements OnInit {
 
   ngOnInit(): void {
     //TODO how to chain this subscriptions?
-    this.activeRoute.params.subscribe(
+    this.paramsSub = this.activeRoute.params.subscribe(
       (params: Params) => {
         if (params["id"])
           this.id = +params["id"];
       });
-    this.store.select("school").subscribe(schoolState => {
+    this.editSchoolSub = this.store.select("school").subscribe(schoolState => {
       if (this.id !== -1) {
-        this.editSchool = schoolState.schools[this.id];
+        this.editSchool = schoolState.schools.find((_school: School, index) => {
+        return _school.id === this.id;
+      });
       } else {
+        this.id = -1;
         this.editSchool = null;
       }
-      this.initForm();
     });
+    this.initForm();
   }
 
   private initForm() {
@@ -53,9 +59,7 @@ export class SchoolDataEditorComponent implements OnInit {
     let representative_nip = null;
     let representative_regon = null;
     if (this.editSchool) {
-      this.schoolForm.addControl("nick", new FormControl({
-        value: nick, disabled: true
-      }, []));
+      nick = this.editSchool.nick;
       name = this.editSchool.name;
       address = this.editSchool.address;
       regon = this.editSchool.regon;
@@ -67,6 +71,9 @@ export class SchoolDataEditorComponent implements OnInit {
       representative = this.editSchool.representative;
       representative_nip = this.editSchool.representative_nip;
       representative_regon = this.editSchool.representative_regon;
+      this.schoolForm.addControl("nick", new FormControl({
+        value: nick, disabled: true
+      }, []));
 
     }
     this.schoolForm.addControl("nick", new FormControl(nick, [Validators.required]));
@@ -88,8 +95,13 @@ export class SchoolDataEditorComponent implements OnInit {
     if (!this.editSchool) {
       this.store.dispatch(new SchoolActions.Add(formValues));
     } else {
-      this.store.dispatch(new SchoolActions.Update(formValues));
+      this.store.dispatch(new SchoolActions.Update(formValues, this.editSchool.id));
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramsSub) this.paramsSub.unsubscribe();
+    if (this.editSchoolSub) this.editSchoolSub.unsubscribe();
   }
 
 }

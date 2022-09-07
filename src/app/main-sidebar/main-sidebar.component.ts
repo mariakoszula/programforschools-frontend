@@ -16,8 +16,9 @@ export class MainSidebarComponent implements OnInit {
   userIcon = RoleUtils.getIconName();
   userName: string = '';
   isLoggedIn = false;
+  isProgramSelected = false;
   private userSubscription: Subscription | undefined;
-
+  private programSub: Subscription | undefined;
   constructor(private store: Store<fromApp.AppState>, private router: Router) {
   }
 
@@ -34,6 +35,13 @@ export class MainSidebarComponent implements OnInit {
         this.appName = RoleUtils.getProgramTitle();
         this.userIcon = RoleUtils.getIconName();
         this.userName = "";
+      }
+    });
+    this.programSub = this.store.select('programs').subscribe(programState => {
+      if (programState.indexOfSelectedProgram !== -1){
+        this.isProgramSelected = true
+      } else {
+        this.isProgramSelected = false;
       }
     });
   }

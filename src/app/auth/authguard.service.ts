@@ -72,3 +72,22 @@ export class AdminGuard implements CanActivate {
       }));
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProgramSelectedGuard implements CanActivate {
+ constructor(private router: Router, private store: Store<fromApp.AppState>) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    boolean | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | UrlTree {
+    return this.store.select('programs').pipe(
+      take(1),
+      map(programState => {
+        if (programState.indexOfSelectedProgram === -1)
+          return this.router.createUrlTree(["/"]);
+        return true;
+      }));
+  }
+}

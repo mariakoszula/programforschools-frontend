@@ -27,7 +27,7 @@ import {SchoolResolverService} from "./school-resolver.service";
         children: [
           {path: '', component: SchoolslistComponent, resolve: [SchoolResolverService]},
           {path: 'nowa', component: SchoolDataEditorComponent},
-          {path: ':id/edycja', component: SchoolDataEditorComponent}
+          {path: ':id/edycja', component: SchoolDataEditorComponent, resolve: [SchoolResolverService]}
         ]
       },
     ]),

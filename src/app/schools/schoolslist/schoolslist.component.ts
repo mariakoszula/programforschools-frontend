@@ -22,7 +22,7 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-     this.store.dispatch(new SchoolActions.Fetch());
+    // this.store.dispatch(new SchoolActions.Fetch());
     this.schoolsSub = this.store.select("school").subscribe(
       (schoolState: State) => {
         this.schools = schoolState.schools;
@@ -32,17 +32,22 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 50,
       responsive: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
+      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+      rowCallback: (row: Node, data: any[] | Object, index:number) => {
+        $('td', row).off('click');
+        $('td', row).on('click', () => {
+          this.onEdit(this.schools[index]);
+        });
+        return row;
+      }};
     };
-
-  }
 
   addSchool() {
     this.router.navigate(["nowa"], {relativeTo: this.activeRoute});
   }
 
-  onEdit() {
-    //navigate to :id/edycja
+  onEdit(school: School) {
+    this.router.navigate([school.id + "/edycja"], {relativeTo: this.activeRoute});
   }
 
   ngOnDestroy(): void {

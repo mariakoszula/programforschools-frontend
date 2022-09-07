@@ -9,17 +9,15 @@
         <th>Lp</th>
         <th>Skrót</th>
         <th>Nazwa</th>
-        <th>Regon</th>
         <th>Email</th>
         <th>Telefon</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let school of schools; let i = index;">
+      <tr class="cursor" *ngFor="let school of schools; let i = index;">
         <td>{{ i+1 }}</td>
         <td>{{ school.nick }}</td>
         <td>{{ school.name }}</td>
-        <td>{{ school.regon }}</td>
         <td>{{ school.email }}</td>
         <td>{{ school.phone }}</td>
       </tr>
