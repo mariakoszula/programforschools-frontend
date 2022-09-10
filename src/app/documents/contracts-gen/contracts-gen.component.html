@@ -1,1 +1,36 @@
-<p>contracts-gen works!</p>
+<div class="col-12">
+  <div class="card">
+    <div class="overlay dark" *ngIf="isGenerating">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div class="card-header">
+      <h1 *ngIf="program" class="card-title">Generuj umowy na semestr {{ program.semester_no }}
+        roku {{program.school_year}}</h1>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="contractForm" (ngSubmit)="onContractCreate()">
+        <div class="form-group">
+          <label>Data podpisania umów</label>
+          <input formControlName="contract_date" type="date" class="form-control text-left" name="contract_date"
+                 min="2022-09-01" max="2032-01-01">
+          <div style="text-align: justify" class="form-group">
+            <div class="form-check">
+              <input formControlName="select_all" (change)="checkUncheck()" type="checkbox" class="form-check-input"
+                     id="select_all"/>Zaznacz/Odznacz Wszystkie
+            </div>
+            <div formArrayName="schools" *ngFor="let school of schoolsControls; let i = index;" class="form-check">
+              <input [formControlName]="i"
+                     class="form-check-input" type="checkbox" name="school_ids">
+              <label class="form-check-label">{{schools[i].nick}}</label>
+            </div>
+            <br/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!contractForm.valid">
+          <i class="fas fa-check-circle"></i> Generuj
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<app-document-generation-info></app-document-generation-info>

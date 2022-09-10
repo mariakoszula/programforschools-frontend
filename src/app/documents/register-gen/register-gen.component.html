@@ -1,1 +1,14 @@
-<p>register-gen works!</p>
+<div class="col-md-4 col-sm-6 col-12">
+  <div (click)="onGenerateRegistry()" class="info-box cursor">
+    <div class="overlay dark" *ngIf="isGenerating">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <span class="info-box-icon bg-gradient-success">
+    <i class="far fa-copy">
+    </i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">Generuj Rejestr</span>
+    </div>
+  </div>
+</div>
+<app-document-generation-info></app-document-generation-info>

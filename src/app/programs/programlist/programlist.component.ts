@@ -24,7 +24,7 @@ export class ProgramlistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.programSub = this.store.select("programs").subscribe(
+    this.programSub = this.store.select("program").subscribe(
       (programState) => {
         this.isLoading = programState.isLoading;
         this.programs = programState.programs;

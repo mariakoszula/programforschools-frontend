@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
-import {ActivatedRoute} from "@angular/router";
 import {Program} from "../program.model";
 import {Subscription} from "rxjs";
 import {
@@ -33,7 +32,7 @@ export class ProgramDataEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.programSub = this.store.select("programs")
+    this.programSub = this.store.select("program")
       .subscribe(programState => {
           this.isLoading = programState.isLoading;
           if (programState.indexOfSelectedProgram !== -1) {

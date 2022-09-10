@@ -2,13 +2,17 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback');
 
 cursor {
-   cursor: pointer;
+  cursor: pointer;
 }
 
 button.cursor {
-   cursor: pointer;
+  cursor: pointer;
 }
 
 tr.cursor {
-   cursor: pointer;
+  cursor: pointer;
+}
+
+div.cursor {
+  cursor: pointer;
 }

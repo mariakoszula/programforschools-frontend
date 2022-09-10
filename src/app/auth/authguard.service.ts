@@ -82,7 +82,7 @@ export class ProgramSelectedGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | UrlTree {
-    return this.store.select('programs').pipe(
+    return this.store.select('program').pipe(
       take(1),
       map(programState => {
         if (programState.indexOfSelectedProgram === -1)

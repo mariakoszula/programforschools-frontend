@@ -4,8 +4,7 @@ import * as ProgramActions from "../../store/program.action";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../store/app.reducer";
 import {
-  convert_date_to_backend_format, convert_range_dates_and_validate,
-  validate_date
+  convert_range_dates_and_validate,
 } from "../../../shared/date_converter.utils";
 
 @Component({

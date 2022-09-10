@@ -1,1 +1,54 @@
-<p>contract-details works!</p>
+<div class="card">
+  <div class="card-header">
+    <h1 *ngIf="contract" class="card-title">Umowy i zmiany do umów dla {{contract.school.nick}}</h1>
+    <h1 *ngIf="!contract" class="card-title">Wybrana szkoła nie ma umowy</h1>
+  </div>
+  <br/>
+  <div *ngIf="contract" class="col-md-4 col-sm-6 col-12">
+    <div (click)="onNewAnnex(contract.id)" class="info-box cursor">
+    <span class="info-box-icon bg-gradient-warning">
+    <i class="far fa-copy">
+    </i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Dodaj Aneks</span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="contract" class="card-body">
+    <table [dtOptions]="dtOptions" datatable class="table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Data obowiązywania</th>
+        <th>Koniec obowiązywania*</th>
+        <th>Produkt owocowy</th>
+        <th>Produkt melczny</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="table-success">
+        <td>{{ contract.contract_no }}/{{ contract.contract_year }}</td>
+        <td>{{ contract.validity_date }}</td>
+        <td></td>
+        <td>{{ contract.fruitVeg_products }}</td>
+        <td>{{ contract.dairy_products }}</td>
+        <td><a class="btn btn-info btn-sm" (click)="onEditContract(contract.id)">
+          <i class="fas fa-pencil-alt"></i>Edycja
+        </a></td>
+      </tr>
+      <tr class="table-warning" *ngFor="let annex of contract.annex">
+        <td>{{ annex.no }}</td>
+        <td>{{ annex.validity_date }}</td>
+        <td></td>
+        <td>{{ annex.fruitVeg_products }}</td>
+        <td>{{ annex.dairy_products }}</td>
+        <td><a class="btn btn-info btn-sm" (click)="onEditAnnex(annex.id)">
+          <i class="fas fa-pencil-alt"></i>Edycja
+        </a></td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="help-block">*kwarantanna i lockdown</p>
+  </div>
+</div>

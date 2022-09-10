@@ -11,7 +11,7 @@ import {AppState} from "../../store/app.reducer";
   templateUrl: './program-data.component.html'
 })
 export class ProgramDataComponent implements OnInit {
-  @Input() isAdmin: boolean = false; //TODO fix this
+  @Input() isAdmin: boolean = false;
   program!: Program;
   id: number | undefined;
   weeks: Week[] = [];
@@ -29,7 +29,7 @@ export class ProgramDataComponent implements OnInit {
         }),
         switchMap(id => {
           this.id = id;
-          return this.store.select('programs');
+          return this.store.select('program');
         }),
         map(programState => {
           if (programState.weeks) {

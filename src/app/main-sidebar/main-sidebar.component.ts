@@ -37,7 +37,7 @@ export class MainSidebarComponent implements OnInit {
         this.userName = "";
       }
     });
-    this.programSub = this.store.select('programs').subscribe(programState => {
+    this.programSub = this.store.select('program').subscribe(programState => {
       if (programState.indexOfSelectedProgram !== -1){
         this.isProgramSelected = true
       } else {

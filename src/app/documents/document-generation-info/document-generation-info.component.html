@@ -1,0 +1,11 @@
+<div *ngIf="anyGeneratedDocuments()" class="callout callout-success">
+  <h5>Wygenerowano dokumenty pomyślnie!</h5>
+  <p> Ostatnio wygnerowane dokumenty:</p>
+  <ul>
+    <div *ngFor="let item of generatedDocuments | keyvalue">
+    <li>
+      <a href="{{item.value}}">{{item.key}}</a>
+    </li>
+      </div>
+  </ul>
+</div>

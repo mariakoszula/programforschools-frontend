@@ -19,7 +19,7 @@ export class ProgramResolverService implements Resolve<Program[]> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Program[]> | Promise<Program[]> | Program[] {
-    return this.store.select("programs").pipe(
+    return this.store.select("program").pipe(
       take(1),
       map(programState => {
         return programState.programs;

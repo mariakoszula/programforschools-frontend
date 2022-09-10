@@ -1,1 +1,29 @@
-<p>contractlist works!</p>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Lista umów</h1>
+  </div>
+  <div class="card-body">
+    <table datatable [dtOptions]="contractDtOptions" class="row-border hover">
+      <thead>
+      <tr>
+        <th>Umowa</th>
+        <th>Skrót</th>
+        <th>Nazwa</th>
+        <th>Dzieci owoce</th>
+        <th>Dzieci mleko</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="cursor" *ngFor="let contract of contracts; let i = index;">
+        <td>{{ contract.contract_no }}</td>
+        <td>{{ contract.school.nick }}</td>
+        <td>{{ contract.school.name }}</td>
+        <td>{{ get_latest_fruitVeg_product(contract) }}</td>
+        <td>{{ get_latest_diary_product(contract) }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+<br/>
+<br/>
+</div>

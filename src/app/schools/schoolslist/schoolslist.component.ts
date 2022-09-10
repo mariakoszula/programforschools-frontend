@@ -22,7 +22,6 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.store.dispatch(new SchoolActions.Fetch());
     this.schoolsSub = this.store.select("school").subscribe(
       (schoolState: State) => {
         this.schools = schoolState.schools;

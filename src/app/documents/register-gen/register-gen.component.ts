@@ -1,15 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import {Store} from "@ngrx/store";
+import {AppState} from "../../store/app.reducer";
+import {Subscription} from "rxjs";
+import * as DocumentsActions from "../store/documents.action";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-register-gen',
   templateUrl: './register-gen.component.html',
-  styleUrls: ['./register-gen.component.css']
 })
 export class RegisterGenComponent implements OnInit {
+  isGenerating: boolean = false;
+  contractSub: Subscription | null = null;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private store: Store<AppState>) {
   }
 
+  ngOnInit(): void {
+    this.contractSub = this.store.select("document").subscribe((contractState) => {
+      this.isGenerating = contractState.isGenerating;
+    });
+  }
+
+  onGenerateRegistry() {
+    this.store.dispatch(new DocumentsActions.GenerateRegister());
+
+  }
+
+  ngOnDestroy() {
+    if (this.contractSub) this.contractSub.unsubscribe();
+  }
 }

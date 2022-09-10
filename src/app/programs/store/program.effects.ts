@@ -48,7 +48,7 @@ export class ProgramEffects {
   onAddWeek$ = createEffect(() => {
     return this.action$.pipe(
       ofType(ProgramActions.ADD_WEEK),
-      withLatestFrom(this.store$.select('programs')),
+      withLatestFrom(this.store$.select('program')),
       switchMap(([currentAction, currentState]) => {
         let programData: ProgramActions.AddWeek = currentAction;
         let prepareBody = {...programData.payload};
@@ -71,7 +71,7 @@ export class ProgramEffects {
   onUpdate$ = createEffect(() => {
     return this.action$.pipe(
       ofType(ProgramActions.UPDATE),
-      withLatestFrom(this.store$.select('programs')),
+      withLatestFrom(this.store$.select('program')),
       switchMap(([currentAction, currentState]) => {
         let programData: ProgramActions.Update = currentAction;
         let prepareBody = {...programData.payload};
@@ -108,7 +108,7 @@ export class ProgramEffects {
 
   onSelect$ = createEffect(() => this.action$.pipe(
     ofType(ProgramActions.SELECT),
-    withLatestFrom(this.store$.select('programs')),
+    withLatestFrom(this.store$.select('program')),
     switchMap(([_, state]) => {
       let id = null;
       if (state.indexOfSelectedProgram !== -1) {
