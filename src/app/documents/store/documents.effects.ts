@@ -1,7 +1,7 @@
-import {Contract} from "../contract.model";
+import {Annex, Contract} from "../contract.model";
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, of, switchMap, withLatestFrom} from "rxjs";
+import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
@@ -9,8 +9,8 @@ import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
-import {FetchContracts, GenerateContracts, GenerateRegister} from "./documents.action";
-import {convert_date_from_backend_format, convert_date_to_backend_format} from "../../shared/date_converter.utils";
+import {FetchContracts, GenerateContracts, GenerateRegister, UpdateAnnex, UpdateKidsNo} from "./documents.action";
+import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
 
 interface ContractsResponse {
   contracts: Contract[];
@@ -19,6 +19,15 @@ interface ContractsResponse {
 
 interface RegisterResponse {
   documents: string[]
+}
+
+interface AnnexResponse {
+  annex: Annex;
+  documents: string[]
+}
+
+interface ContractResponse {
+  contract: Contract;
 }
 
 @Injectable()
@@ -101,6 +110,63 @@ export class DocumentsEffects {
           );
       }));
   });
+
+  onUpdateAnnex$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.UPDATE_ANNEX),
+      switchMap((action: UpdateAnnex) => {
+        return this.http.put<AnnexResponse>(environment.backendUrl +
+          "/annex/" + action.payload.contract_id
+          + "?date=" + action.payload.sign_date,
+          {...action.payload})
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.SetAnnex({
+                annex: responseData.annex,
+                documents: responseData.documents.filter((document_info: string) => {
+                  return document_info.includes("pdf")
+                })
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+  onUpdateKidsNo$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.UPDATE_KIDS_NO),
+      switchMap((action: UpdateKidsNo) => {
+        const jsonProgram = localStorage.getItem("currentProgram");
+        if (!jsonProgram) {
+          throw new Error("CurrentProgram not found in localStorage");
+        }
+        const current_program = JSON.parse(jsonProgram);
+        return this.http.put<ContractResponse>(environment.backendUrl +
+          "/contract/" + current_program.id + "/" + action.school_id,
+          {...action.payload})
+          .pipe(
+            map(_ => {
+              return new DocumentsActions.FetchContracts(current_program.id);
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+  redirectOnSet = createEffect(() =>
+      this.action$.pipe(
+        ofType(DocumentsActions.SET_ANNEX, DocumentsActions.SET_CONTRACTS),
+        tap(() => {
+          this.router.navigate(["/dokumenty/umowy/"]);
+        })),
+    {dispatch: false});
+
+
   constructor(private action$: Actions, private http: HttpClient,
               private router: Router,
               private store$: Store<AppState>) {

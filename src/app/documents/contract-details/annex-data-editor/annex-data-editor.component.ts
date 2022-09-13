@@ -3,15 +3,18 @@ import {Annex} from "../../contract.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subscription} from "rxjs";
-import {convert_range_dates_and_validate} from "../../../shared/date_converter.utils";
+import {convert_date_from_backend_format, convert_range_dates_and_validate} from "../../../shared/date_converter.utils";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../store/app.reducer";
+import {formatDate} from "@angular/common";
+import * as DocumentsActions from "../../store/documents.action";
 
 @Component({
   selector: 'app-annex-data-editor',
   templateUrl: './annex-data-editor.component.html'
 })
 export class AnnexDataEditorComponent implements OnInit, OnDestroy {
+  isGenerating: boolean = false;
   editAnnex: Annex | null = null;
   annexForm: FormGroup;
   school_id: number = -1;
@@ -37,6 +40,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
       fruitVeg_products = this.editAnnex.fruitVeg_products;
       dairy_products = this.editAnnex.dairy_products;
     }
+    if (validity_date) validity_date = formatDate(convert_date_from_backend_format(validity_date), "yyyy-MM-dd", 'en');
     this.annexForm.addControl('sign_date', new FormControl("", [Validators.required]));
     this.annexForm.addControl('validity_date', new FormControl(validity_date, [Validators.required]));
     this.annexForm.addControl('fruitVeg_products', new FormControl(fruitVeg_products, [Validators.required, Validators.max(1000)]));
@@ -58,6 +62,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
           this.editAnnex = null;
         }});
     this.documentSub = this.store.select("document").subscribe(documentsState => {
+        this.isGenerating = documentsState.isGenerating;
         const contract = documentsState.contracts.find((contract) => { return contract.id === this.contract_id;})
         if (contract) {
           if (this.annex_id !== -1) {
@@ -77,7 +82,10 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
 
   onSubmitAnnex() {
     let formValues = this.annexForm.getRawValue();
-    this.error = convert_range_dates_and_validate(formValues);
+    this.error = convert_range_dates_and_validate(formValues, "sign_date", "validity_date");
+    if (this.error) return;
+    formValues["contract_id"] = this.contract_id;
+    this.store.dispatch(new DocumentsActions.UpdateAnnex(formValues));
   }
 
   ngOnDestroy(): void {

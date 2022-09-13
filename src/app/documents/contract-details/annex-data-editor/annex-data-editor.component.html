@@ -3,6 +3,9 @@
     <p>{{ error }}</p>
   </div>
   <div class="card">
+    <div class="overlay dark" *ngIf="isGenerating">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
     <div class="card-header">
       <h1 *ngIf="!editAnnex" class="card-title">Podaj dane do aneksu</h1>
       <h1 *ngIf="editAnnex" class="card-title">Edytuj dane aneksu nr {{editAnnex.no}}</h1>

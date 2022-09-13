@@ -32,10 +32,16 @@ export class ContractlistComponent implements OnInit {
       pageLength: 50,
       responsive: true,
       language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
+      rowCallback: (row: Node, data: Object | any, index: number) => {
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.onEdit(this.contracts[index].school.id);
+          const contract_no = data.at(0);
+          const contract = this.contracts.find((contract: Contract) => {
+            return contract.contract_no === contract_no;
+          })
+          if (contract){
+            this.onEdit(contract.school.id);
+          }
         });
         return row;
       }

@@ -1,7 +1,8 @@
 <div *ngIf="!selectedProgram" class="row">
-  <div *ngIf="isLoading" style="text: center;" class="overlay dark">
+  <div *ngIf="isLoading" class="overlay dark">
     <app-loading-spinner></app-loading-spinner>
   </div>
+
   <div class="col-12 align-content-center">
     <a (click)="addProgram()" class="btn-lg btn-info float-right cursor">
       <i class="fas fa-sign"></i> Dodaj nowy program
@@ -23,9 +24,9 @@
 <div *ngIf="selectedProgram" class="row">
   <div class="col-12 align-content-center">
     <h3>Program na semestr {{ selectedProgram.semester_no}} roku {{ selectedProgram.school_year}} </h3>
-      <a (click)="showDetails()" class="btn-lg btn-info float-lg-start cursor">
-        <i class="fas fa-info-circle"></i> Informacje
-      </a>
+    <a (click)="showDetails()" class="btn-lg btn-info float-lg-start cursor">
+      <i class="fas fa-info-circle"></i> Informacje
+    </a>
     <a (click)="loadOtherProgram()" class="btn-lg btn-primary float-lg-end cursor">
       <i class="fas fa-list"></i> Załaduj inny program
     </a>

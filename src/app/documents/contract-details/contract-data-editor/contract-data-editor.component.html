@@ -1,1 +1,27 @@
-<p>contract-data-editor works!</p>
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 *ngIf="contract" class="card-title">{{contract.school.nick}}: </h1>
+      <h2 *ngIf="contract" class="card-title">wpisz liczbę dzieci dla umowy nr
+        {{contract.contract_no}}/{{contract.contract_year}}</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="contractForm" (ngSubmit)="onSubmitKidsNoUpdate()">
+        <div class="form-group">
+          <label>Produkt owocowo-warzywny</label>
+          <input formControlName="fruitVeg_products" type="number" step="1"
+                 class="form-control"
+                 name="fruitVeg_products">
+          <label>Produkt mleczny</label>
+          <input formControlName="dairy_products" type="number" step="1"
+                 class="form-control"
+                 name="dairy_products">
+          <br/>
+        </div>
+        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!contractForm.valid">
+          <i class="fas fa-check-circle"></i> Zatwierdź
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

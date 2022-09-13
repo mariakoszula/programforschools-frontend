@@ -7,6 +7,7 @@ export class Annex {
               public validity_date: string,
               public fruitVeg_products: number,
               public dairy_products: number,
+              public sign_date: string
 ) {
 
   }
