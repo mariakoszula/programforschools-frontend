@@ -9,10 +9,12 @@ import {ProgramsComponent} from "./programs.component";
 import { ProgramDataComponent } from './program-data/program-data.component';
 import { WeekDataEditorComponent } from './weeks-add/week-data-editor.component';
 import { WeekEditComponent } from './weeks-add/week-edit/week-edit.component';
+import { ProductAddComponent } from './product-add/product-add.component';
+import { ProductSummarizeComponent } from './product-summrize/product-summarize.component';
 
 
 @NgModule({
-  declarations: [ProgramlistComponent, ProgramDataEditorComponent, ProgramsComponent, ProgramDataComponent, WeekDataEditorComponent, WeekEditComponent
+  declarations: [ProgramlistComponent, ProgramDataEditorComponent, ProgramsComponent, ProgramDataComponent, WeekDataEditorComponent, WeekEditComponent, ProductAddComponent, ProductSummarizeComponent
     ],
   imports: [
     CommonModule,

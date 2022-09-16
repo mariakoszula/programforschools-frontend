@@ -37,13 +37,12 @@ export class ProgramDataEditorComponent implements OnInit, OnDestroy {
           this.isLoading = programState.isLoading;
           if (programState.indexOfSelectedProgram !== -1) {
             this.editedProgram = programState.programs[programState.indexOfSelectedProgram];
-            this.initForm();
           } else {
             this.editedProgram = null;
           }
         }
       );
-
+    this.initForm();
   }
 
   private initForm() {

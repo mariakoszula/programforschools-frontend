@@ -31,3 +31,18 @@ export class Week {
               public program_id: number) {
   }
 }
+
+export class Product {
+  constructor(public name: string,
+              public product_type: string,
+              public weight_type: string) {
+  }
+}
+
+export class ProductStore {
+  constructor(public product: Product,
+              public weight: number,
+              public min_amount: number,
+              public program_id: number) {
+  }
+}

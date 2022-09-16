@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Program, Week} from "../program.model";
+import {ProductStore, Program, Week} from "../program.model";
 import {map} from "rxjs/operators";
-import {switchMap} from "rxjs";
+import {Subscription, switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 
@@ -15,6 +15,9 @@ export class ProgramDataComponent implements OnInit {
   program!: Program;
   id: number | undefined;
   weeks: Week[] = [];
+  productsFruitVeg: ProductStore[] = [];
+  productsDairy: ProductStore[] = [];
+
   constructor(private router: Router,
               private activeRoute: ActivatedRoute,
               private store: Store<AppState>) {
@@ -30,33 +33,31 @@ export class ProgramDataComponent implements OnInit {
         switchMap(id => {
           this.id = id;
           return this.store.select('program');
-        }),
-        map(programState => {
-          if (programState.weeks) {
-            this.weeks = programState.weeks;
-          }
-          return programState.programs.find((program, _) => {
-            return program.id === this.id;
-          });
-        })).subscribe(program => {
-      if (program)
+        })).subscribe(programState => {
+      let program = programState.programs.find((program, _) => {
+        return program.id === this.id;
+      });
+      if (program) {
         this.program = program;
-    })
-
+        this.weeks = programState.weeks;
+        this.productsDairy = programState.dairyProducts;
+        this.productsFruitVeg = programState.fruitVegProducts;
+      }
+    });
   }
 
   onDelete() {
   }
 
   onEdit() {
-      this.router.navigate(['edycja'], {relativeTo: this.activeRoute});
+    this.router.navigate(['edycja'], {relativeTo: this.activeRoute});
   }
 
   onEditWeeks() {
-      this.router.navigate(['tygodnie'], {relativeTo: this.activeRoute});
+    this.router.navigate(['tygodnie'], {relativeTo: this.activeRoute});
   }
 
   onEditProduct() {
-    //TODO implement
+    this.router.navigate(['produkty'], {relativeTo: this.activeRoute});
   }
 }

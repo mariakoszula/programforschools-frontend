@@ -1,0 +1,30 @@
+<div class="card-header text-muted border-bottom-0">
+</div>
+<div class="card-body pt-0">
+  <div class="row">
+    <div class="col-10">
+      <h2 class="lead"><b>Produkty</b></h2>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Nazwa</th>
+          <th>Ilość podań</th>
+          <th>Waga</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let _product of productsFruitVeg" class="table-success">
+          <td>{{ _product.product.name }}</td>
+          <td>{{ _product.min_amount }}</td>
+          <td>{{ _product.weight }} {{ _product.product.weight_type }}</td>
+        </tr>
+        <tr *ngFor="let _product of productsDairy" class="table-warning">
+          <td>{{ _product.product.name }}</td>
+          <td>{{ _product.min_amount }}</td>
+          <td>{{ _product.weight }} {{ _product.product.weight_type }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

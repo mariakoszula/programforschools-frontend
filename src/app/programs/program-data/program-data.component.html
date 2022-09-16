@@ -1,16 +1,19 @@
-<div *ngIf="program" style="align-content: center">
+<div *ngIf="program" class="d-flex align-items-stretch flex-row flex-wrap" style="align-content: center">
   <div class="card bg-light m-2" style="width:400px">
     <div class="card-header text-muted border-bottom-0">
       Semestr {{ program.semester_no }} rok {{ program.school_year}}
     </div>
     <div class="card-body pt-0">
       <div class="row">
-        <div class="col-7">
+        <div class="col-10">
           <h2 class="lead"><b>Dane podstawowe</b></h2>
           <ul class="ml-4 mb-0 fa-ul text-muted">
             <li *ngIf="isAdmin" class="small"><span class="fa-li"><i class="fas fa-lg fa-sign"></i></span>
               {{ program.id }}
             </li>
+            <li>{{program.start_date}} - {{program.end_date}}</li>
+            <li>Suma podań produktów owocowo-warzywnych: <b>{{program.fruitVeg_amount}}</b></li>
+            <li>Suma podań produktów owocowo-warzywnych: <b>{{program.dairy_amount}}</b></li>
           </ul>
         </div>
       </div>
@@ -33,13 +36,24 @@
     </div>
     <div class="card-body pt-0">
       <div class="row">
-        <div class="col-7">
+        <div class="col-10">
           <h2 class="lead"><b>Tygodnie</b></h2>
-          <ul class="ml-4 mb-0 fa-ul text-muted">
-            <li *ngFor="let week of weeks;">
-              {{week.week_no}}: {{ week.start_date }} - {{ week.end_date}}
-            </li>
-          </ul>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Data rozpoczęcia</th>
+              <th>Data zakończenia</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let week of weeks">
+              <td>{{ week.week_no }}</td>
+              <td>{{ week.start_date }}</td>
+              <td>{{ week.end_date }}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -52,19 +66,7 @@
     </div>
   </div>
   <div class="card bg-light m-2" style="width:400px">
-    <div class="card-header text-muted border-bottom-0">
-    </div>
-    <div class="card-body pt-0">
-      <div class="row">
-        <div class="col-7">
-          <h2 class="lead"><b>Produkty</b></h2>
-          <ul class="ml-4 mb-0 fa-ul text-muted">
-            <li> Do implementacji
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <app-product-summarize [productsDairy]="productsDairy" [productsFruitVeg]="productsFruitVeg"></app-product-summarize>
     <div class="card-footer">
       <div class="text-left">
         <a (click)="onEditProduct()" class="btn btn-sm btn-primary">

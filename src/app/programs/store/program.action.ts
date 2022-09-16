@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {Program, Week} from "../program.model";
+import {Product, ProductStore, Program, Week} from "../program.model";
 
 export const ADD = "[Program] ADD";
 export const UPDATE = "[Program] UPDATE";
@@ -7,9 +7,18 @@ export const FETCH = "[Program] FETCH";
 export const SELECT = "[Program] SELECT";
 export const SET_ALL = "[Program] SET_ALL";
 export const SET_WEEK_ALL = "[Program] SET_WEEK_ALL";
+export const SET_ALL_DAIRY_PRODUCTS = "[Program] SET_ALL_DAIRY_PRODUCTS";
+export const SET_ALL_FRUIT_VEG_PRODUCTS = "[Program] SET_ALL_FRUIT_VEG_PRODUCTS";
 export const SAVE = "[Program] SAVE";
-export const ADD_WEEK = "[Program] ADD_WEEK";
-export const SAVE_WEEK = "[Program] SAVE_WEEK";
+export const ADD_WEEK = "[Week] ADD_WEEK";
+export const SAVE_WEEK = "[Week] SAVE_WEEK";
+export const ERROR_HANDLER = "[Program] ERROR_HANDLER";
+export const FETCH_PRODUCT_TYPE = "[Product] FETCH_PRODUCT_TYPE"
+export const SET_PRODUCT_TYPE = "[Product] SET_PRODUCT_TYPE"
+export const FETCH_PRODUCT = "[Product] FETCH_PRODUCT"
+export const SET_PRODUCTS = "[Product] SET_PRODUCTS"
+export const ADD_PRODUCT = "[Product] ADD_PRODUCT"
+export const SAVE_PRODUCT = "[Product] SAVE_PRODUCT"
 
 export class Fetch implements Action {
   readonly type = FETCH;
@@ -70,4 +79,84 @@ export class SetAllWeek implements Action {
   constructor(public payload: Week[]) {
   }
 }
-export type ProgramActions = Fetch | Add | Update | SetAll | Select | Save | AddWeek | SaveWeek | SetAllWeek;
+
+export class ErrorHandler implements Action {
+  readonly type = ERROR_HANDLER;
+
+  constructor(public payload: string) {
+
+  }
+}
+
+export class SetAllDairyProducts implements Action {
+  readonly type = SET_ALL_DAIRY_PRODUCTS;
+
+  constructor(public payload: ProductStore[]) {
+  }
+}
+
+export class SetAllFruitVegProducts implements Action {
+  readonly type = SET_ALL_FRUIT_VEG_PRODUCTS;
+
+  constructor(public payload: ProductStore[]) {
+  }
+}
+
+export class FetchProductType implements Action {
+  readonly type = FETCH_PRODUCT_TYPE;
+}
+
+export class SetProductType implements Action {
+  readonly type = SET_PRODUCT_TYPE;
+
+  constructor(public payload: string[]) {
+  }
+}
+
+export class FetchProduct implements Action {
+  readonly type = FETCH_PRODUCT;
+
+  constructor(public product_type: string) {
+  }
+}
+
+export class SetProducts implements Action {
+  readonly type = SET_PRODUCTS;
+
+  constructor(public payload: Product[]) {
+  }
+}
+
+export class AddProduct implements Action {
+  readonly type = ADD_PRODUCT;
+
+  constructor(public product_type: string, public payload: ProductStore) {
+  }
+}
+
+export class SaveProduct implements Action {
+  readonly type = SAVE_PRODUCT;
+
+  constructor(public product_type: string, public payload: ProductStore) {
+  }
+}
+
+export type ProgramActions =
+  Fetch
+  | Add
+  | Update
+  | SetAll
+  | Select
+  | Save
+  | AddWeek
+  | SaveWeek
+  | SetAllWeek
+  | ErrorHandler
+  | SetAllDairyProducts
+  | SetAllFruitVegProducts
+  | FetchProductType
+  | SetProductType
+  | FetchProduct
+  | SetProducts
+  | SaveProduct
+  | AddProduct;

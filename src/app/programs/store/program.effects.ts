@@ -7,9 +7,12 @@ import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
-import {Program, ProgramResponse, Week, WeeksResponse} from "../program.model";
+import {Product, ProductStore, Program, ProgramResponse, Week, WeeksResponse} from "../program.model";
 import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
+export const FRUIT_VEG_PRODUCT = "owocowo-warzywny";
+export const DAIRY_PRODUCT = "nabiał";
 
 interface ProgramAddResponse {
   program: Program;
@@ -17,6 +20,24 @@ interface ProgramAddResponse {
 
 interface WeekAddResponse {
   week: Week;
+}
+
+interface ProductResponse {
+  products: ProductStore[];
+}
+
+function update_in_storage_list(json_storage_name: string, new_item: any) {
+  if (!new_item) {
+    console.log("New Item does not exists");
+    return;
+  }
+  let jsonData = localStorage.getItem(json_storage_name);
+  let listTemp = [];
+  if (jsonData) {
+    listTemp = JSON.parse(jsonData);
+  }
+  listTemp.push(new_item);
+  localStorage.setItem(json_storage_name, JSON.stringify(listTemp));
 }
 
 @Injectable()
@@ -37,9 +58,8 @@ export class ProgramEffects {
           map((respData) => {
             return new ProgramActions.Save(respData.program);
           }),
-          catchError(error => {
-            console.log(error);
-            return of({type: "Dummy_action"});
+          catchError((error: HttpErrorResponse) => {
+            return of(new ProgramActions.ErrorHandler(error.error.message));
           }));
       }));
   });
@@ -60,9 +80,8 @@ export class ProgramEffects {
           map((respData) => {
             return new ProgramActions.SaveWeek(respData.week);
           }),
-          catchError(error => {
-            console.log(error);
-            return of({type: "Dummy_action"});
+          catchError((error: HttpErrorResponse) => {
+            return of(new ProgramActions.ErrorHandler(error.error.message));
           }));
       }));
   });
@@ -83,10 +102,10 @@ export class ProgramEffects {
             localStorage.setItem("currentProgram", JSON.stringify(respData.program));
             return new ProgramActions.Save(respData.program);
           }),
-          catchError(error => {
-            console.log(error);
-            return of({type: "Dummy_action"});
-          }));
+          catchError((error: HttpErrorResponse) => {
+              return of(new ProgramActions.ErrorHandler(error.error.message));
+            }
+          ));
       }));
   });
 
@@ -98,11 +117,27 @@ export class ProgramEffects {
         })),
     {dispatch: false});
 
-  redirectOnSaveWeek = createEffect(() =>
+  redirectAndSaveOnSaveWeek = createEffect(() =>
       this.action$.pipe(
         ofType(ProgramActions.SAVE_WEEK),
         tap((actionResp: ProgramActions.SaveWeek) => {
+          update_in_storage_list("currentWeeks", actionResp.payload);
           this.router.navigate(["programy/" + actionResp.payload.program_id]);
+        })),
+    {dispatch: false});
+
+  onSaveProduct = createEffect(() =>
+      this.action$.pipe(
+        ofType(ProgramActions.SAVE_PRODUCT),
+        tap((actionResp: ProgramActions.SaveProduct) => {
+          console.log(actionResp);
+          console.log("product types in save: " + actionResp.product_type);
+          if (actionResp.product_type === FRUIT_VEG_PRODUCT) {
+            update_in_storage_list("currentFruitVegProducts", actionResp.payload);
+
+          } else if (actionResp.product_type === DAIRY_PRODUCT) {
+            update_in_storage_list("currentDiaryProducts", actionResp.payload);
+          }
         })),
     {dispatch: false});
 
@@ -118,14 +153,58 @@ export class ProgramEffects {
         return this.http.get<WeeksResponse>(environment.backendUrl + '/week/all?program_id=' + id)
           .pipe(
             map(responseData => {
+              localStorage.setItem("currentWeeks", JSON.stringify(responseData.weeks));
               return new ProgramActions.SetAllWeek(responseData.weeks);
             }),
-            catchError(error => {
-              console.log(error);
-              return of({type: "Dummy_action"});
+            catchError((error: HttpErrorResponse) => {
+              return of(new ProgramActions.ErrorHandler(error.error.message));
             }))
       }
-       return of({type: "Dummy_action"});
+      return of({type: "Dummy_action"});
+    })));
+
+  onSetAllWeek$ = createEffect(() => this.action$.pipe(
+    ofType(ProgramActions.SET_WEEK_ALL),
+    withLatestFrom(this.store$.select('program')),
+    switchMap(([_, state]) => {
+      let id = null;
+      if (state.indexOfSelectedProgram !== -1) {
+        const currentProgram = state.programs[state.indexOfSelectedProgram];
+        id = currentProgram.id;
+        return this.http.get<ProductResponse>(environment.backendUrl + '/product_store?program_id=' + id
+          + '&product_type=' + FRUIT_VEG_PRODUCT)
+          .pipe(
+            map(responseData => {
+              localStorage.setItem("currentFruitVegProducts", JSON.stringify(responseData.products));
+              return new ProgramActions.SetAllFruitVegProducts(responseData.products);
+            }),
+            catchError((error: HttpErrorResponse) => {
+              return of(new ProgramActions.ErrorHandler(error.error.message));
+            }))
+      }
+      return of({type: "Dummy_action"});
+    })));
+
+  onSetAllFruitVegProducts$ = createEffect(() => this.action$.pipe(
+    ofType(ProgramActions.SET_ALL_FRUIT_VEG_PRODUCTS),
+    withLatestFrom(this.store$.select('program')),
+    switchMap(([_, state]) => {
+      let id = null;
+      if (state.indexOfSelectedProgram !== -1) {
+        const currentProgram = state.programs[state.indexOfSelectedProgram];
+        id = currentProgram.id;
+        return this.http.get<ProductResponse>(environment.backendUrl + '/product_store?program_id=' + id
+          + '&product_type=' + DAIRY_PRODUCT)
+          .pipe(
+            map(responseData => {
+              localStorage.setItem("currentDiaryProducts", JSON.stringify(responseData.products));
+              return new ProgramActions.SetAllDairyProducts(responseData.products);
+            }),
+            catchError((error: HttpErrorResponse) => {
+              return of(new ProgramActions.ErrorHandler(error.error.message));
+            }))
+      }
+      return of({type: "Dummy_action"});
     })));
 
   onFetch$ = createEffect(() => {
@@ -136,9 +215,61 @@ export class ProgramEffects {
           .pipe(
             map(responseData => {
               localStorage.removeItem("currentProgram");
+              localStorage.removeItem("currentWeeks");
+              localStorage.removeItem("currentDiaryProducts");
+              localStorage.removeItem("currentFruitVegProducts");
               return new ProgramActions.SetAll(responseData.programs);
             }),
           );
+      }));
+  });
+
+  onFetchProductType$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.FETCH_PRODUCT_TYPE),
+      switchMap(() => {
+        return this.http.get<{ product_type: string[] }>(environment.backendUrl + '/product_type')
+          .pipe(
+            map(responseData => {
+              return new ProgramActions.SetProductType(responseData.product_type);
+            }),
+          );
+      }));
+  });
+
+  onFetchProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.FETCH_PRODUCT),
+      switchMap(() => {
+        return this.http.get<{ product: Product[] }>(environment.backendUrl + '/product')
+          .pipe(
+            map(responseData => {
+              return new ProgramActions.SetProducts(responseData.product);
+            }),
+          );
+      }));
+  });
+
+  onAddProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.ADD_PRODUCT),
+      withLatestFrom(this.store$.select('program')),
+      switchMap(([currentAction, currentState]) => {
+
+        let programData: ProgramActions.AddProduct = currentAction;
+        let prepareBody = {...programData.payload};
+        let program_id = currentState.programs[currentState.indexOfSelectedProgram].id;
+        prepareBody.program_id = program_id;
+        return this.http.post<{product_store: ProductStore}>(
+          environment.backendUrl + '/product_store',
+          prepareBody).pipe(
+          map((respData) => {
+            return new ProgramActions.SaveProduct(programData.product_type, respData.product_store);
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.log(error);
+            return of(new ProgramActions.ErrorHandler(error.error.message));
+          }));
       }));
   });
 
