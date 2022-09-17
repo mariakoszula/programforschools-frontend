@@ -95,8 +95,11 @@ export class AuthEffects {
           this.authService.removeToken(userData.access_token);
           localStorage.removeItem("userData");
           this.router.navigate(['/logowanie']);
-
         }
+        localStorage.removeItem("currentProgram");
+        localStorage.removeItem("currentWeeks");
+        localStorage.removeItem("currentDiaryProducts");
+        localStorage.removeItem("currentFruitVegProducts");
       })),
     {dispatch: false}
   );
