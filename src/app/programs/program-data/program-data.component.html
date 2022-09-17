@@ -44,6 +44,8 @@
               <th>#</th>
               <th>Data rozpoczęcia</th>
               <th>Data zakończenia</th>
+              <th>Data zakończenia</th>
+              <th></th>
             </tr>
             </thead>
             <tbody>
@@ -51,6 +53,9 @@
               <td>{{ week.week_no }}</td>
               <td>{{ week.start_date }}</td>
               <td>{{ week.end_date }}</td>
+              <td><a class="btn btn-info btn-sm" (click)="onEditWeek(week.id)">
+                <i class="fas fa-pencil-alt"></i>Edycja
+              </a></td>
             </tr>
             </tbody>
           </table>
@@ -66,7 +71,8 @@
     </div>
   </div>
   <div class="card bg-light m-2" style="width:400px">
-    <app-product-summarize [productsDairy]="productsDairy" [productsFruitVeg]="productsFruitVeg"></app-product-summarize>
+    <app-product-summarize [productsDairy]="productsDairy"
+                           [productsFruitVeg]="productsFruitVeg"></app-product-summarize>
     <div class="card-footer">
       <div class="text-left">
         <a (click)="onEditProduct()" class="btn btn-sm btn-primary">

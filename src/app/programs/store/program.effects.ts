@@ -26,15 +26,22 @@ interface ProductResponse {
   products: ProductStore[];
 }
 
-function update_in_storage_list(json_storage_name: string, new_item: any) {
+type TypeWithId = Week | ProductStore;
+
+function update_in_storage_list(json_storage_name: string, new_item: TypeWithId) {
   if (!new_item) {
     console.log("New Item does not exists");
     return;
   }
   let jsonData = localStorage.getItem(json_storage_name);
-  let listTemp = [];
+  let listTemp: TypeWithId[] = [];
   if (jsonData) {
     listTemp = JSON.parse(jsonData);
+    let update = listTemp.find((item: TypeWithId) => item.id === new_item.id);
+    if (update) {
+      let indexOfUpdate = listTemp.indexOf(update);
+      listTemp.splice(indexOfUpdate, 1);
+    }
   }
   listTemp.push(new_item);
   localStorage.setItem(json_storage_name, JSON.stringify(listTemp));
@@ -86,7 +93,25 @@ export class ProgramEffects {
       }));
   });
 
-
+  onEditWeek$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.EDIT_WEEK),
+      switchMap((action: ProgramActions.EditWeek) => {
+        return this.http.put<WeekAddResponse>(
+          environment.backendUrl + '/week/' + action.payload.id,
+          {
+            'week_no': action.payload.week_no,
+            'start_date': action.payload.start_date,
+            'end_date': action.payload.end_date
+          }).pipe(
+          map((respData) => {
+            return new ProgramActions.SaveWeek(respData.week);
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(new ProgramActions.ErrorHandler(error.error.message));
+          }));
+      }));
+  });
   onUpdate$ = createEffect(() => {
     return this.action$.pipe(
       ofType(ProgramActions.UPDATE),
@@ -260,7 +285,7 @@ export class ProgramEffects {
         let prepareBody = {...programData.payload};
         let program_id = currentState.programs[currentState.indexOfSelectedProgram].id;
         prepareBody.program_id = program_id;
-        return this.http.post<{product_store: ProductStore}>(
+        return this.http.post<{ product_store: ProductStore }>(
           environment.backendUrl + '/product_store',
           prepareBody).pipe(
           map((respData) => {

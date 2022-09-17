@@ -34,9 +34,9 @@ import {Contract} from "./contract.model";
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: DocumentsComponent,
-        resolve: [ProgramResolverService, ContractResolverService],
+        resolve: [ProgramResolverService, SchoolResolverService],
         children: [
-          {path: 'umowy', component: ContractsGenComponent, resolve: [ProgramResolverService, SchoolResolverService]},
+          {path: 'umowy', component: ContractsGenComponent, resolve: [ContractResolverService]},
           {path: 'umowy/:school_id', component: ContractDetailsComponent},
           {path: 'umowy/:school_id/:contract_id/edycja', component: ContractDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/nowy_aneks', component: AnnexDataEditorComponent},

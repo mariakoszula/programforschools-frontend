@@ -26,9 +26,9 @@ export class Program {
 export class Week {
   constructor(public id: number,
               public week_no: number,
-              public start_date: number,
-              public end_date: number,
-              public program_id: number) {
+              public start_date: string,
+              public end_date: string,
+              public program_id: number | null = null) {
   }
 }
 
@@ -43,6 +43,7 @@ export class ProductStore {
   constructor(public product: Product,
               public weight: number,
               public min_amount: number,
-              public program_id: number) {
+              public program_id: number,
+              public id: number) {
   }
 }

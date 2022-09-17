@@ -13,7 +13,7 @@ import {SET_CONTRACTS} from "./store/documents.action";
   providedIn: 'root'
 })
 export class ContractResolverService implements Resolve<Contract[]> {
-
+  resolved: boolean = false;
   constructor(private store: Store<AppState>,
               private actions$: Actions) {
   }
@@ -25,19 +25,19 @@ export class ContractResolverService implements Resolve<Contract[]> {
         return contractState.contracts;
       }),
       switchMap(contracts => {
-        if (contracts.length === 0) {
+        if (contracts.length === 0 && !this.resolved) {
           const currentProgramJson = localStorage.getItem("currentProgram")
-          if(currentProgramJson) {
+          if (currentProgramJson) {
             const program_id = JSON.parse(currentProgramJson)["id"];
             this.store.dispatch(new DocumentsActions.FetchContracts(program_id));
+            this.resolved = true;
+            return this.actions$.pipe(
+              ofType(SET_CONTRACTS),
+              take(1)
+            )
           }
-          return this.actions$.pipe(
-            ofType(SET_CONTRACTS),
-            take(1)
-          )
-        } else {
-          return of(contracts);
         }
+        return of(contracts);
       })
     );
   }

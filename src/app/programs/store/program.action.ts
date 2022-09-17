@@ -11,6 +11,7 @@ export const SET_ALL_DAIRY_PRODUCTS = "[Program] SET_ALL_DAIRY_PRODUCTS";
 export const SET_ALL_FRUIT_VEG_PRODUCTS = "[Program] SET_ALL_FRUIT_VEG_PRODUCTS";
 export const SAVE = "[Program] SAVE";
 export const ADD_WEEK = "[Week] ADD_WEEK";
+export const EDIT_WEEK = "[Week] EDIT_WEEK";
 export const SAVE_WEEK = "[Week] SAVE_WEEK";
 export const ERROR_HANDLER = "[Program] ERROR_HANDLER";
 export const FETCH_PRODUCT_TYPE = "[Product] FETCH_PRODUCT_TYPE"
@@ -62,6 +63,12 @@ export class Select implements Action {
 export class AddWeek implements Action {
   readonly type = ADD_WEEK;
 
+  constructor(public payload: Week) {
+  }
+}
+
+export class EditWeek implements Action {
+  readonly type = EDIT_WEEK;
   constructor(public payload: Week) {
   }
 }
@@ -149,6 +156,7 @@ export type ProgramActions =
   | Select
   | Save
   | AddWeek
+  | EditWeek
   | SaveWeek
   | SetAllWeek
   | ErrorHandler

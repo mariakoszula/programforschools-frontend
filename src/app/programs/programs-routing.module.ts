@@ -6,8 +6,8 @@ import {ProgramDataEditorComponent} from "./program-add/program-data-editor.comp
 import {ProgramsComponent} from "./programs.component";
 import {ProgramDataComponent} from "./program-data/program-data.component";
 import {ProgramResolverService} from "./program-resolver.service";
-import {WeekDataEditorComponent} from "./weeks-add/week-data-editor.component";
 import {ProductAddComponent} from "./product-add/product-add.component";
+import {WeekEditComponent} from "./weeks-add/week-edit.component";
 
 const routes: Routes = [
   {
@@ -19,9 +19,9 @@ const routes: Routes = [
       {path: 'nowy', component: ProgramDataEditorComponent},
       {path: ':id', component: ProgramDataComponent, resolve: [ProgramResolverService]},
       {path: ':id/edycja', component: ProgramDataEditorComponent, resolve: [ProgramResolverService]},
-      {path: ':id/tygodnie', component: WeekDataEditorComponent, resolve: [ProgramResolverService]},
+      {path: ':id/tygodnie', component: WeekEditComponent, resolve: [ProgramResolverService]},
       {path: ':id/produkty', component: ProductAddComponent, resolve: [ProgramResolverService]},
-      {path: ':id/tygodnie/edycja', component: WeekDataEditorComponent, resolve: [ProgramResolverService]},
+      {path: ':id/tygodnie/:week_id/edycja', component: WeekEditComponent, resolve: [ProgramResolverService]},
     ]
   }
 ];

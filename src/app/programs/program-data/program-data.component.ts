@@ -60,4 +60,8 @@ export class ProgramDataComponent implements OnInit {
   onEditProduct() {
     this.router.navigate(['produkty'], {relativeTo: this.activeRoute});
   }
+
+  onEditWeek(id: number) {
+    this.router.navigate(['tygodnie/' + id + '/edycja'], {relativeTo: this.activeRoute});
+  }
 }

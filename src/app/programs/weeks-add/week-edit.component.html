@@ -2,7 +2,7 @@
   <p>{{ error }}</p>
 </div>
 <div class="col-lg-12">
-  <form [formGroup]="weekForm" (ngSubmit)="addWeek()" autocomplete="off">
+  <form [formGroup]="weekForm" (ngSubmit)="addOrEditWeek()" autocomplete="off">
     <div class="form-group">
       <label>Numer </label><input formControlName="week_no" class="form-control" name="week_no" type="number">
       <label>Data rozpoczęcia</label>
@@ -13,7 +13,7 @@
              min="2022-09-19" max="2032-01-01">
     </div>
     <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!weekForm.valid">
-      <i class="fas fa-calendar-week"></i> Dodaj tydzień
+      <i class="fas fa-save"></i> Zapisz
     </button>
   </form>
 </div>
