@@ -33,5 +33,6 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
 
   fetchData() {
      this.store.dispatch(new ProgramActions.Fetch());
+     this.router.navigate(["/programy"]);
   }
 }

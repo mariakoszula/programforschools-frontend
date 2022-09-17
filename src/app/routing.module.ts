@@ -8,7 +8,8 @@ const appRoutes: Routes = [
   {path: 'uzytkownicy', loadChildren: () => import('./user-management/user-management.module').then(module => module.UserManagementModule)},
   {path: 'programy', loadChildren: () => import('./programs/programs.module').then(module => module.ProgramsModule)},
   {path: 'szkoly', loadChildren: () => import('./schools/schools.module').then(module => module.SchoolsModule)},
-  {path: 'dokumenty', loadChildren: () => import('./documents/documents.module').then(module => module.DocumentsModule)}
+  {path: 'dokumenty', loadChildren: () => import('./documents/documents.module').then(module => module.DocumentsModule)},
+  {path: 'planowanie', loadChildren: () => import('./record-planner/record-planner.module').then(module => module.RecordPlannerModule)}
 ];
 
 @NgModule({

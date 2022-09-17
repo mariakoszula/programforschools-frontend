@@ -1,0 +1,53 @@
+<div class="card card-primary">
+  <div class="card-header">
+    <h3 class="card-title">Zaplanuj tydzień</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body row" style="display: inline-flex;">
+    <button (click)="selectWeek($event, week.id)" *ngFor="let week of weeks" type="button"
+            class="btn btn-outline-info btn-block btn-flat"><i
+      class="fa fa-list-ol"></i>
+      Tydzień {{week.week_no}}
+    </button>
+  </div>
+</div>
+<div class="card card-outline card-success">
+  <div class="card-header">
+    <h3 class="card-title">Zaplanuj produkty</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <p *ngIf="!weekSelected">Wybierz tydzień</p>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<div class="card card-success" style="transition: all 0.15s ease 0s; height: inherit; width: inherit;">
+  <div class="card-header">
+    <h3 class="card-title">Zaplanowane podania</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html"
+              data-source-selector="#card-refresh-content" data-load-on-init="false">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <p *ngIf="!weekSelected">Wybierz tydzień</p>
+  </div>
+</div>
