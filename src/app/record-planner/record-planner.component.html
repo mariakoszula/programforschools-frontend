@@ -28,7 +28,7 @@
   </div>
   <div class="card-body">
     <p *ngIf="!weekSelected">Wybierz tydzień</p>
-    <router-outlet></router-outlet>
+    <router-outlet *ngIf="weekSelected"></router-outlet>
   </div>
 </div>
 <div class="card card-success" style="transition: all 0.15s ease 0s; height: inherit; width: inherit;">

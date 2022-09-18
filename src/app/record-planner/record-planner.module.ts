@@ -3,13 +3,12 @@ import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {RouterModule} from "@angular/router";
 import {AuthGuard, ProgramSelectedGuard} from "../auth/authguard.service";
-import {DocumentsComponent} from "../documents/documents.component";
 import {ProgramResolverService} from "../programs/program-resolver.service";
 import {SchoolResolverService} from "../schools/school-resolver.service";
-import {ContractsGenComponent} from "../documents/contracts-gen/contracts-gen.component";
-import {ContractResolverService} from "../documents/documents-resolver.service";
 import {RecordPlannerComponent} from "./record-planner.component";
 import {SelectDateComponent} from "./select-date/select-date.component";
+import {SelectSchoolComponent} from "./select-school/select-school.component";
+import {SelectProductComponent} from "./select-product/select-product.component";
 
 @NgModule({
   declarations: [RecordPlannerComponent, SelectDateComponent],
@@ -23,7 +22,9 @@ import {SelectDateComponent} from "./select-date/select-date.component";
         component: RecordPlannerComponent,
         resolve: [ProgramResolverService, SchoolResolverService],
         children: [
-          {path: ':id', component: SelectDateComponent}
+          {path: ':id', component: SelectDateComponent},
+          {path: ':id/:date/wybierz-szkoly', component: SelectSchoolComponent},
+          {path: ':id/:date/wybierz-produkty', component: SelectProductComponent}
         ]
       }
     ])
