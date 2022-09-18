@@ -23,7 +23,7 @@ export class ProductAddComponent implements OnInit {
       "product_type": new FormControl("", []),
       "name": new FormControl("", [Validators.required]),
       "min_amount": new FormControl("", [Validators.required, Validators.min(1), Validators.max(100)]),
-      "weight": new FormControl("", [Validators.required, Validators.min(0.1), Validators.max(1)])
+      "weight": new FormControl("", [Validators.required, Validators.min(0.09), Validators.max(1)])
     });
   }
 
