@@ -41,7 +41,6 @@ export class AddUserComponent implements OnInit {
     this.authService.register(email, password,
       username, RoleUtils.toEnum(role)).subscribe({
         next: response => {
-          console.log(response);
           this.isLoading = false;
           this.router.navigate(['/uzytkownicy']);
         },

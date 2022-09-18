@@ -6,8 +6,7 @@ import {
   GENERATE_REGISTER,
   SET_ANNEX,
   SET_CONTRACTS,
-  UPDATE_ANNEX,
-  UPDATE_KIDS_NO
+  UPDATE_ANNEX
 } from "./documents.action";
 
 export interface State {
@@ -22,26 +21,37 @@ const initialState = {
   isGenerating: false
 }
 
-export function documentsReducer(state: State = initialState, action: DocumentsActions)
-{
-  switch(action.type) {
+export function documentsReducer(state: State = initialState, action: DocumentsActions) {
+  switch (action.type) {
     case FETCH_CONTRACTS:
       return {
         ...state,
-        contracts: [...state.contracts]
+        contracts: [],
+        generatedDocuments: [],
+        isGenerating: false
       }
     case SET_CONTRACTS:
+      let updated_contracts: Contract[] = [...state.contracts];
+      action.payload.contracts.forEach(new_contract => {
+        const foundContract = updated_contracts.find(_contract => _contract.id === new_contract.id);
+        if (foundContract){
+          const indexOfUpdatedContract = updated_contracts.indexOf(foundContract);
+          updated_contracts[indexOfUpdatedContract] = {...new_contract};
+        } else {
+          updated_contracts.push(new_contract)
+        }
+      });
       return {
         ...state,
-        contracts: [...action.payload.contracts],
+        contracts: updated_contracts,
         generatedDocuments: [...action.payload.documents],
         isGenerating: false
       }
     case SET_ANNEX:
-      const updated_contracts = [...state.contracts];
+      const updated_contracts_for_annex = [...state.contracts];
       const contract_with_annex = state.contracts.find((_contract: Contract) => {
         return _contract.id === action.payload.annex.contract_id;
-    });
+      });
       if (contract_with_annex) {
         const indexOfUpdatedContract = state.contracts.indexOf(contract_with_annex);
         let updated_contract = {...contract_with_annex};
@@ -56,11 +66,11 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
           }
         }
         updated_contract.annex.push(action.payload.annex);
-        updated_contracts[indexOfUpdatedContract] = updated_contract;
+        updated_contracts_for_annex[indexOfUpdatedContract] = updated_contract;
       }
       return {
         ...state,
-        contracts: updated_contracts,
+        contracts: updated_contracts_for_annex,
         generatedDocuments: [...action.payload.documents],
         isGenerating: false
       }

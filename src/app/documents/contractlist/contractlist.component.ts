@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Contract} from "../contract.model";
 import {State} from "../store/documents.reducer";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
+import {DataTableDirective} from "angular-datatables";
 
 @Component({
   selector: 'app-contractlist',
-  templateUrl: './contractlist.component.html',
+  templateUrl: './contractlist.component.html'
 })
 export class ContractlistComponent implements OnInit {
   contractDtOptions: DataTables.Settings = {};
@@ -18,8 +19,8 @@ export class ContractlistComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>,
               private router: Router,
               private activeRoute: ActivatedRoute) {
-
   }
+
 
   ngOnInit(): void {
     this.store.select("document").subscribe(
@@ -39,7 +40,7 @@ export class ContractlistComponent implements OnInit {
           const contract = this.contracts.find((contract: Contract) => {
             return contract.contract_no === contract_no;
           })
-          if (contract){
+          if (contract) {
             this.onEdit(contract.school.id);
           }
         });
@@ -52,13 +53,13 @@ export class ContractlistComponent implements OnInit {
     this.router.navigate(["umowy/" + school_id], {relativeTo: this.activeRoute});
   }
 
-  get_latest_fruitVeg_product(contract: Contract){
-       if (contract.annex.length === 0)
-         return contract.fruitVeg_products;
-       return contract.annex[0].fruitVeg_products;
+  get_latest_fruitVeg_product(contract: Contract) {
+    if (contract.annex.length === 0)
+      return contract.fruitVeg_products;
+    return contract.annex[0].fruitVeg_products;
   }
 
-  get_latest_diary_product(contract:Contract) {
+  get_latest_diary_product(contract: Contract) {
     if (contract.annex.length === 0)
       return contract.dairy_products;
     return contract.annex[0].dairy_products;

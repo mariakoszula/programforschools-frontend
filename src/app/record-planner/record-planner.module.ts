@@ -4,15 +4,17 @@ import {SharedModule} from "../shared/shared.module";
 import {RouterModule} from "@angular/router";
 import {AuthGuard, ProgramSelectedGuard} from "../auth/authguard.service";
 import {ProgramResolverService} from "../programs/program-resolver.service";
-import {SchoolResolverService} from "../schools/school-resolver.service";
 import {RecordPlannerComponent} from "./record-planner.component";
 import {SelectDateComponent} from "./select-date/select-date.component";
 import {SelectSchoolComponent} from "./select-school/select-school.component";
 import {SelectProductComponent} from "./select-product/select-product.component";
+import {ContractResolverService} from "../documents/documents-resolver.service";
+import {AngularDualListBoxModule} from 'angular-dual-listbox';
 
 @NgModule({
-  declarations: [RecordPlannerComponent, SelectDateComponent],
+  declarations: [RecordPlannerComponent, SelectDateComponent, SelectSchoolComponent, SelectProductComponent],
   imports: [
+    AngularDualListBoxModule ,
     CommonModule,
     SharedModule,
     RouterModule.forChild([
@@ -20,7 +22,7 @@ import {SelectProductComponent} from "./select-product/select-product.component"
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: RecordPlannerComponent,
-        resolve: [ProgramResolverService, SchoolResolverService],
+        resolve: [ProgramResolverService, ContractResolverService],
         children: [
           {path: ':id', component: SelectDateComponent},
           {path: ':id/:date/wybierz-szkoly', component: SelectSchoolComponent},

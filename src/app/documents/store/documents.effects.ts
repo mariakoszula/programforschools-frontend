@@ -1,7 +1,7 @@
 import {Annex, Contract} from "../contract.model";
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
+import {catchError, of, switchMap, tap} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
-import {FetchContracts, GenerateContracts, GenerateRegister, UpdateAnnex, UpdateKidsNo} from "./documents.action";
+import {FetchContracts, GenerateContracts, UpdateAnnex, UpdateKidsNo} from "./documents.action";
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
 
 interface ContractsResponse {
@@ -85,8 +85,7 @@ export class DocumentsEffects {
   onGenerateRegister$ = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_REGISTER),
-      withLatestFrom(this.store$.select('document')),
-      switchMap(([_, currentState]) => {
+      switchMap((_) => {
         const jsonProgram = localStorage.getItem("currentProgram");
         if (!jsonProgram) {
           throw new Error("CurrentProgram not found in localStorage");
@@ -97,7 +96,7 @@ export class DocumentsEffects {
           .pipe(
             map(responseData => {
               return new DocumentsActions.SetContracts({
-                contracts: currentState.contracts,
+                contracts: [],
                 documents: responseData.documents.filter((document_info: string) => {
                   return document_info.includes("pdf")
                 })
@@ -121,6 +120,7 @@ export class DocumentsEffects {
           {...action.payload})
           .pipe(
             map(responseData => {
+              localStorage.removeItem("refresh");
               return new DocumentsActions.SetAnnex({
                 annex: responseData.annex,
                 documents: responseData.documents.filter((document_info: string) => {
@@ -148,8 +148,12 @@ export class DocumentsEffects {
           "/contract/" + current_program.id + "/" + action.school_id,
           {...action.payload})
           .pipe(
-            map(_ => {
-              return new DocumentsActions.FetchContracts(current_program.id);
+            map(responseData => {
+              localStorage.removeItem("refresh");
+              return new DocumentsActions.SetContracts({
+                contracts: [responseData.contract],
+                documents: []
+              });
             }),
             catchError(error => {
               console.log(error);
@@ -162,7 +166,13 @@ export class DocumentsEffects {
       this.action$.pipe(
         ofType(DocumentsActions.SET_ANNEX, DocumentsActions.SET_CONTRACTS),
         tap(() => {
-          this.router.navigate(["/dokumenty/umowy/"]);
+          let refresh = localStorage.getItem("refresh");
+          this.router.navigate(["/dokumenty/umowy"]).then(() => {
+            if (!refresh) {
+              window.location.reload();
+              localStorage.setItem("refresh", "1");
+            }
+          });
         })),
     {dispatch: false});
 

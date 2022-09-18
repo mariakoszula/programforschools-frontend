@@ -1,1 +1,12 @@
-<p>select-school works!</p>
+<div class="row">
+  <div class="col-12">
+    <div class="form-group">
+      <label>Data WZ: {{date}}</label>
+    <dual-list [display]="unique_key" [source]="source" [(destination)]="confirmed"
+               [filter]="true" [format]="format" height="400px">
+    </dual-list>
+    </div>
+  </div>
+
+</div>
+

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
@@ -19,7 +18,6 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools'
 import {environment} from "../environments/environment";
 import {ProgramEffects} from "./programs/store/program.effects";
 import {CompanyEffects} from "./companies/store/company.effects";
-import { DataTablesModule } from "angular-datatables";
 import {SchoolsEffects} from "./schools/store/schools.effects";
 import {DocumentsEffects} from "./documents/store/documents.effects";
 
