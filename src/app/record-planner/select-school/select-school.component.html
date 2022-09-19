@@ -1,12 +1,29 @@
-<div class="row">
-  <div class="col-12">
-    <div class="form-group">
-      <label>Data WZ: {{date}}</label>
-    <dual-list [display]="unique_key" [source]="source" [(destination)]="confirmed"
-               [filter]="true" [format]="format" height="400px">
-    </dual-list>
+<app-alert-simple *ngIf="displayWarning"
+                  [messageHead]="'Musisz wybrać conajmniej jedną szkołę'"
+                  [alertType]="'alert-warning'"></app-alert-simple>
+
+<div class="card card-default">
+  <div class="card-header">
+    <h3 class="card-title">WZ: {{date}}</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
     </div>
   </div>
-
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <dual-list [display]="unique_key" [source]="source" [(destination)]="confirmed"
+                     [filter]="true" [format]="format" height="400px">
+          </dual-list>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer" style="display: block;">
+    <button class="btn-lg btn-outline-info float-lg-right"  (click)="selectProducts()">Przejdź do wyboru produktów</button>
+  </div>
 </div>
 

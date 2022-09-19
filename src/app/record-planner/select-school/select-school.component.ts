@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Params} from "@angular/router";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {DualListComponent} from "angular-dual-listbox";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {switchMap} from "rxjs";
 import {Contract} from "../../documents/contract.model";
-import {RecordRequiredForSchool} from "../record.model";
+import {DairyRecord, FruitVegRecord, RecordRequiredForSchool} from "../record.model";
+import {ShareRecordDataService} from "../share-record-data.service";
 
 @Component({
   selector: 'app-select-school',
@@ -17,11 +18,16 @@ export class SelectSchoolComponent implements OnInit {
   source: Array<any>;
   confirmed: Array<any>;
   unique_key: string;
-  format = { add: 'Dodaj', remove: 'Usuń', locale: 'pl', all: 'Zanacz wszystkie', none: "Odznacz wszystkie",
-  draggable: true, direction: DualListComponent.LTR}
+  displayWarning: boolean = false;
+  format = {
+    add: 'Dodaj', remove: 'Usuń', locale: 'pl', all: 'Zanacz wszystkie', none: "Odznacz wszystkie",
+    draggable: true, direction: DualListComponent.LTR
+  }
 
   constructor(private activeRoute: ActivatedRoute,
-              private store: Store<AppState>) {
+              private router: Router,
+              private store: Store<AppState>,
+              private shareRecordDataService: ShareRecordDataService) {
     this.sourceData = new Array<RecordRequiredForSchool>();
     this.source = new Array<any>();
     this.confirmed = new Array<any>();
@@ -29,28 +35,48 @@ export class SelectSchoolComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     this.activeRoute.params.pipe(
+    this.activeRoute.params.pipe(
       switchMap((param: Params) => {
-        this.date=param["date"];
+        this.date = param["date"];
         return this.store.select('document');
       })).subscribe(documentState => {
-       let filtered_contracts = documentState.contracts.filter((contract: Contract) => {
-         return this.isFruitVeg(contract) || this.isDairy(contract);
-       });
-       filtered_contracts.forEach( contract => {
-         let new_record_school = new RecordRequiredForSchool(contract.school.nick, this.isFruitVeg(contract), this.isDairy(contract));
-         this.sourceData.push(new_record_school);
-       })
-     })
+      let filtered_contracts = documentState.contracts.filter((contract: Contract) => {
+        return SelectSchoolComponent.isFruitVeg(contract) || SelectSchoolComponent.isDairy(contract);
+      });
+      filtered_contracts.forEach(contract => {
+        let new_record_school = new RecordRequiredForSchool(
+          contract.school.nick,
+          new FruitVegRecord(SelectSchoolComponent.isFruitVeg(contract)),
+          new DairyRecord(SelectSchoolComponent.isDairy(contract)));
+        this.sourceData.push(new_record_school);
+      })
+    })
     this.sourceData.forEach(recordRequired => {
       this.source.push(recordRequired.nick);
     })
+    this.shareRecordDataService.getData().forEach(record => {
+      this.confirmed.push(record.nick);
+    });
+    console.log("confirmed");
+    console.log(this.confirmed);
   };
 
-  isFruitVeg(contract: Contract) {
+  selectProducts() {
+    if (this.confirmed.length === 0) {
+      this.displayWarning = true;
+    }else {
+      this.displayWarning = false;
+      let data = this.sourceData.filter(record => this.confirmed.find(confirmed_nick => record.nick === confirmed_nick));
+      this.shareRecordDataService.setData(data);
+      this.router.navigate(['../wybierz-produkty'], {relativeTo: this.activeRoute});
+    }
+  }
+
+  private static isFruitVeg(contract: Contract) {
     return contract.fruitVeg_products !== 0;
   }
-  isDairy(contract: Contract) {
+
+  private static isDairy(contract: Contract) {
     return contract.dairy_products !== 0;
   }
 }

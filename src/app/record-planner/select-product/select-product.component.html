@@ -1,1 +1,46 @@
-<p>select-product works!</p>
+<app-alert-simple *ngIf="displayWarning"
+                  [messageHead]="'Dla poniższych szkół nie wybrano żadnego produktu'"
+                  [alertType]="'alert-warning'"
+                  [messageBody]="messageBody"></app-alert-simple>
+
+<div class="card card-default">
+  <div class="card-header">
+    <h3 class="card-title">WZ: {{date}}</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <form #productsForm="ngForm" (ngSubmit)="onSend(productsForm.value)" autocomplete="off">
+            <div *ngFor="let record of recordRequiredForSchools">
+              <label>{{record.nick}}</label>
+              <select *ngIf="record.fruitVeg.isRequired" class="form-control custom-select"
+                      name="{{fruitVegSuffix}}{{record.nick}}" ngModel>
+                <option *ngFor="let product of fruitVegProducts;"
+                        [value]="product.product.name">{{product.product.name}}</option>
+              </select>
+              <select *ngIf="record.dairy.isRequired" class="form-control custom-select"
+                      name="{{dairySuffix}}{{record.nick}}" ngModel>
+                <option *ngFor="let product of dairyProducts;"
+                        [value]="product.product.name">{{product.product.name}}</option>
+              </select>
+              <br/>
+            </div>
+            <br/>
+            <div class="btn-group w-100 h-25">
+              <button class="btn btn-outline-secondary" routerLink="../wybierz-szkoly">Powrót</button>
+              <br/>
+              <button class="btn btn-success" type="submit">Prześlij</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

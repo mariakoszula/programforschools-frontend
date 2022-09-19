@@ -10,12 +10,14 @@ import {SelectSchoolComponent} from "./select-school/select-school.component";
 import {SelectProductComponent} from "./select-product/select-product.component";
 import {ContractResolverService} from "../documents/documents-resolver.service";
 import {AngularDualListBoxModule} from 'angular-dual-listbox';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [RecordPlannerComponent, SelectDateComponent, SelectSchoolComponent, SelectProductComponent],
   imports: [
     AngularDualListBoxModule ,
     CommonModule,
+    FormsModule,
     SharedModule,
     RouterModule.forChild([
       {
