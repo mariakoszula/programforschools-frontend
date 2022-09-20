@@ -16,7 +16,7 @@ import {
   UPDATE
 } from "./program.action";
 import {Product, ProductStore, Program, Week} from "../program.model";
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "./program.effects";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 export interface State {
   programs: Program[];

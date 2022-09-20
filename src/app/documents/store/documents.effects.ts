@@ -11,6 +11,7 @@ import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
 import {FetchContracts, GenerateContracts, UpdateAnnex, UpdateKidsNo} from "./documents.action";
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
+import {get_current_program} from "../../shared/common.functions";
 
 interface ContractsResponse {
   contracts: Contract[];
@@ -139,13 +140,8 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.UPDATE_KIDS_NO),
       switchMap((action: UpdateKidsNo) => {
-        const jsonProgram = localStorage.getItem("currentProgram");
-        if (!jsonProgram) {
-          throw new Error("CurrentProgram not found in localStorage");
-        }
-        const current_program = JSON.parse(jsonProgram);
         return this.http.put<ContractResponse>(environment.backendUrl +
-          "/contract/" + current_program.id + "/" + action.school_id,
+          "/contract/" + get_current_program().id + "/" + action.school_id,
           {...action.payload})
           .pipe(
             map(responseData => {

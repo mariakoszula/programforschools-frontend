@@ -20,6 +20,7 @@ import {ProgramEffects} from "./programs/store/program.effects";
 import {CompanyEffects} from "./companies/store/company.effects";
 import {SchoolsEffects} from "./schools/store/schools.effects";
 import {DocumentsEffects} from "./documents/store/documents.effects";
+import {RecordEffects} from "./record-planner/store/record.effects";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,14 @@ import {DocumentsEffects} from "./documents/store/documents.effects";
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects, ProgramEffects, CompanyEffects, SchoolsEffects, DocumentsEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      ProgramEffects,
+      CompanyEffects,
+      SchoolsEffects,
+      DocumentsEffects,
+      RecordEffects
+    ]),
     StoreDevtoolsModule.instrument({logOnly: environment.production})
   ],
   providers: [

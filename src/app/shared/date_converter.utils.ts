@@ -4,8 +4,8 @@ export function validate_date(start_date: string, end_date: string) {
   return new Date(start_date) <= new Date(end_date);
 }
 
-export function convert_date_to_backend_format(date: string) {
-  const [year, month, day] = date.split("-");
+export function convert_date_to_backend_format(date: string, separator="-") {
+  const [year, month, day] = date.split(separator);
   return `${day}.${month}.${year}`;
 }
 

@@ -1,6 +1,6 @@
 <div class="col-sm-6">
   <div class="form-group">
-    <p *ngIf="!week">Podany tydzień nie istnieje</p>
+    <p *ngIf="dates.length === 0">Podany tydzień nie istnieje</p>
     <div *ngFor="let date of dates" class="form-check">
       <input (change)="selectDate($event)" class="form-check-input" type="radio" name="date_id" [value]="date">
       <label class="form-check-label">{{date}}</label>

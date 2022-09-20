@@ -1,9 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Week} from "../programs/program.model";
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ProductStore, Week} from "../programs/program.model";
 import {AppState} from "../store/app.reducer";
 import {Store} from "@ngrx/store";
-import {Subscription} from "rxjs";
+import {Subscription, switchMap} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
+import {RecordDataService} from "./record-data.service";
+import {Record} from "./record.model";
+import {Contract} from "../documents/contract.model";
 
 @Component({
   selector: 'app-record-planner',
@@ -11,33 +14,60 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class RecordPlannerComponent implements OnInit, OnDestroy {
   weeks: Week[] = [];
-  programSub: Subscription | null = null;
-  weekSelected: boolean = false;
+  sub: Subscription | null = null;
+  recordSub: Subscription | null = null;
+  selectedWeek: Week | null = null;
+  isLoading: boolean = false;
+  records: Record[] = [];
+  contracts: Contract[] = [];
+  fruitVegProducts: ProductStore[] = [];
+  dairyProducts: ProductStore[] = [];
 
   constructor(private store: Store<AppState>,
-              private router: Router, private activeRoute: ActivatedRoute) {
+              private router: Router,
+              private activeRoute: ActivatedRoute,
+              private recordDataService: RecordDataService) {
   }
 
   ngOnDestroy(): void {
-    if (this.programSub) this.programSub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
+    if (this.recordSub) this.recordSub.unsubscribe();
+    this.recordDataService.resetDates();
   }
 
   ngOnInit(): void {
-    this.programSub = this.store.select("program").subscribe(programState => {
-      this.weeks = programState.weeks;
-    });
+    this.sub = this.store.select("program").pipe(
+      switchMap(programState => {
+        this.fruitVegProducts = programState.fruitVegProducts;
+        this.dairyProducts = programState.dairyProducts;
+        this.weeks = programState.weeks;
+        return this.store.select("document");
+      }),
+      switchMap(documentState => {
+          this.contracts = documentState.contracts;
+          return this.store.select("record")
+        }
+      )).subscribe(recordState => {
+        this.isLoading = recordState.isLoading;
+        this.records = recordState.records;
+      }
+    );
   }
 
   selectWeek($event: any, id: number) {
     let clickedElement = $event.target;
-    if( clickedElement.nodeName === "BUTTON" ) {
+    if (clickedElement.nodeName === "BUTTON") {
       let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
-      if( isCertainButtonAlreadyActive ) {
+      if (isCertainButtonAlreadyActive) {
         isCertainButtonAlreadyActive.classList.remove("active");
       }
       clickedElement.className += " active";
     }
-    this.weekSelected = true;
-    this.router.navigate([id], {relativeTo: this.activeRoute});
+    let foundWeek = this.weeks.find(week => week.id === id);
+    if (foundWeek) {
+      this.selectedWeek = foundWeek;
+      this.recordDataService.setDates(this.selectedWeek);
+      this.router.navigate([id], {relativeTo: this.activeRoute});
+    }
   }
 }

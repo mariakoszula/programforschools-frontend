@@ -5,15 +5,19 @@ import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {switchMap} from "rxjs";
 import {Contract} from "../../documents/contract.model";
-import {DairyRecord, FruitVegRecord, RecordRequiredForSchool} from "../record.model";
-import {ShareRecordDataService} from "../share-record-data.service";
+import {
+  DairyProductDemand,
+  FruitVegProductDemand,
+  SchoolWithRecordDemand
+} from "../record.model";
+import {RecordDataService} from "../record-data.service";
 
 @Component({
   selector: 'app-select-school',
   templateUrl: './select-school.component.html'
 })
 export class SelectSchoolComponent implements OnInit {
-  private sourceData: Array<RecordRequiredForSchool>;
+  private sourceData: Array<SchoolWithRecordDemand>;
   date?: string;
   source: Array<any>;
   confirmed: Array<any>;
@@ -27,8 +31,8 @@ export class SelectSchoolComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute,
               private router: Router,
               private store: Store<AppState>,
-              private shareRecordDataService: ShareRecordDataService) {
-    this.sourceData = new Array<RecordRequiredForSchool>();
+              private shareRecordDataService: RecordDataService) {
+    this.sourceData = new Array<SchoolWithRecordDemand>();
     this.source = new Array<any>();
     this.confirmed = new Array<any>();
     this.unique_key = "nick";
@@ -44,10 +48,10 @@ export class SelectSchoolComponent implements OnInit {
         return SelectSchoolComponent.isFruitVeg(contract) || SelectSchoolComponent.isDairy(contract);
       });
       filtered_contracts.forEach(contract => {
-        let new_record_school = new RecordRequiredForSchool(
+        let new_record_school = new SchoolWithRecordDemand(
           contract.school.nick,
-          new FruitVegRecord(SelectSchoolComponent.isFruitVeg(contract)),
-          new DairyRecord(SelectSchoolComponent.isDairy(contract)));
+          new FruitVegProductDemand(SelectSchoolComponent.isFruitVeg(contract)),
+          new DairyProductDemand(SelectSchoolComponent.isDairy(contract)));
         this.sourceData.push(new_record_school);
       })
     })

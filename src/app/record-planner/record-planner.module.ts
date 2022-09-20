@@ -11,11 +11,21 @@ import {SelectProductComponent} from "./select-product/select-product.component"
 import {ContractResolverService} from "../documents/documents-resolver.service";
 import {AngularDualListBoxModule} from 'angular-dual-listbox';
 import {FormsModule} from "@angular/forms";
+import {RecordDisplayComponent} from "./record-display/record-display.component";
+import {CutYearFromDate} from "../shared/cut-date.pipe";
+import {RecordResolverService} from "./record-resolver.service";
 
 @NgModule({
-  declarations: [RecordPlannerComponent, SelectDateComponent, SelectSchoolComponent, SelectProductComponent],
+    declarations: [
+        RecordPlannerComponent,
+        SelectDateComponent,
+        SelectSchoolComponent,
+        SelectProductComponent,
+        RecordDisplayComponent,
+        CutYearFromDate
+    ],
   imports: [
-    AngularDualListBoxModule ,
+    AngularDualListBoxModule,
     CommonModule,
     FormsModule,
     SharedModule,
@@ -24,7 +34,7 @@ import {FormsModule} from "@angular/forms";
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: RecordPlannerComponent,
-        resolve: [ProgramResolverService, ContractResolverService],
+        resolve: [ProgramResolverService, ContractResolverService, RecordResolverService],
         children: [
           {path: ':id', component: SelectDateComponent},
           {path: ':id/:date/wybierz-szkoly', component: SelectSchoolComponent},

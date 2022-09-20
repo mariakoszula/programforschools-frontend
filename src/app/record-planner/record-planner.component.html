@@ -14,23 +14,6 @@
     </button>
   </div>
 </div>
-<div class="card card-outline card-success">
-  <div class="card-header">
-    <h3 class="card-title">Zaplanuj produkty</h3>
-    <div class="card-tools">
-      <button type="button" class="btn btn-tool" data-card-widget="maximize">
-        <i class="fas fa-expand"></i>
-      </button>
-      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-        <i class="fas fa-minus"></i>
-      </button>
-    </div>
-  </div>
-  <div class="card-body">
-    <p *ngIf="!weekSelected">Wybierz tydzień</p>
-    <router-outlet *ngIf="weekSelected"></router-outlet>
-  </div>
-</div>
 <div class="card card-success" style="transition: all 0.15s ease 0s; height: inherit; width: inherit;">
   <div class="card-header">
     <h3 class="card-title">Zaplanowane podania</h3>
@@ -47,7 +30,35 @@
       </button>
     </div>
   </div>
+  <div *ngIf="isLoading" class="overlay dark">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
   <div class="card-body">
-    <p *ngIf="!weekSelected">Wybierz tydzień</p>
+    <p *ngIf="!selectedWeek">Wybierz tydzień</p>
+    <app-record-display
+      *ngIf="selectedWeek"
+      [records]="records"
+      [contracts]="contracts"
+      [fruitVegProducts]="fruitVegProducts"
+      [dairyProducts]="dairyProducts"
+    ></app-record-display>
+  </div>
+</div>
+
+<div class="card card-outline card-success">
+  <div class="card-header">
+    <h3 class="card-title">Zaplanuj produkty</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <p *ngIf="!selectedWeek">Wybierz tydzień</p>
+    <router-outlet *ngIf="selectedWeek"></router-outlet>
   </div>
 </div>

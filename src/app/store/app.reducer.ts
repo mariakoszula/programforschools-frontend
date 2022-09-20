@@ -4,6 +4,7 @@ import * as fromProgram from "../programs/store/program.reducer";
 import * as fromCompany from "../companies/store/company.reducer";
 import * as fromSchool from "../schools/store/schools.reducer";
 import * as fromDocuments from "../documents/store/documents.reducer";
+import * as fromRecord from "../record-planner/store/record.reducer";
 
 export interface AppState {
   auth: fromAuth.State;
@@ -11,6 +12,7 @@ export interface AppState {
   company: fromCompany.State;
   school: fromSchool.State;
   document: fromDocuments.State;
+  record: fromRecord.State;
 }
 
 export const appReducer: ActionReducerMap<AppState, any> = {
@@ -19,4 +21,5 @@ export const appReducer: ActionReducerMap<AppState, any> = {
   company: fromCompany.companyReducer,
   school: fromSchool.schoolReducer,
   document: fromDocuments.documentsReducer,
+  record: fromRecord.recordReducer
 };

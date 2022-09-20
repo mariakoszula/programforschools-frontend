@@ -1,18 +1,32 @@
-export class Record {
+export class ProductDemand {
   constructor(public isRequired: boolean,
              public name: string = "") {
   }
 }
 
-export class FruitVegRecord extends Record{
+export class FruitVegProductDemand extends ProductDemand{
 }
 
-export class DairyRecord extends Record {
+export class DairyProductDemand extends ProductDemand {
 }
 
-export class RecordRequiredForSchool {
+export class SchoolWithRecordDemand {
   constructor(public nick: string,
-              public fruitVeg: FruitVegRecord,
-              public dairy: DairyRecord) {
+              public fruitVeg: FruitVegProductDemand,
+              public dairy: DairyProductDemand) {
   }
+}
+
+export class Record {
+  constructor(public id: number,
+              public date: string,
+              public delivery_date: string | null,
+              public delivered_kids_no: string | null,
+              public state: string,
+              public product_store_id: number,
+              public product_type_id: number,
+              public contract_id: number,
+              public week_id: number) {
+  }
+
 }

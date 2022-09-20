@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RecordRequiredForSchool} from "../record.model";
+import {SchoolWithRecordDemand} from "../record.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import {switchMap} from "rxjs";
 import {FormGroup} from "@angular/forms";
 import {ProductStore} from "../../programs/program.model";
-import {ShareRecordDataService} from "../share-record-data.service";
+import {RecordDataService} from "../record-data.service";
 
 @Component({
   selector: 'app-select-product',
@@ -20,7 +20,7 @@ export class SelectProductComponent implements OnInit {
   //TODO future: possiblity to add extra products in another view
   fruitVegSuffix: string = "fruitVeg_";
   dairySuffix: string = "dairy_";
-  recordRequiredForSchools?: Array<RecordRequiredForSchool>;
+  recordRequiredForSchools?: Array<SchoolWithRecordDemand>;
   date?: string;
   displayWarning: boolean = false;
   fruitVegProducts: ProductStore[] = [];
@@ -31,7 +31,7 @@ export class SelectProductComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute,
               private router: Router,
               private store: Store<AppState>,
-              private shareRecordDataService: ShareRecordDataService) {
+              private shareRecordDataService: RecordDataService) {
   }
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class SelectProductComponent implements OnInit {
     return this.schoolsWithoutSelectedProduct.length !== 0;
   }
 
-  private static required_data_not_selected(record: RecordRequiredForSchool) {
+  private static required_data_not_selected(record: SchoolWithRecordDemand) {
     return (record.fruitVeg.isRequired && record.fruitVeg.name === "")
       && (record.dairy.isRequired && record.dairy.name === "")
       || (!record.fruitVeg.isRequired && (record.dairy.isRequired && record.dairy.name === ""))

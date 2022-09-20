@@ -1,0 +1,30 @@
+<p *ngIf="records.length === 0">Brak zaplanowanych WZ dla podanego tygodnia</p>
+<div *ngIf="records.length !== 0" class="card">
+  <div class="card-body p-0 text-sm-center">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="w-10">{{fruitVeg}}</th>
+        <th class="w-20" *ngFor="let date of dates">{{date | cutYearFromDate}}</th>
+        <th class="w-10">{{dairy}}</th>
+        <th class="w-20" *ngFor="let date of dates">{{date | cutYearFromDate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let contract of contracts; let contract_index = index">
+        <td>{{contract.school.nick}}</td>
+        <td *ngFor="let date of dates; let date_index = index">
+          <button *ngIf="productFruitVegStorage[contract_index][date_index]" [disabled]="!clickableView" type="button"
+                  class="btn btn-sm btn-outline-dark">{{productFruitVegStorage[contract_index][date_index]}}</button>
+        </td>
+        <td>{{contract.school.nick}}</td>
+        <td *ngFor="let date of dates; let date_index = index">
+          <button *ngIf="productDairyStorage[contract_index][date_index]" [disabled]="!clickableView" type="button"
+                  class="btn btn-sm btn-outline-dark">{{productDairyStorage[contract_index][date_index]}}</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

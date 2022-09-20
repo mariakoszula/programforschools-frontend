@@ -10,9 +10,8 @@ import {Store} from "@ngrx/store";
 import {Product, ProductStore, Program, ProgramResponse, Week, WeeksResponse} from "../program.model";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
-export const FRUIT_VEG_PRODUCT = "owocowo-warzywny";
-export const DAIRY_PRODUCT = "nabiał";
 
 interface ProgramAddResponse {
   program: Program;
