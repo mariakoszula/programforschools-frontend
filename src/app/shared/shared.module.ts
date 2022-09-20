@@ -1,16 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {LoadingSpinnerComponent} from "./loading-spinner/loading-spinner.component";
 import {SimpleAlertComponent} from "./alert-success/simple-alert.component";
 import {DataTablesModule} from "angular-datatables";
 import {ReactiveFormsModule} from "@angular/forms";
-
-
+import {RecordDisplayComponent} from "./record-display/record-display.component";
+import {CutYearFromDate} from "./cut-date.pipe";
 
 @NgModule({
   declarations: [
     SimpleAlertComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    RecordDisplayComponent,
+    CutYearFromDate
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     LoadingSpinnerComponent,
     CommonModule,
     DataTablesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RecordDisplayComponent
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}
