@@ -1,11 +1,10 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Contract} from "../contract.model";
 import {State} from "../store/documents.reducer";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
-import {Subject, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
-import {DataTableDirective} from "angular-datatables";
 
 @Component({
   selector: 'app-contractlist',

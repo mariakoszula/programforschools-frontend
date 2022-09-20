@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../namemapping.utils";
 import {Subscription, concatMap, switchMap, Observable} from "rxjs";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute} from "@angular/router";
-import {RecordDataService} from "../record-data.service";
-import {Record} from "../record.model";
+import {RecordDataService} from "../../record-planner/record-data.service";
+import {Record} from "../../record-planner/record.model";
 import {Contract} from "../../documents/contract.model";
 import {ProductStore} from "../../programs/program.model";
 import {take} from "rxjs/operators";

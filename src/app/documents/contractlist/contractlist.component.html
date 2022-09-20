@@ -1,6 +1,11 @@
 <div class="card">
   <div class="card-header">
     <h1 class="card-title">Lista umów</h1>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
   </div>
   <div class="card-body">
     <table datatable [dtOptions]="contractDtOptions" class="row-border hover">
@@ -24,6 +29,6 @@
       </tbody>
     </table>
   </div>
-<br/>
-<br/>
+  <br/>
+  <br/>
 </div>
