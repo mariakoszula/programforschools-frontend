@@ -2,6 +2,11 @@
                   [messageHead]="'Musisz wybrać conajmniej jedną szkołę'"
                   [alertType]="'alert-warning'"></app-alert-simple>
 
+<app-alert-simple *ngIf="failedRecords"
+                  [messageHead]="'Błędy przy generowaniu dokumentów'"
+                  [alertType]="'alert-warning'"
+                  [messageBody]="error" >
+</app-alert-simple>
 <div class="card card-default">
   <div class="card-header">
     <h3 class="card-title">WZ: {{date}}</h3>
@@ -23,7 +28,8 @@
     </div>
   </div>
   <div class="card-footer" style="display: block;">
-    <button class="btn-lg btn-outline-info float-lg-right"  (click)="selectProducts()">Przejdź do wyboru produktów</button>
+    <button class="btn-lg btn-outline-info float-lg-right" (click)="selectProducts()">Przejdź do wyboru produktów
+    </button>
   </div>
 </div>
 

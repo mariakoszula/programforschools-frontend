@@ -4,9 +4,9 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import {switchMap} from "rxjs";
-import {FormGroup} from "@angular/forms";
 import {ProductStore} from "../../programs/program.model";
 import {RecordDataService} from "../record-data.service";
+import * as RecordActions from "../store/record.action";
 
 @Component({
   selector: 'app-select-product',
@@ -42,7 +42,7 @@ export class SelectProductComponent implements OnInit {
       })).subscribe(programState => {
       this.fruitVegProducts = programState.fruitVegProducts;
       this.dairyProducts = programState.dairyProducts;
-      this.recordRequiredForSchools = this.shareRecordDataService.getData();
+      this.recordRequiredForSchools = this.shareRecordDataService.getRecordDemand();
     });
   }
 
@@ -53,7 +53,12 @@ export class SelectProductComponent implements OnInit {
     } else {
       this.messageBody = "";
       this.displayWarning = false;
-      console.log("dispatch event to send data");
+      if (this.date && this.recordRequiredForSchools) {
+        this.store.dispatch(new RecordActions.AddRecords({
+          date: this.date,
+          recordsDemand: this.recordRequiredForSchools
+        }));
+      }
     }
   }
 

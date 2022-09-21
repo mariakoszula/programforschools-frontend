@@ -49,6 +49,7 @@ export class RecordPlannerComponent implements OnInit, OnDestroy {
         }
       )).subscribe(recordState => {
         this.isLoading = recordState.isLoading;
+        this.recordDataService.setFailedRecords(recordState.recordsFailedResponse);
         this.records = recordState.records;
       }
     );

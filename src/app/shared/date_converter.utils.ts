@@ -9,8 +9,10 @@ export function convert_date_to_backend_format(date: string, separator="-") {
   return `${day}.${month}.${year}`;
 }
 
-export function convert_date_from_backend_format(date: string) {
-  const [day, month, year] = date.split(".");
+export function convert_date_from_backend_format(date: string, join_separator=".",  separator=".") {
+   //TODO use regex in future to properly convert dates depending on format
+  //backend: dd.MM.YYYY frontend date: YYYY-mm-dd frontEnd display: YYYY.mm.dd
+  const [day, month, year] = date.split(separator);
   return `${year}.${month}.${day}`;
 }
 
@@ -35,4 +37,13 @@ export function get_next_date(current_date:string): string {
 export function is_working_day(current_date: string): boolean {
   const date = new Date(current_date);
   return !(date.getDay() === 6 || date.getDay() === 0);
+}
+
+
+export function is_date_in_range (_date: string, _start_date: string, _end_date: string) {
+  let date = new Date(convert_date_from_backend_format(_date, "-"));
+  let start_date = new Date(convert_date_from_backend_format(_start_date, "-"));
+  let end_date = new Date(convert_date_from_backend_format(_end_date, "-"));
+  return start_date <= date && date <= end_date;
+
 }

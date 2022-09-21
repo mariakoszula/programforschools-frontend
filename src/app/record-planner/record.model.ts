@@ -17,6 +17,11 @@ export class SchoolWithRecordDemand {
   }
 }
 
+export interface RecordsDemand {
+  date: string;
+  recordsDemand: SchoolWithRecordDemand[];
+}
+
 export class Record {
   constructor(public id: number,
               public date: string,
@@ -28,5 +33,26 @@ export class Record {
               public contract_id: number,
               public week_id: number) {
   }
-
 }
+
+
+export enum RecordAdditionResultInfo {
+  SUCCESS = 0,
+  RECORD_OF_THIS_TYPE_EXISTS,
+  MIN_AMOUNT_EXCEED,
+  NO_CONTRACT_FOR_PRODUCT_TYPE,
+  FAILED_WITH_OTHER_REASON
+}
+
+export interface RecordAddResult {
+  nick: string;
+  product: string;
+  result: RecordAdditionResultInfo;
+  record: Record | null;
+}
+
+export interface AdditionRecordsResponse {
+  date: string;
+  records: RecordAddResult[];
+}
+

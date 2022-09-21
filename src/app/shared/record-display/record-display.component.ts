@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../namemapping.utils";
 import {Subscription, concatMap, switchMap, Observable} from "rxjs";
 import {AppState} from "../../store/app.reducer";
@@ -17,7 +17,7 @@ const MAXIMUM_DATE_PER_WEEK_NO = 5;
   selector: 'app-record-display',
   templateUrl: './record-display.component.html'
 })
-export class RecordDisplayComponent implements OnInit, OnDestroy {
+export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   @Input() clickableView = false;
   @Input() records: Record[] = [];
   @Input() contracts: Contract[] = [];
@@ -40,6 +40,13 @@ export class RecordDisplayComponent implements OnInit, OnDestroy {
     RecordDisplayComponent.initEmptyProducts(this.productFruitVegStorage);
     RecordDisplayComponent.initEmptyProducts(this.productDairyStorage);
     this.dates = this.recordDataService.getDates();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.contracts = changes["contracts"] ? changes["contracts"].currentValue : this.contracts;
+    this.fruitVegProducts = changes["fruitVegProducts"] ? changes["fruitVegProducts"].currentValue : this.fruitVegProducts;
+    this.dairyProducts = changes["dairyProducts"] ? changes["dairyProducts"].currentValue : this.dairyProducts;
+    this.records = changes["records"] ? changes["records"].currentValue : this.records;
   }
 
   static initEmptyProducts(storage_list: string[][]) {

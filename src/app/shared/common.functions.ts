@@ -15,6 +15,14 @@ export function get_current_program() {
   return JSON.parse(jsonProgram);
 }
 
+export function get_weeks() {
+  const jsonProgram = localStorage.getItem("currentWeeks");
+  if (!jsonProgram) {
+    throw new Error("CurrentWeeks not found in localStorage");
+  }
+  return JSON.parse(jsonProgram);
+}
+
 export function generate_dates(week: Week): string[] {
   let generated_dates: string[] = [];
   let next_date = convert_date_from_backend_format(week.start_date);

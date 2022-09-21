@@ -1,5 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
+
+const iconMapping: {[key: string]: string} = {
+  'alert-success': 'fa-check',
+  'alert-warning': 'fa-exclamation-triangle'
+}
 @Component({
   selector: 'app-alert-simple',
   templateUrl: './simple-alert.component.html',
@@ -11,6 +16,7 @@ export class SimpleAlertComponent implements OnInit {
   @Input() alertType: string;
   @Output() close = new EventEmitter<void>();
 
+  icon: string = "fa-check";
   constructor() {
     this.messageHead = "";
     this.messageBody = "";
@@ -18,6 +24,7 @@ export class SimpleAlertComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.icon = iconMapping[this.alertType];
   }
 
 }

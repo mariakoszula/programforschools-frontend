@@ -3,7 +3,7 @@ import {Contract} from "../contract.model";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Subscription, switchMap, tap} from "rxjs";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-contract-details',
