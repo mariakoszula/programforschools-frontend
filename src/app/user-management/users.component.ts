@@ -1,4 +1,4 @@
-import {Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {User} from "../auth/user.model";
 import {AuthService} from "../auth/auth.service";
 import {RoleUtils} from "../shared/namemapping.utils";

@@ -1,14 +1,12 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../auth/auth.service";
 import {Router} from "@angular/router";
 import {Role, RoleUtils} from "../../shared/namemapping.utils";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-adduser',
-  templateUrl: './adduser.component.html',
-  styleUrls: ['./adduser.component.css']
+  templateUrl: './adduser.component.html'
 })
 export class AddUserComponent implements OnInit {
   registerForm: FormGroup;

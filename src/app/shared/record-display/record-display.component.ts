@@ -47,6 +47,7 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     this.fruitVegProducts = changes["fruitVegProducts"] ? changes["fruitVegProducts"].currentValue : this.fruitVegProducts;
     this.dairyProducts = changes["dairyProducts"] ? changes["dairyProducts"].currentValue : this.dairyProducts;
     this.records = changes["records"] ? changes["records"].currentValue : this.records;
+    this.setRecordsInProductStorages();
   }
 
   static initEmptyProducts(storage_list: string[][]) {

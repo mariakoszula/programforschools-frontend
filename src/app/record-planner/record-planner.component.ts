@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {ProductStore, Week} from "../programs/program.model";
 import {AppState} from "../store/app.reducer";
 import {Store} from "@ngrx/store";
@@ -7,12 +7,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {RecordDataService} from "./record-data.service";
 import {Record} from "./record.model";
 import {Contract} from "../documents/contract.model";
+import * as RecordActions from "./store/record.action";
 
 @Component({
   selector: 'app-record-planner',
   templateUrl: './record-planner.component.html'
 })
-export class RecordPlannerComponent implements OnInit, OnDestroy {
+export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
   weeks: Week[] = [];
   sub: Subscription | null = null;
   recordSub: Subscription | null = null;
@@ -28,6 +29,10 @@ export class RecordPlannerComponent implements OnInit, OnDestroy {
               private activeRoute: ActivatedRoute,
               private recordDataService: RecordDataService) {
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+    }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
@@ -70,5 +75,8 @@ export class RecordPlannerComponent implements OnInit, OnDestroy {
       this.recordDataService.setDates(this.selectedWeek);
       this.router.navigate([id], {relativeTo: this.activeRoute});
     }
+  }
+  fetchRecords() {
+    this.store.dispatch(new RecordActions.Fetch());
   }
 }

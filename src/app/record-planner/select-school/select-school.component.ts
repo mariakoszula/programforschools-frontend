@@ -69,6 +69,7 @@ export class SelectSchoolComponent implements OnInit, OnDestroy {
       });
     } else {
       this.error = "";
+      this.failedRecords = null;
     }
     return failed_school_nick;
   }
