@@ -84,6 +84,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
     let formValues = this.annexForm.getRawValue();
     this.error = convert_range_dates_and_validate(formValues, "sign_date", "validity_date");
     if (this.error) return;
+    if (this.editAnnex) formValues["no"] = this.editAnnex.no
     formValues["contract_id"] = this.contract_id;
     this.store.dispatch(new DocumentsActions.UpdateAnnex(formValues));
   }
