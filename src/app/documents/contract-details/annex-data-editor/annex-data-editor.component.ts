@@ -19,6 +19,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
   annexForm: FormGroup;
   school_id: number = -1;
   contract_id: number = -1;
+  school_nick: string = "";
   annex_id: number = -1;
   paramsSub: Subscription | null = null;
   documentSub: Subscription | null = null;
@@ -65,6 +66,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
         this.isGenerating = documentsState.isGenerating;
         const contract = documentsState.contracts.find((contract) => { return contract.id === this.contract_id;})
         if (contract) {
+          this.school_nick = contract.school.nick;
           if (this.annex_id !== -1) {
             const annex = contract.annex.find((annex) => {
               return annex.id === this.annex_id

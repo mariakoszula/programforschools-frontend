@@ -3,7 +3,7 @@ import {Contract} from "../contract.model";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {Subscription, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-contract-details',
@@ -12,8 +12,7 @@ import {Subscription} from "rxjs";
 export class ContractDetailsComponent implements OnInit, OnDestroy {
   contract: Contract | null = null;
   school_id: number = -1;
-  paramsSub: Subscription | null = null;
-  documentsSub: Subscription | null = null;
+  sub: Subscription | null = null;
   dtOptions: DataTables.Settings = {};
 
   constructor(private store: Store<AppState>,
@@ -28,12 +27,13 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.paramsSub = this.activeRoute.params.subscribe(
-      (params: Params) => {
+    this.sub = this.activeRoute.params.pipe(
+      switchMap((params: Params) => {
         if (params["school_id"]) {
           this.school_id = +params["school_id"];
         }
-        this.documentsSub = this.store.select("document").subscribe((documentState) => {
+        return this.store.select("document");
+      })).subscribe((documentState) => {
           const res = documentState.contracts.find((contract => {
             return contract.school.id === this.school_id;
           }));
@@ -42,14 +42,11 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
           } else {
             this.contract = res;
           }
-        })
-      });
-
+        });
   }
 
   ngOnDestroy(): void {
-    if (this.paramsSub) this.paramsSub.unsubscribe();
-    if (this.documentsSub) this.documentsSub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
   }
 
   onEditContract(contract_id: number) {

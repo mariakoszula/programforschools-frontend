@@ -35,18 +35,19 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: DocumentsComponent,
-        resolve: [ProgramResolverService, SchoolResolverService],
+        resolve: [ProgramResolverService, SchoolResolverService, ContractResolverService],
         children: [
-          {path: 'umowy', component: ContractsGenComponent, resolve: [ContractResolverService]},
+          {path: 'umowy', component: DocumentsComponent},
           {path: 'umowy/:school_id', component: ContractDetailsComponent},
           {path: 'umowy/:school_id/:contract_id/edycja', component: ContractDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/nowy_aneks', component: AnnexDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/:annex_id/edycja', component: AnnexDataEditorComponent},
           {path: 'rejestr', component: RegisterGenComponent},
+          {path: 'generuj_umowy', component: ContractsGenComponent},
           {
             path: 'wydanie-na-zewnatrz',
             component: RecordGenComponent,
-            resolve: [ContractResolverService, RecordResolverService]
+            resolve: [RecordResolverService]
           },
         ]
       }

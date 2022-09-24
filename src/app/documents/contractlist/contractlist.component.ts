@@ -49,7 +49,7 @@ export class ContractlistComponent implements OnInit {
   }
 
   onEdit(school_id: number) {
-    this.router.navigate(["umowy/" + school_id], {relativeTo: this.activeRoute});
+    this.router.navigate(["dokumenty/umowy/" + school_id]);
   }
 
   get_latest_fruitVeg_product(contract: Contract) {

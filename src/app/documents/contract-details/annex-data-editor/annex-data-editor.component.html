@@ -7,8 +7,8 @@
       <app-loading-spinner></app-loading-spinner>
     </div>
     <div class="card-header">
-      <h1 *ngIf="!editAnnex" class="card-title">Podaj dane do aneksu</h1>
-      <h1 *ngIf="editAnnex" class="card-title">Edytuj dane aneksu nr {{editAnnex.no}}</h1>
+      <h1 *ngIf="!editAnnex" class="card-title">{{school_nick}}: Podaj dane do aneksu</h1>
+      <h1 *ngIf="editAnnex" class="card-title">{{school_nick}}: Edytuj dane aneksu nr {{editAnnex.no}}</h1>
     </div>
     <div class="card-body">
       <form [formGroup]="annexForm" (ngSubmit)="onSubmitAnnex()">

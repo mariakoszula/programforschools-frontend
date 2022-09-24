@@ -5,7 +5,7 @@
     <li class="nav-item">
       <a class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a>
     </li>
-    <li *ngIf="isLoggedIn" class="nav-item">
+    <li *ngIf="isLoggedIn && isProgramSelected" class="nav-item">
       <a class="nav-link cursor" routerLink="planowanie" routerLinkActive="active">Zaplanuj tydzień</a>
     </li>
   </ul>

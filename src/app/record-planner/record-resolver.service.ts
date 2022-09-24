@@ -13,6 +13,7 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 export class RecordResolverService implements Resolve<Record[]> {
+  resolved: boolean = false;
   constructor(private store: Store<AppState>,
               private actions$: Actions) {
   }
@@ -24,8 +25,9 @@ export class RecordResolverService implements Resolve<Record[]> {
         return recordStates.records;
       }),
       switchMap(records => {
-        if (records.length === 0) {
+        if (records.length === 0 && !this.resolved) {
           this.store.dispatch(new RecordActions.Fetch());
+          this.resolved = true;
           return this.actions$.pipe(
             ofType(SET_RECORDS),
             take(1)
