@@ -112,7 +112,6 @@ export class DocumentsEffects {
           {...action.payload})
           .pipe(
             map(responseData => {
-              localStorage.removeItem("refresh");
               return new DocumentsActions.SetAnnex({
                 annex: responseData.annex,
                 documents: responseData.documents.filter((document_info: string) => {
@@ -136,7 +135,6 @@ export class DocumentsEffects {
           {...action.payload})
           .pipe(
             map(responseData => {
-              localStorage.removeItem("refresh");
               return new DocumentsActions.SetContracts({
                 contracts: [responseData.contract],
                 documents: []
@@ -153,12 +151,7 @@ export class DocumentsEffects {
       this.action$.pipe(
         ofType(DocumentsActions.SET_ANNEX, DocumentsActions.SET_CONTRACTS),
         tap(() => {
-          let refresh = localStorage.getItem("refresh");
           this.router.navigate(["/dokumenty/umowy"]).then(() => {
-            if (!refresh) {
-              window.location.reload();
-              localStorage.setItem("refresh", "1");
-            }
           });
         })),
     {dispatch: false});

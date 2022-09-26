@@ -98,7 +98,6 @@ export class AuthEffects {
           localStorage.removeItem("currentWeeks");
           localStorage.removeItem("currentDiaryProducts");
           localStorage.removeItem("currentFruitVegProducts");
-          localStorage.removeItem("refresh");
           this.router.navigate(['/logowanie']);
         }
       })),

@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="contractDtOptions" class="row-border hover">
+    <table datatable [dtOptions]="contractDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
       <thead>
       <tr>
         <th>Umowa</th>
@@ -20,7 +20,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="cursor" *ngFor="let contract of contracts; let i = index;">
+      <tr  class="cursor" *ngFor="let contract of contracts; let i = index;" (click)="onSelectContract(contract)">
         <td>{{ contract.contract_no }}</td>
         <td>{{ contract.school.nick }}</td>
         <td>{{ contract.school.name }}</td>

@@ -1,23 +1,36 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Contract} from "../contract.model";
 import {State} from "../store/documents.reducer";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
+import {DataTableDirective} from "angular-datatables";
 
 @Component({
   selector: 'app-contractlist',
   templateUrl: './contractlist.component.html'
 })
-export class ContractlistComponent implements OnInit {
+export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement!: DataTableDirective;
+
   contractDtOptions: DataTables.Settings = {};
   contracts: Contract[] = [];
   programSub: Subscription | null = null;
+  dtTrigger: Subject<any> = new Subject();
 
   constructor(private store: Store<fromApp.AppState>,
               private router: Router,
               private activeRoute: ActivatedRoute) {
+  }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.dtTrigger.next(true);
   }
 
 
@@ -31,20 +44,7 @@ export class ContractlistComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 50,
       responsive: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
-      rowCallback: (row: Node, data: Object | any, index: number) => {
-        $('td', row).off('click');
-        $('td', row).on('click', () => {
-          const contract_no = data.at(0);
-          const contract = this.contracts.find((contract: Contract) => {
-            return contract.contract_no === contract_no;
-          })
-          if (contract) {
-            this.onEdit(contract.school.id);
-          }
-        });
-        return row;
-      }
+      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
     };
   }
 
@@ -64,5 +64,16 @@ export class ContractlistComponent implements OnInit {
     return contract.annex[0].dairy_products;
   }
 
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next(true);
+    });
+  }
 
+  onSelectContract(contract: Contract) {
+     this.onEdit(contract.school.id);
+  }
 }
