@@ -1,0 +1,16 @@
+<div class="card card-primary">
+  <div class="card-header">
+    <h3 class="card-title">{{title}}</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body row" style="display: inline-flex;">
+    <button (click)="selectWeek($event, week.id)" *ngFor="let week of weeks" type="button"
+            class="btn btn-outline-info btn-block btn-flat"><i
+      class="fa fa-list-ol"></i>
+      Tydzień {{week.week_no}}
+    </button>
+  </div>
+</div>

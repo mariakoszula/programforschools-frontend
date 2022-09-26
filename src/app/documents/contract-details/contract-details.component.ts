@@ -37,9 +37,7 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
           const res = documentState.contracts.find((contract => {
             return contract.school.id === this.school_id;
           }));
-          if (!res) {
-            this.router.navigate([".."]);
-          } else {
+          if (res) {
             this.contract = res;
           }
         });

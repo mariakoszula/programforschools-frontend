@@ -154,7 +154,6 @@ export class ProgramEffects {
       this.action$.pipe(
         ofType(ProgramActions.SAVE_PRODUCT),
         tap((actionResp: ProgramActions.SaveProduct) => {
-          console.log(actionResp);
           if (actionResp.product_type === FRUIT_VEG_PRODUCT) {
             update_in_storage_list("currentFruitVegProducts", actionResp.payload);
 

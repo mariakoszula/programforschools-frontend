@@ -9,7 +9,8 @@ import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
-import {FetchContracts, GenerateContracts, UpdateAnnex, UpdateKidsNo} from "./documents.action";
+import * as RecordsActions from "../../record-planner/store/record.action";
+import {FetchContracts, GenerateContracts, GenerateDelivery, UpdateAnnex, UpdateKidsNo} from "./documents.action";
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
 import {get_current_program} from "../../shared/common.functions";
 
@@ -18,7 +19,7 @@ interface ContractsResponse {
   documents: string[]
 }
 
-interface RegisterResponse {
+interface ResponseWithDocuments {
   documents: string[]
 }
 
@@ -57,13 +58,8 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_CONTRACTS),
       switchMap((action: GenerateContracts) => {
-        const jsonProgram = localStorage.getItem("currentProgram");
-        if (!jsonProgram) {
-          throw new Error("CurrentProgram not found in localStorage");
-        }
-        const current_program = JSON.parse(jsonProgram);
         return this.http.get<ContractsResponse>(environment.backendUrl +
-          "/create_contracts?program_id=" + current_program.id
+          "/create_contracts?program_id=" + get_current_program().id
           + "&date=" + convert_date_to_backend_format(action.payload.contract_date)
           + "&schools_list=" + action.payload.school_ids.join(","))
           .pipe(
@@ -87,13 +83,8 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_REGISTER),
       switchMap((_) => {
-        const jsonProgram = localStorage.getItem("currentProgram");
-        if (!jsonProgram) {
-          throw new Error("CurrentProgram not found in localStorage");
-        }
-        const current_program = JSON.parse(jsonProgram);
-        return this.http.get<RegisterResponse>(environment.backendUrl +
-          "/create_school_register/" + current_program.id)
+        return this.http.get<ResponseWithDocuments>(environment.backendUrl +
+          "/create_school_register/" + get_current_program().id)
           .pipe(
             map(responseData => {
               return new DocumentsActions.SetContracts({
@@ -172,9 +163,43 @@ export class DocumentsEffects {
         })),
     {dispatch: false});
 
+  onGenerateDelivery$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_DELIVERY),
+      switchMap((action: GenerateDelivery) => {
+        let record_ids: number[] = [];
+        action.records.forEach(record => record_ids.push(record.id));
+        let prepareBody: {[key: string]: any} = {records: record_ids};
+        if (action.comments) {
+          prepareBody['comments'] = action.comments;
+        }
+        return this.http.put<ResponseWithDocuments>(environment.backendUrl +
+          "/create_delivery?date=" + action.delivery_date + "&driver=" + action.driver,
+          {...prepareBody})
+          .pipe(
+            map(responseData  => {
+              return new DocumentsActions.FinishGenerateDelivery(
+                responseData.documents.filter((document_info: string) => {
+                  return document_info.includes("pdf")}));
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
+  fetchRecordsOnFinishDelivery = createEffect(() =>
+      this.action$.pipe(
+        ofType(DocumentsActions.FINISH_GENERATE_DELIVERY),
+        tap(() => {
+          this.store.dispatch(new RecordsActions.Fetch());
+        })),
+    {dispatch: false});
 
   constructor(private action$: Actions, private http: HttpClient,
               private router: Router,
-              private store$: Store<AppState>) {
+              private store: Store<AppState>) {
   }
 }

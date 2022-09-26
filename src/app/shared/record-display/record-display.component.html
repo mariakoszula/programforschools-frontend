@@ -14,12 +14,25 @@
       <tr *ngFor="let contract of contracts; let contract_index = index">
         <td>{{contract.school.nick}}</td>
         <td *ngFor="let date of dates; let date_index = index">
-          <button *ngIf="productFruitVegStorage[contract_index][date_index]" [disabled]="!clickableView" type="button"
+          <button *ngIf="productFruitVegStorage[contract_index][date_index]"
+                  [ngStyle]="{'background-color': getColorFruitVeg(contract_index, date_index)}"
+                  [ngClass]="{active: isActiveFruitVeg(contract_index, date_index)}"
+                  (mouseenter)="changeToHoverColor($event)"
+                  (mouseleave)="changeToDefaultColorFruitVeg($event, contract_index, date_index)"
+                  (click)="onFruitVegRecordSelect(contract_index, date_index)"
+                  [disabled]="!clickableView" type="button"
                   class="btn btn-sm btn-outline-dark">{{productFruitVegStorage[contract_index][date_index]}}</button>
         </td>
         <td>{{contract.school.nick}}</td>
         <td *ngFor="let date of dates; let date_index = index">
-          <button *ngIf="productDairyStorage[contract_index][date_index]" [disabled]="!clickableView" type="button"
+          <button *ngIf="productDairyStorage[contract_index][date_index]"
+                  [ngStyle]="{'background-color': getColorDairy(contract_index, date_index)}"
+                  [ngClass]="{active: isActiveDairy(contract_index, date_index)}"
+                  (mouseenter)="changeToHoverColor($event)"
+                  (mouseleave)="changeToDefaultColorDiary($event, contract_index, date_index)"
+                  (click)="onDairyRecordSelect(contract_index, date_index)"
+                  [disabled]="!clickableView"
+                  type="button"
                   class="btn btn-sm btn-outline-dark">{{productDairyStorage[contract_index][date_index]}}</button>
         </td>
       </tr>

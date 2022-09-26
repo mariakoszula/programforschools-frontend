@@ -37,7 +37,7 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
         component: DocumentsComponent,
         resolve: [ProgramResolverService, SchoolResolverService, ContractResolverService],
         children: [
-          {path: 'umowy', component: DocumentsComponent},
+          {path: 'umowy', component: ContractDetailsComponent},
           {path: 'umowy/:school_id', component: ContractDetailsComponent},
           {path: 'umowy/:school_id/:contract_id/edycja', component: ContractDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/nowy_aneks', component: AnnexDataEditorComponent},

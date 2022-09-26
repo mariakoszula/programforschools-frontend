@@ -8,12 +8,13 @@ import {Actions, ofType} from "@ngrx/effects";
 import {Injectable} from "@angular/core";
 import {Contract} from "./contract.model";
 import {SET_CONTRACTS} from "./store/documents.action";
+import {MAXIMUM_RESOLVER_TIMES} from "../shared/common.functions";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractResolverService implements Resolve<Contract[]> {
-  resolved: boolean = false;
+  resolved: number = 0;
   constructor(private store: Store<AppState>,
               private actions$: Actions) {
   }
@@ -25,12 +26,12 @@ export class ContractResolverService implements Resolve<Contract[]> {
         return contractState.contracts;
       }),
       switchMap(contracts => {
-        if (contracts.length === 0 && !this.resolved) {
+        if (contracts.length === 0 && (this.resolved <= MAXIMUM_RESOLVER_TIMES)) {
           const currentProgramJson = localStorage.getItem("currentProgram")
           if (currentProgramJson) {
             const program_id = JSON.parse(currentProgramJson)["id"];
             this.store.dispatch(new DocumentsActions.FetchContracts(program_id));
-            this.resolved = true;
+            this.resolved += 1;
             return this.actions$.pipe(
               ofType(SET_CONTRACTS),
               take(1)

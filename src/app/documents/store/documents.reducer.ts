@@ -1,8 +1,9 @@
 import {Annex, Contract} from "../contract.model";
 import {
   DocumentsActions,
-  FETCH_CONTRACTS,
+  FETCH_CONTRACTS, FINISH_GENERATE_DELIVERY,
   GENERATE_CONTRACTS,
+  GENERATE_DELIVERY,
   GENERATE_REGISTER,
   SET_ANNEX,
   SET_CONTRACTS,
@@ -77,9 +78,16 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
     case UPDATE_ANNEX:
     case GENERATE_CONTRACTS:
     case GENERATE_REGISTER:
+    case GENERATE_DELIVERY:
       return {
         ...state,
         isGenerating: true
+      }
+    case FINISH_GENERATE_DELIVERY:
+      return {
+        ...state,
+        generatedDocuments: [...action.payload],
+        isGenerating: false
       }
     default:
       return state;

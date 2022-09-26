@@ -6,27 +6,30 @@ import {DataTablesModule} from "angular-datatables";
 import {ReactiveFormsModule} from "@angular/forms";
 import {RecordDisplayComponent} from "./record-display/record-display.component";
 import {CutYearFromDate} from "./cut-date.pipe";
+import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
 
 @NgModule({
-  declarations: [
-    SimpleAlertComponent,
-    LoadingSpinnerComponent,
-    RecordDisplayComponent,
-    CutYearFromDate
-  ],
+    declarations: [
+        SimpleAlertComponent,
+        LoadingSpinnerComponent,
+        RecordDisplayComponent,
+        CutYearFromDate,
+        WeeksDisplayComponent
+    ],
   imports: [
     CommonModule,
     DataTablesModule,
     ReactiveFormsModule
   ],
-  exports: [
-    SimpleAlertComponent,
-    LoadingSpinnerComponent,
-    CommonModule,
-    DataTablesModule,
-    ReactiveFormsModule,
-    RecordDisplayComponent
-  ]
+    exports: [
+        SimpleAlertComponent,
+        LoadingSpinnerComponent,
+        CommonModule,
+        DataTablesModule,
+        ReactiveFormsModule,
+        RecordDisplayComponent,
+        WeeksDisplayComponent
+    ]
 })
 export class SharedModule {
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ProductStore, Week} from "../programs/program.model";
 import {AppState} from "../store/app.reducer";
 import {Store} from "@ngrx/store";
@@ -14,15 +14,14 @@ import * as RecordActions from "./store/record.action";
   templateUrl: './record-planner.component.html'
 })
 export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
-  weeks: Week[] = [];
   sub: Subscription | null = null;
   recordSub: Subscription | null = null;
-  selectedWeek: Week | null = null;
   isLoading: boolean = false;
   records: Record[] = [];
   contracts: Contract[] = [];
   fruitVegProducts: ProductStore[] = [];
   dairyProducts: ProductStore[] = [];
+  selectedWeek: Week | null = null;
 
   constructor(private store: Store<AppState>,
               private router: Router,
@@ -45,7 +44,6 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
       switchMap(programState => {
         this.fruitVegProducts = programState.fruitVegProducts;
         this.dairyProducts = programState.dairyProducts;
-        this.weeks = programState.weeks;
         return this.store.select("document");
       }),
       switchMap(documentState => {
@@ -59,23 +57,12 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
       }
     );
   }
-
-  selectWeek($event: any, id: number) {
-    let clickedElement = $event.target;
-    if (clickedElement.nodeName === "BUTTON") {
-      let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
-      if (isCertainButtonAlreadyActive) {
-        isCertainButtonAlreadyActive.classList.remove("active");
-      }
-      clickedElement.className += " active";
-    }
-    let foundWeek = this.weeks.find(week => week.id === id);
-    if (foundWeek) {
-      this.selectedWeek = foundWeek;
+  onSelectWeek(selectedWeek: Week) {
+      this.selectedWeek = selectedWeek;
       this.recordDataService.setDates(this.selectedWeek);
-      this.router.navigate([id], {relativeTo: this.activeRoute});
-    }
+      this.router.navigate([this.selectedWeek.id], {relativeTo: this.activeRoute});
   }
+
   fetchRecords() {
     this.store.dispatch(new RecordActions.Fetch());
   }

@@ -7,6 +7,8 @@ import {
 } from "./date_converter.utils";
 import {Week} from "../programs/program.model";
 
+export const MAXIMUM_RESOLVER_TIMES = 2;
+
 export function get_current_program() {
   const jsonProgram = localStorage.getItem("currentProgram");
   if (!jsonProgram) {

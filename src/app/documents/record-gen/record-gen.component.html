@@ -1,1 +1,40 @@
-<p>W trakcie dodawania będzie tu formularz do wyboru tygodnia, wyboru WZ, kierowcy, daty wydania!</p>
+<div class="card">
+  <div class="overlay dark" *ngIf="isGenerating">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div class="card-header">
+    <h1 class="card-title">Zaplanuj dostawy</h1>
+  </div>
+  <form [formGroup]="deliveryForm" (ngSubmit)="onSubmitDelivery()">
+    <div class="card-body">
+      <app-weeks-display
+        [title]="'Tydzień'"
+        (selectedWeekEvent)="onSelectWeek($event)"></app-weeks-display>
+      <div class="form-group">
+        <label>Data dostawy</label>
+        <input formControlName="delivery_date" type="date" class="form-control text-left" name="delivery_date"
+               min="2022-09-19" max="2032-01-01">
+        <label>Kierowca</label><input formControlName="driver" class="form-control" name="driver">
+        <br/>
+        <div class="alert alert-danger" *ngIf="error">
+          <p>{{ error }}</p>
+        </div>
+        <app-record-display
+          *ngIf="selectedWeek"
+          [records]="get_records()"
+          [contracts]="contracts"
+          [fruitVegProducts]="fruitVegProducts"
+          [dairyProducts]="dairyProducts"
+          (selectedRecordsEvent)="onSelectRecords($event)"
+        ></app-record-display>
+        <label>Dodatkowy komentarz</label><textarea rows="3" cols="20" formControlName="comment" class="form-control"
+                                                    name="comment"></textarea>
+      </div>
+      <div class="card-footer" style="display: block;">
+        <button class="btn-lg btn-outline-info float-lg-right" type="submit" [disabled]="!deliveryForm.valid">Przygotuj
+          dokumenty do dostawy
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

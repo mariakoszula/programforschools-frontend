@@ -39,6 +39,11 @@ export function is_working_day(current_date: string): boolean {
   return !(date.getDay() === 6 || date.getDay() === 0);
 }
 
+export function get_day(current_date: string): number {
+  const date = new Date(current_date);
+  return date.getDay();
+}
+
 
 export function is_date_in_range (_date: string, _start_date: string, _end_date: string) {
   let date = new Date(convert_date_from_backend_format(_date, "-"));
