@@ -14,12 +14,12 @@ import {FormsModule} from "@angular/forms";
 import {RecordResolverService} from "./record-resolver.service";
 
 @NgModule({
-    declarations: [
-        RecordPlannerComponent,
-        SelectDateComponent,
-        SelectSchoolComponent,
-        SelectProductComponent
-    ],
+  declarations: [
+    RecordPlannerComponent,
+    SelectDateComponent,
+    SelectSchoolComponent,
+    SelectProductComponent
+  ],
   imports: [
     AngularDualListBoxModule,
     CommonModule,

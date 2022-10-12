@@ -35,6 +35,11 @@ export class Record {
   }
 }
 
+export enum RecordStates {
+  PLANNED = "PLANNED",
+  GENERATED = "GENERATED",
+  DELIVERED = "DELIVERED"
+}
 
 export enum RecordAdditionResultInfo {
   SUCCESS = 0,

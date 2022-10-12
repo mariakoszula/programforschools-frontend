@@ -9,7 +9,8 @@ const appRoutes: Routes = [
   {path: 'programy', loadChildren: () => import('./programs/programs.module').then(module => module.ProgramsModule)},
   {path: 'szkoly', loadChildren: () => import('./schools/schools.module').then(module => module.SchoolsModule)},
   {path: 'dokumenty', loadChildren: () => import('./documents/documents.module').then(module => module.DocumentsModule)},
-  {path: 'planowanie', loadChildren: () => import('./record-planner/record-planner.module').then(module => module.RecordPlannerModule)}
+  {path: 'planowanie', loadChildren: () => import('./record-planner/record-planner.module').then(module => module.RecordPlannerModule)},
+  {path: 'wz', loadChildren: () => import('./record-managment/record-management.module').then(module => module.RecordManagementModule)}
 ];
 
 @NgModule({

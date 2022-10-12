@@ -1,5 +1,5 @@
 import {AdditionRecordsResponse, Record} from "../record.model";
-import {FETCH, RecordActions, SET_RECORDS, ADD_RECORDS} from "./record.action";
+import {ADD_RECORDS, DELETE_RECORD_CONFIRM, FETCH, RecordActions, SET_RECORDS} from "./record.action";
 
 export interface State {
   records: Record[];
@@ -26,6 +26,16 @@ export function recordReducer(state: State = initialState, action: RecordActions
       return {
         ...state,
         isLoading: true
+      }
+    case DELETE_RECORD_CONFIRM:
+      let updated_records = [...state.records];
+      let record = updated_records.find(record => record.id == action.id);
+      if (record) {
+        updated_records.splice(updated_records.indexOf(record), 1);
+      }
+      return {
+        ...state,
+        records: [...updated_records]
       }
     case SET_RECORDS:
       let failed = action.payload.recordsFailedResponse;

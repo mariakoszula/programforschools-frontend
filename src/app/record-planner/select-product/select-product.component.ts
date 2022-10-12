@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SchoolWithRecordDemand} from "../record.model";
+import {Component, OnInit} from '@angular/core';
+import {Record, SchoolWithRecordDemand} from "../record.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
@@ -7,21 +7,19 @@ import {switchMap} from "rxjs";
 import {ProductStore} from "../../programs/program.model";
 import {RecordDataService} from "../record-data.service";
 import * as RecordActions from "../store/record.action";
+import {Contract} from "../../documents/contract.model";
 
 @Component({
   selector: 'app-select-product',
   templateUrl: './select-product.component.html'
 })
 export class SelectProductComponent implements OnInit {
-
-  //TODO if record already exists do not show this input button for this record
-  // TODO modification, removing and accepting -- as in old program and this is only possibility to change already planned schools
-  //TODO don't show products which was already delivered in amount of min-amount for this school; need record state
-  //TODO future: possiblity to add extra products in another view
   fruitVegSuffix: string = "fruitVeg_";
   dairySuffix: string = "dairy_";
   recordRequiredForSchools?: Array<SchoolWithRecordDemand>;
   date?: string;
+  records?: Record[];
+  contracts?: Contract[];
   displayWarning: boolean = false;
   fruitVegProducts: ProductStore[] = [];
   dairyProducts: ProductStore[] = [];
@@ -34,15 +32,52 @@ export class SelectProductComponent implements OnInit {
               private shareRecordDataService: RecordDataService) {
   }
 
+  reached_min_amount(product: ProductStore, school_nick: string): boolean {
+    const contract: Contract | undefined = this.contracts?.find(contract => contract.school.nick === school_nick);
+    if (contract) {
+      let records_for_school = this.records?.filter(record => record.contract_id === contract?.id &&
+        record.product_store_id === product.id);
+      if (records_for_school) {
+        return records_for_school.length >= product.min_amount;
+      }
+    }
+    return false;
+  }
+
+  __all_reached_min_amount(products: ProductStore[], school_nick: string): boolean {
+    let results = [];
+    for (let product of products) {
+      results.push(this.reached_min_amount(product, school_nick));
+    }
+    return results.every( result => result);
+  }
+
   ngOnInit(): void {
     this.activeRoute.params.pipe(
       switchMap((param: Params) => {
         this.date = param["date"];
         return this.store.select('program');
-      })).subscribe(programState => {
-      this.fruitVegProducts = programState.fruitVegProducts;
-      this.dairyProducts = programState.dairyProducts;
+      }),
+      switchMap(programState => {
+        this.fruitVegProducts = programState.fruitVegProducts;
+        this.dairyProducts = programState.dairyProducts;
+        return this.store.select("record");
+      }),
+      switchMap(recordState => {
+        this.records = recordState.records;
+        console.log(this.records);
+        return this.store.select("document");
+      })).subscribe(documentState => {
+      this.contracts = documentState.contracts;
       this.recordRequiredForSchools = this.shareRecordDataService.getRecordDemand();
+      this.recordRequiredForSchools.forEach(recordRequired => {
+        if (recordRequired.fruitVeg.isRequired && this.__all_reached_min_amount(this.fruitVegProducts, recordRequired.nick)) {
+            recordRequired.fruitVeg.isRequired = false;
+        }
+        if (recordRequired.dairy.isRequired && this.__all_reached_min_amount(this.dairyProducts, recordRequired.nick)) {
+          recordRequired.dairy.isRequired = false;
+        }
+      });
     });
   }
 

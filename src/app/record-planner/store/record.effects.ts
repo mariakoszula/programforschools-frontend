@@ -1,16 +1,15 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
+import {catchError, of, switchMap, tap} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import * as RecordActions from "./record.action";
 import {HttpClient} from "@angular/common/http";
-import {AddRecords, Fetch} from "./record.action";
+import {AddRecords, DeleteRecord, Fetch} from "./record.action";
 import {
   AdditionRecordsResponse,
   Record,
   RecordAddResult,
-  RecordsDemand,
   RecordAdditionResultInfo,
 } from "../record.model";
 import {get_current_program, get_weeks} from "../../shared/common.functions";
@@ -95,6 +94,25 @@ export class RecordEffects {
           );
       }));
   });
+
+  onDelete$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(RecordActions.DELETE_RECORD),
+      switchMap((action: DeleteRecord) => {
+        return this.http.delete<{ deleted_record: number }>(environment.backendUrl +
+          "/record/" + action.id)
+          .pipe(
+            map(responseData => {
+              return new RecordActions.DeleteRecordConfirm(responseData.deleted_record);
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
 
   redirectOnSave = createEffect(() =>
       this.action$.pipe(

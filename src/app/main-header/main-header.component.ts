@@ -3,9 +3,7 @@ import {Router} from "@angular/router";
 import {Subscription, switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../store/app.reducer";
-import {map} from "rxjs/operators";
 import * as ProgramActions from '../programs/store/program.action';
-import {Program} from '../programs/program.model';
 
 @Component({
   selector: 'app-main-header',
