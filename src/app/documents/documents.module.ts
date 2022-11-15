@@ -48,7 +48,7 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
             path: 'wydanie-na-zewnatrz',
             component: RecordGenComponent,
             resolve: [RecordResolverService]
-          },
+          }
         ]
       }
     ])

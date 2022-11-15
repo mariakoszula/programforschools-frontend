@@ -14,8 +14,8 @@ export class DocumentGenerationInfoComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.contractSub = this.store.select("document").subscribe((contractState) => {
-      contractState.generatedDocuments.forEach((document) => {
+    this.contractSub = this.store.select("document").subscribe((documentsState) => {
+      documentsState.generatedDocuments.forEach((document) => {
         const res = document.split(": webViewLink:");
         this.generatedDocuments[res[0]] = res[1];
         }

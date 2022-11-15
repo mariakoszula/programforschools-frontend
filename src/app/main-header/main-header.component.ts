@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subscription, switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
@@ -12,6 +12,7 @@ import * as ProgramActions from '../programs/store/program.action';
 export class MainHeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   isProgramSelected = false;
+  displayNotification = false;
   private userSubscription: Subscription | undefined;
 
   constructor(private store: Store<fromApp.AppState>,
@@ -28,16 +29,20 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
         this.isLoggedIn = !!authState.user;
         return this.store.select('program');
       })).subscribe(programState => {
-      if (programState.indexOfSelectedProgram !== -1) {
-        this.isProgramSelected = true
-      } else {
-        this.isProgramSelected = false;
-      }
+      this.isProgramSelected = programState.indexOfSelectedProgram !== -1;
     });
   }
 
   fetchData() {
     this.store.dispatch(new ProgramActions.Fetch());
     this.router.navigate(["/programy"]);
+  }
+  showNotifications(e: MouseEvent) {
+    e.stopPropagation();
+    this.displayNotification = !this.displayNotification;
+  }
+
+  @HostListener("document:click") hideOnClick() {
+    this.displayNotification = false;
   }
 }

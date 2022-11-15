@@ -7,6 +7,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {RecordDisplayComponent} from "./record-display/record-display.component";
 import {CutYearFromDate} from "./cut-date.pipe";
 import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
+import {NotificationsComponent} from "../documents/notifications/notifications.component";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     declarations: [
@@ -14,22 +16,25 @@ import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
         LoadingSpinnerComponent,
         RecordDisplayComponent,
         CutYearFromDate,
-        WeeksDisplayComponent
+        WeeksDisplayComponent,
+        NotificationsComponent
     ],
   imports: [
     CommonModule,
     DataTablesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
-    exports: [
-        SimpleAlertComponent,
-        LoadingSpinnerComponent,
-        CommonModule,
-        DataTablesModule,
-        ReactiveFormsModule,
-        RecordDisplayComponent,
-        WeeksDisplayComponent
-    ]
+  exports: [
+    SimpleAlertComponent,
+    LoadingSpinnerComponent,
+    CommonModule,
+    DataTablesModule,
+    ReactiveFormsModule,
+    RecordDisplayComponent,
+    WeeksDisplayComponent,
+    NotificationsComponent
+  ]
 })
 export class SharedModule {
 }

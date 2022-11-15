@@ -21,6 +21,7 @@ import {CompanyEffects} from "./companies/store/company.effects";
 import {SchoolsEffects} from "./schools/store/schools.effects";
 import {DocumentsEffects} from "./documents/store/documents.effects";
 import {RecordEffects} from "./record-planner/store/record.effects";
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -30,23 +31,24 @@ import {RecordEffects} from "./record-planner/store/record.effects";
     ControlSidebarComponent,
     MainFooterComponent
   ],
-  imports: [
-    BrowserModule,
-    RoutingModule,
-    ContentModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([
-      AuthEffects,
-      ProgramEffects,
-      CompanyEffects,
-      SchoolsEffects,
-      DocumentsEffects,
-      RecordEffects
-    ]),
-    StoreDevtoolsModule.instrument({logOnly: environment.production})
-  ],
+    imports: [
+        BrowserModule,
+        RoutingModule,
+        ContentModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        StoreModule.forRoot(fromApp.appReducer),
+        EffectsModule.forRoot([
+            AuthEffects,
+            ProgramEffects,
+            CompanyEffects,
+            SchoolsEffects,
+            DocumentsEffects,
+            RecordEffects
+        ]),
+        StoreDevtoolsModule.instrument({logOnly: environment.production}),
+        SharedModule
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

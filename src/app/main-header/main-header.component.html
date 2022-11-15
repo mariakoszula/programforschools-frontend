@@ -18,6 +18,16 @@
     <li *ngIf="isLoggedIn" class="nav-item">
       <a class="nav-link" role="button" (click)="fetchData()">Przeładuj dane</a>
     </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-toggle="dropdown" (click)="showNotifications($event)" role="button">
+        <i class="far fa-bell"></i>
+        <span class="badge badge-info navbar-badge">1</span>
+      </a>
+      <div id="showNotification" class="dropdown-menu dropdown-menu-lg dropdown-menu-right"
+           [ngClass]="{'show':displayNotification}">
+        <app-notifications></app-notifications>
+      </div>
+    </li>
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" routerLink="{{ this.router.url }}" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
