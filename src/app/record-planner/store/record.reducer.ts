@@ -1,5 +1,5 @@
 import {AdditionRecordsResponse, Record} from "../record.model";
-import {ADD_RECORDS, DELETE_RECORD_CONFIRM, FETCH, RecordActions, SET_RECORDS} from "./record.action";
+import {ADD_RECORDS, DELETE_RECORD_CONFIRM, FETCH, RecordActions, SET_RECORDS, UPDATE_RECORD} from "./record.action";
 
 export interface State {
   records: Record[];
@@ -14,7 +14,7 @@ const initialState = {
 }
 
 export function recordReducer(state: State = initialState, action: RecordActions) {
-  switch(action.type) {
+  switch (action.type) {
     case FETCH:
       return {
         ...state,
@@ -23,6 +23,11 @@ export function recordReducer(state: State = initialState, action: RecordActions
         isLoading: true
       }
     case ADD_RECORDS:
+      return {
+        ...state,
+        isLoading: true
+      }
+    case UPDATE_RECORD:
       return {
         ...state,
         isLoading: true
@@ -40,7 +45,7 @@ export function recordReducer(state: State = initialState, action: RecordActions
     case SET_RECORDS:
       let failed = action.payload.recordsFailedResponse;
       let updateFailed: AdditionRecordsResponse | null = null;
-      if (failed){
+      if (failed) {
         updateFailed = {
           date: failed.date,
           records: [...failed.records]

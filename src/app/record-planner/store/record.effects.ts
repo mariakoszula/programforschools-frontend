@@ -5,12 +5,12 @@ import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import * as RecordActions from "./record.action";
 import {HttpClient} from "@angular/common/http";
-import {AddRecords, DeleteRecord, Fetch} from "./record.action";
+import {AddRecords, DeleteRecord, Fetch, UpdateRecord} from "./record.action";
 import {
   AdditionRecordsResponse,
   Record,
   RecordAddResult,
-  RecordAdditionResultInfo,
+  RecordAdditionResultInfo, RecordUpdateResult, get_sate_number,
 } from "../record.model";
 import {get_current_program, get_weeks} from "../../shared/common.functions";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -44,6 +44,27 @@ export class RecordEffects {
                 records: responseData.records,
                 recordsFailedResponse: null
               })
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
+  onUpdate$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(RecordActions.UPDATE_RECORD),
+      switchMap((action: UpdateRecord) => {
+        return this.http.put<RecordUpdateResult>(environment.backendUrl +
+          "/record/" + action.payload.id, {
+          'state': get_sate_number(action.payload.state)
+        })
+          .pipe(
+            map(responseData => {
+              console.log(responseData);
+              return new RecordActions.Fetch(); // TODO refactor to use separate action to update only one item
             }),
             catchError(error => {
               console.log(error);

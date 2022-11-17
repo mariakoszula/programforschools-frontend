@@ -9,6 +9,7 @@ import {CutYearFromDate} from "./cut-date.pipe";
 import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
 import {NotificationsComponent} from "../documents/notifications/notifications.component";
 import {RouterModule} from "@angular/router";
+import {ProgressBarModule} from "angular-progress-bar";
 
 @NgModule({
     declarations: [
@@ -19,12 +20,13 @@ import {RouterModule} from "@angular/router";
         WeeksDisplayComponent,
         NotificationsComponent
     ],
-  imports: [
-    CommonModule,
-    DataTablesModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
+    imports: [
+        CommonModule,
+        DataTablesModule,
+        ReactiveFormsModule,
+        RouterModule,
+        ProgressBarModule
+    ],
   exports: [
     SimpleAlertComponent,
     LoadingSpinnerComponent,

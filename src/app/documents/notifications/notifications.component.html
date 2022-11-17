@@ -1,7 +1,7 @@
 <a *ngFor="let notification of getNotifications()" class="dropdown-item cursor">
   <i class="fas fa-file mr-2"></i>{{notification.name}}
-  <progress-bar [progress]="notification.progress"
-                [color-degraded]="{'0': '#cb1e00', '80': '#ff5005', '99': '#e3bb0a', '100': '#48e700'}">
+  <progress-bar [progress]="progressToStr(notification.progress)"
+                [color-degraded]="{'0': '#cb1e00', '40': '#ff8000', '70': '#e3bb0a', '99': '#48e700'}">
   </progress-bar>
 </a>
 <div class="dropdown-divider"></div>

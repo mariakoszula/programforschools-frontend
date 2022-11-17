@@ -3,10 +3,15 @@
   <p> Ostatnio wygnerowane dokumenty:</p>
   <ul>
     <div *ngFor="let item of generatedDocuments | keyvalue">
-    <li>
-      <a href="{{item.value}}">{{item.key}}</a>
-    </li>
-      </div>
+      <li>
+        <a href="{{item.value}}">{{item.key}}</a>
+      </li>
+    </div>
   </ul>
 </div>
-<div *ngIf="!anyGeneratedDocuments()" class="callout callout-info">Nie wygenerowano żadnych nowych dokumentów</div>
+<div *ngIf="!anyGeneratedDocuments()" class="callout callout-info">
+  <p> Ostatnio wygnerowane dokumenty:</p>
+  <ul>
+    <li>Brak dokumentów w sesji</li>
+  </ul>
+</div>

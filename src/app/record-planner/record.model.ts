@@ -41,6 +41,14 @@ export enum RecordStates {
   DELIVERED = "DELIVERED"
 }
 
+export function get_sate_number(state: string): number {
+  if (state == RecordStates.DELIVERED) {
+    return 3;
+  }
+  return 0;
+}
+
+
 export enum RecordAdditionResultInfo {
   SUCCESS = 0,
   RECORD_OF_THIS_TYPE_EXISTS,
@@ -53,6 +61,10 @@ export interface RecordAddResult {
   nick: string;
   product: string;
   result: RecordAdditionResultInfo;
+  record: Record | null;
+}
+
+export interface RecordUpdateResult {
   record: Record | null;
 }
 

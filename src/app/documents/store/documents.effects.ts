@@ -216,7 +216,9 @@ export class DocumentsEffects {
                 map(responseData => {
                   let _documents: string[] = [];
                   if (responseData.progress === FINISHED_TASK_PROGRESS) {
-                    _documents.concat(responseData.documents.filter((document_info: string) => document_info.includes("pdf")));
+                    if (responseData.documents) {
+                      _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
+                    }
                   };
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,

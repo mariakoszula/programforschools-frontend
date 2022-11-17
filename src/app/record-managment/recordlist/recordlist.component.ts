@@ -18,6 +18,7 @@ export class RecordListComponent implements OnInit, OnDestroy {
   contracts: Contract[] = [];
   product_storage: ProductStore[] = [];
   sub: Subscription | null = null;
+
   constructor(private store: Store<AppState>,
               private router: Router,
               private activeRoute: ActivatedRoute) {
@@ -33,7 +34,7 @@ export class RecordListComponent implements OnInit, OnDestroy {
         this.records = recordState.records;
         return this.store.select("document");
       })).subscribe(documentState => {
-        this.contracts = documentState.contracts;
+      this.contracts = documentState.contracts;
     });
   }
 
@@ -46,7 +47,7 @@ export class RecordListComponent implements OnInit, OnDestroy {
   }
 
   get_product_type(record: Record) {
-      return this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.product_type;
+    return this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.product_type;
   }
 
   isPlanned(record: Record) {
@@ -55,6 +56,10 @@ export class RecordListComponent implements OnInit, OnDestroy {
 
   isGenerated(record: Record) {
     return record.state == RecordStates.GENERATED;
+  }
+
+  isDelivered(record: Record) {
+    return record.state == RecordStates.DELIVERED;
   }
 
   onEditRecord(record: Record) {
@@ -67,8 +72,8 @@ export class RecordListComponent implements OnInit, OnDestroy {
   }
 
   onConfirmDelivered(record: Record) {
-    record.state = RecordStates.DELIVERED;
-    this.store.dispatch(new RecordActions.UpdateRecord(record));
+    let updated_record = {...record, state: RecordStates.DELIVERED};
+    this.store.dispatch(new RecordActions.UpdateRecord(updated_record));
   }
 
   ngOnDestroy(): void {

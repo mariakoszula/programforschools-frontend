@@ -121,7 +121,7 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
           generatedDocuments: [...action.payload.documents],
           queuedTasks: queuedTaskInfoEntityAdapter.updateOne({
             id: currentTask.id,
-            changes: {progress: action.payload.progress}
+            changes: {progress: action.payload.progress},
           }, state.queuedTasks)
         }
       }
