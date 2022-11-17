@@ -21,7 +21,7 @@
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" (click)="showNotifications($event)" role="button">
         <i class="far fa-bell"></i>
-        <span class="badge badge-info navbar-badge">1</span>
+        <span *ngIf="newNotificationsCounter" class="badge badge-info navbar-badge">{{newNotificationsCounter}}</span>
       </a>
       <div id="showNotification" class="dropdown-menu dropdown-menu-lg dropdown-menu-right"
            [ngClass]="{'show':displayNotification}">

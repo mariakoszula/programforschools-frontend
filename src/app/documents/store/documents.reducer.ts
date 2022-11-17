@@ -1,24 +1,45 @@
 import {Annex, Contract} from "../contract.model";
 import {
   DocumentsActions,
-  FETCH_CONTRACTS, FINISH_GENERATE_DELIVERY,
+  FETCH_CONTRACTS,
   GENERATE_CONTRACTS,
   GENERATE_DELIVERY,
   GENERATE_REGISTER,
+  QUEUE_GENERATING_TASK_AND_START_POLLING,
+  RESET_NOTIFICATION_COUNTER,
   SET_ANNEX,
   SET_CONTRACTS,
+  SET_TASK_PROGRESS,
+  STOP_POLLING,
   UPDATE_ANNEX
 } from "./documents.action";
+import {QueuedTaskInfo} from "../notifications/notifications.component";
+import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
+
+const INITIAL_TASK_PROGRESS = 0;
+export const FINISHED_TASK_PROGRESS = 100;
+export const POLLING_INTERVAL = 10000;
+
+export interface QueuedTaskInfoState extends EntityState<QueuedTaskInfo> {
+}
+
+export const queuedTaskInfoEntityAdapter: EntityAdapter<QueuedTaskInfo> = createEntityAdapter<QueuedTaskInfo>({
+  sortComparer: (n1: QueuedTaskInfo, n2: QueuedTaskInfo) => n1.progress - n2.progress
+});
 
 export interface State {
   contracts: Contract[];
   generatedDocuments: string[];
+  queuedTasks: QueuedTaskInfoState;
+  notificationCounter: number;
   isGenerating: boolean;
 }
 
 const initialState = {
   contracts: [],
   generatedDocuments: [],
+  queuedTasks: queuedTaskInfoEntityAdapter.getInitialState(),
+  notificationCounter: 0,
   isGenerating: false
 }
 
@@ -35,7 +56,7 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
       let updated_contracts: Contract[] = [...state.contracts];
       action.payload.contracts.forEach(new_contract => {
         const foundContract = updated_contracts.find(_contract => _contract.id === new_contract.id);
-        if (foundContract){
+        if (foundContract) {
           const indexOfUpdatedContract = updated_contracts.indexOf(foundContract);
           updated_contracts[indexOfUpdatedContract] = {...new_contract};
         } else {
@@ -83,10 +104,37 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
         ...state,
         isGenerating: true
       }
-    case FINISH_GENERATE_DELIVERY:
+    case QUEUE_GENERATING_TASK_AND_START_POLLING:
       return {
         ...state,
-        generatedDocuments: [...action.payload],
+        queuedTasks: queuedTaskInfoEntityAdapter.addOne({
+            ...action.payload,
+            progress: INITIAL_TASK_PROGRESS
+        }, state.queuedTasks),
+        notificationCounter: state.notificationCounter + 1
+      };
+    case SET_TASK_PROGRESS:
+      let currentTask = getQueueEntities(state)[action.payload.id];
+      if (currentTask && currentTask.progress !== action.payload.progress) {
+        return {
+          ...state,
+          generatedDocuments: [...action.payload.documents],
+          queuedTasks: queuedTaskInfoEntityAdapter.updateOne({
+            id: currentTask.id,
+            changes: {progress: action.payload.progress}
+          }, state.queuedTasks)
+        }
+      }
+      return state;
+    case RESET_NOTIFICATION_COUNTER:
+      return {
+        ...state,
+        notificationCounter: 0
+      }
+    case STOP_POLLING:
+      return {
+        ...state,
+        notificationCounter: state.notificationCounter + 1,
         isGenerating: false
       }
     default:
@@ -94,4 +142,4 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
   }
 }
 
-
+export const getQueueEntities = (state: State) => state.queuedTasks.entities;

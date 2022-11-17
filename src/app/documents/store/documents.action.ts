@@ -10,7 +10,10 @@ export const GENERATE_REGISTER = "[Documents] GENERATE_REGISTER";
 export const UPDATE_ANNEX = "[Documents] UPDATE_ANNEX";
 export const SET_ANNEX = "[Documents] SET_ANNEX";
 export const GENERATE_DELIVERY = "[Documents] GENERATE_DELIVERY";
-export const FINISH_GENERATE_DELIVERY = "[Documents] FINISH_GENERATE_DELIVERY";
+export const QUEUE_GENERATING_TASK_AND_START_POLLING = "[Documents] QUEUE_GENERATING_TASK_AND_START_POLLING";
+export const STOP_POLLING = "[Documents] STOP_POLLING";
+export const SET_TASK_PROGRESS = "[Documents] SET_TASK_PROGRESS";
+export const RESET_NOTIFICATION_COUNTER = "[Documents] RESET_NOTIFICATION_COUNTER";
 
 export class FetchContracts implements Action {
   readonly type = FETCH_CONTRACTS;
@@ -23,7 +26,7 @@ export class FetchContracts implements Action {
 export class SetContracts implements Action {
   readonly type = SET_CONTRACTS;
 
-  constructor(public payload: {contracts: Contract[], documents: string[]}) {
+  constructor(public payload: { contracts: Contract[], documents: string[] }) {
 
   }
 }
@@ -50,7 +53,7 @@ export class UpdateAnnex implements Action {
 export class SetAnnex implements Action {
   readonly type = SET_ANNEX;
 
-  constructor(public payload: {annex: Annex, documents: string[]}) {
+  constructor(public payload: { annex: Annex, documents: string[] }) {
   }
 }
 
@@ -61,7 +64,7 @@ export class UpdateKidsNo implements Action {
   }
 }
 
-export class GenerateDelivery implements  Action {
+export class GenerateDelivery implements Action {
   readonly type = GENERATE_DELIVERY;
 
   constructor(public records: Record[],
@@ -71,12 +74,38 @@ export class GenerateDelivery implements  Action {
   }
 }
 
-export class FinishGenerateDelivery implements Action {
-  readonly type = FINISH_GENERATE_DELIVERY;
-  constructor(public payload: string[]) {
+export class SetTaskProgress implements Action {
+  readonly type = SET_TASK_PROGRESS;
 
+  constructor(public payload: { id: string, progress: number, documents: string[] }) {
   }
 }
 
-export type DocumentsActions = SetContracts | FetchContracts | GenerateContracts |
-  GenerateRegister | UpdateAnnex | SetAnnex | UpdateKidsNo | GenerateDelivery | FinishGenerateDelivery;
+export class QueueGeneratingTaskAndStartPolling implements Action {
+  readonly type = QUEUE_GENERATING_TASK_AND_START_POLLING;
+
+  constructor(public payload: { id: string, name: string }) {
+  }
+}
+
+export class StopPolling implements Action {
+  readonly type = STOP_POLLING;
+}
+
+export class ResetNotificationCounter implements Action {
+  readonly type = RESET_NOTIFICATION_COUNTER;
+}
+
+export type DocumentsActions =
+  SetContracts
+  | FetchContracts
+  | GenerateContracts
+  | GenerateRegister
+  | UpdateAnnex
+  | SetAnnex
+  | UpdateKidsNo
+  | GenerateDelivery
+  | QueueGeneratingTaskAndStartPolling
+  | SetTaskProgress
+  | StopPolling
+  | ResetNotificationCounter;

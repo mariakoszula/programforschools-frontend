@@ -65,7 +65,6 @@ export class SelectProductComponent implements OnInit {
       }),
       switchMap(recordState => {
         this.records = recordState.records;
-        console.log(this.records);
         return this.store.select("document");
       })).subscribe(documentState => {
       this.contracts = documentState.contracts;

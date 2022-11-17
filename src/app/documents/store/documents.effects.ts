@@ -1,7 +1,7 @@
 import {Annex, Contract} from "../contract.model";
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, of, switchMap, tap} from "rxjs";
+import {catchError, of, switchMap, takeUntil, tap, timer, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
@@ -10,9 +10,19 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
 import * as RecordsActions from "../../record-planner/store/record.action";
-import {FetchContracts, GenerateContracts, GenerateDelivery, UpdateAnnex, UpdateKidsNo} from "./documents.action";
+import {
+  FetchContracts,
+  GenerateContracts,
+  GenerateDelivery,
+  QueueGeneratingTaskAndStartPolling,
+  UpdateAnnex,
+  UpdateKidsNo
+} from "./documents.action";
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
 import {get_current_program} from "../../shared/common.functions";
+import {
+  FINISHED_TASK_PROGRESS, getQueueEntities, POLLING_INTERVAL
+} from "./documents.reducer";
 
 interface ContractsResponse {
   contracts: Contract[];
@@ -30,6 +40,15 @@ interface AnnexResponse {
 
 interface ContractResponse {
   contract: Contract;
+}
+
+interface QueuedTaskResponse {
+  task_id: string;
+}
+
+interface QueuedTaskProgressResponse {
+  progress: number;
+  documents: string[];
 }
 
 @Injectable()
@@ -166,14 +185,15 @@ export class DocumentsEffects {
         if (action.comments) {
           prepareBody['comments'] = action.comments;
         }
-        return this.http.put<ResponseWithDocuments>(environment.backendUrl +
+        return this.http.put<QueuedTaskResponse>(environment.backendUrl +
           "/create_delivery?date=" + action.delivery_date + "&driver=" + action.driver,
           {...prepareBody})
           .pipe(
             map(responseData  => {
-              return new DocumentsActions.FinishGenerateDelivery(
-                responseData.documents.filter((document_info: string) => {
-                  return document_info.includes("pdf")}));
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                  id: responseData.task_id,
+                  name: "Dostawa:".concat(action.driver, " ", action.delivery_date)
+                });
             }),
             catchError(error => {
               console.log(error);
@@ -183,11 +203,47 @@ export class DocumentsEffects {
       }));
   });
 
-  fetchRecordsOnFinishDelivery = createEffect(() =>
+  onQueueGeneratingTask$ = createEffect(() =>
+    this.action$.pipe(
+      ofType(DocumentsActions.QUEUE_GENERATING_TASK_AND_START_POLLING),
+      switchMap((action:  QueueGeneratingTaskAndStartPolling) => {
+        return timer(0, POLLING_INTERVAL).pipe(
+          takeUntil(this.action$.pipe(ofType(DocumentsActions.STOP_POLLING))),
+          switchMap(() => {
+            return this.http.get<QueuedTaskProgressResponse>(environment.backendUrl +
+              "/create_delivery/" + action.payload.id)
+              .pipe(
+                map(responseData => {
+                  let _documents: string[] = [];
+                  if (responseData.progress === FINISHED_TASK_PROGRESS) {
+                    _documents.concat(responseData.documents.filter((document_info: string) => document_info.includes("pdf")));
+                  };
+                  return new DocumentsActions.SetTaskProgress({
+                    id: action.payload.id,
+                    progress: responseData.progress,
+                    documents: _documents
+                  });
+                }),
+                catchError(error => {
+                  console.log(error);
+                  return of({type: "Dummy_action"});
+                })
+              );
+          }),
+        );
+      })
+    )
+  );
+
+  fetchRecordsOnFinishStopPollingDelivery = createEffect(() =>
       this.action$.pipe(
-        ofType(DocumentsActions.FINISH_GENERATE_DELIVERY),
-        tap(() => {
-          this.store.dispatch(new RecordsActions.Fetch());
+        ofType(DocumentsActions.SET_TASK_PROGRESS),
+        withLatestFrom(this.store.select("document")),
+        tap(([_, state]) => {
+          if (Object.values(getQueueEntities(state)).every(value => value && value.progress === FINISHED_TASK_PROGRESS)) {
+            this.store.dispatch(new RecordsActions.Fetch());
+            this.store.dispatch(new DocumentsActions.StopPolling());
+          }
         })),
     {dispatch: false});
 
