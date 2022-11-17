@@ -11,16 +11,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^14.1.2",
-    "@angular/common": "^14.1.2",
-    "@angular/compiler": "^14.1.2",
-    "@angular/core": "^14.1.2",
-    "@angular/forms": "^14.1.2",
-    "@angular/platform-browser": "^14.1.2",
-    "@angular/platform-browser-dynamic": "^14.1.2",
-    "@angular/router": "^14.1.2",
-    "@ngrx/effects": "^14.3.0",
-    "@ngrx/store": "^14.3.0",
+    "@angular/animations": "^15.0.0",
+    "@angular/common": "^15.0.0",
+    "@angular/compiler": "^15.0.0",
+    "@angular/core": "^15.0.0",
+    "@angular/forms": "^15.0.0",
+    "@angular/platform-browser": "^15.0.0",
+    "@angular/platform-browser-dynamic": "^15.0.0",
+    "@angular/router": "^15.0.0",
+    "@ngrx/effects": "^14.3.2",
+    "@ngrx/store": "^14.3.2",
     "admin-lte": "^3.2.0",
     "angular-datatables": "^13.1.0",
     "angular-dual-listbox": "^7.0.0",
@@ -35,10 +35,10 @@
     "zone.js": "~0.11.7"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.1.2",
-    "@angular/cli": "~14.1.2",
-    "@angular/compiler-cli": "^14.1.2",
-    "@ngrx/store-devtools": "^14.3.0",
+    "@angular-devkit/build-angular": "^15.0.0",
+    "@angular/cli": "^15.0.0",
+    "@angular/compiler-cli": "^15.0.0",
+    "@ngrx/store-devtools": "^14.3.2",
     "@types/datatables.net": "^1.10.23",
     "@types/jasmine": "~4.0.3",
     "@types/jquery": "^3.5.14",
@@ -48,6 +48,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.8.4"
   }
 }
