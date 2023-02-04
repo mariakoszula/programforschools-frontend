@@ -6,3 +6,4 @@ export class CutYearFromDate implements PipeTransform {
     return value.replace(/(.\d{4})/, "");
   }
 }
+

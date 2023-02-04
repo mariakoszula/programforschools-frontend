@@ -5,9 +5,9 @@
       <thead>
       <tr>
         <th class="w-10">{{fruitVeg}}</th>
-        <th class="w-20" *ngFor="let date of dates">{{date | cutYearFromDate}}</th>
+        <th class="w-20" *ngFor="let date of dates">{{date | dayName}}<br/>{{date | cutYearFromDate}}</th>
         <th class="w-10">{{dairy}}</th>
-        <th class="w-20" *ngFor="let date of dates">{{date | cutYearFromDate}}</th>
+        <th class="w-20" *ngFor="let date of dates">{{date | dayName}}<br/>{{date | cutYearFromDate}}</th>
       </tr>
       </thead>
       <tbody>

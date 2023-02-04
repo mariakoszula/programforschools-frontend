@@ -8,9 +8,10 @@
   </div>
   <div class="card-body row" style="display: inline-flex;">
     <button (click)="selectWeek($event, week.id)" *ngFor="let week of weeks" type="button"
-            class="btn btn-outline-info btn-block btn-flat"><i
+            class="btn btn-outline-info btn-block btn-flat">
+      Tydzień {{week.week_no}}  <i
       class="fa fa-list-ol"></i>
-      Tydzień {{week.week_no}}
+      {{week.start_date | cutYearFromDate}}  - {{week.end_date | cutYearFromDate}}
     </button>
   </div>
 </div>
