@@ -6,6 +6,7 @@ import * as fromApp from "../../store/app.reducer";
 import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataTableDirective} from "angular-datatables";
+import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-contractlist',
@@ -19,10 +20,14 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   contracts: Contract[] = [];
   programSub: Subscription | null = null;
   dtTrigger: Subject<any> = new Subject();
+  FRUIT_VEG_PRODUCT: string;
+  DAIRY_PRODUCT: string;
 
   constructor(private store: Store<fromApp.AppState>,
               private router: Router,
               private activeRoute: ActivatedRoute) {
+    this.FRUIT_VEG_PRODUCT = FRUIT_VEG_PRODUCT;
+    this.DAIRY_PRODUCT = DAIRY_PRODUCT;
   }
 
   ngOnDestroy(): void {
@@ -74,6 +79,6 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSelectContract(contract: Contract) {
-     this.onEdit(contract.school.id);
+    this.onEdit(contract.school.id);
   }
 }

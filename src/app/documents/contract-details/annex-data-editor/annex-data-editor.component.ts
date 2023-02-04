@@ -8,6 +8,7 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../../../store/app.reducer";
 import {formatDate} from "@angular/common";
 import * as DocumentsActions from "../../store/documents.action";
+import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-annex-data-editor',
@@ -24,12 +25,16 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
   paramsSub: Subscription | null = null;
   documentSub: Subscription | null = null;
   error: string = "";
+  FRUIT_VEG_PRODUCT: string;
+  DAIRY_PRODUCT: string;
 
 
   constructor(private activeRoute: ActivatedRoute,
               private router: Router,
               private store: Store<AppState>) {
     this.annexForm = new FormGroup({});
+    this.FRUIT_VEG_PRODUCT = FRUIT_VEG_PRODUCT;
+    this.DAIRY_PRODUCT = DAIRY_PRODUCT;
   }
 
   initForm() {
@@ -62,23 +67,26 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
           this.annex_id = +params["annex_id"];
         } else {
           this.editAnnex = null;
-        }});
+        }
+      });
     this.documentSub = this.store.select("document").subscribe(documentsState => {
-        this.isGenerating = documentsState.isGenerating;
-        const contract = documentsState.contracts.find((contract) => { return contract.id === this.contract_id;})
-        if (contract) {
-          this.school_nick = contract.school.nick;
-          if (this.annex_id !== -1) {
-            const annex = contract.annex.find((annex) => {
-              return annex.id === this.annex_id
-            });
-            if (annex) {
-              this.editAnnex = annex;
-            } else {
-              this.editAnnex = null;
-            }
+      this.isGenerating = documentsState.isGenerating;
+      const contract = documentsState.contracts.find((contract) => {
+        return contract.id === this.contract_id;
+      })
+      if (contract) {
+        this.school_nick = contract.school.nick;
+        if (this.annex_id !== -1) {
+          const annex = contract.annex.find((annex) => {
+            return annex.id === this.annex_id
+          });
+          if (annex) {
+            this.editAnnex = annex;
+          } else {
+            this.editAnnex = null;
           }
         }
+      }
     });
     this.initForm();
   }

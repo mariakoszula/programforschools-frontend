@@ -8,11 +8,11 @@
     <div class="card-body">
       <form [formGroup]="contractForm" (ngSubmit)="onSubmitKidsNoUpdate()">
         <div class="form-group">
-          <label>Produkt owocowo-warzywny</label>
+          <label>{{FRUIT_VEG_PRODUCT | titlecase}}</label>
           <input formControlName="fruitVeg_products" type="number" step="1"
                  class="form-control"
                  name="fruitVeg_products">
-          <label>Produkt mleczny</label>
+          <label>{{DAIRY_PRODUCT | titlecase}}</label>
           <input formControlName="dairy_products" type="number" step="1"
                  class="form-control"
                  name="dairy_products">

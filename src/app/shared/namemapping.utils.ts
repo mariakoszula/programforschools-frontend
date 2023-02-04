@@ -12,8 +12,18 @@ export interface CommonResponse{
   message: string;
 }
 
-export const FRUIT_VEG_PRODUCT = "owocowo-warzywny";
+export const DayColors = [
+  '#4CAF50',
+  '#DC3DB2',
+  '#008CBA',
+  '#f44336',
+  '#EAEA26'
+]
+
+
+export const FRUIT_VEG_PRODUCT = "owoce-warzywa";
 export const DAIRY_PRODUCT = "nabiał";
+
 
 export class RoleUtils {
   public static roles_names: string[] =  [

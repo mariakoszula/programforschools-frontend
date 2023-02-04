@@ -4,6 +4,7 @@ import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subscription, switchMap} from "rxjs";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-contract-details',
@@ -14,10 +15,14 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
   school_id: number = -1;
   sub: Subscription | null = null;
   dtOptions: DataTables.Settings = {};
+  FRUIT_VEG_PRODUCT: string;
+  DAIRY_PRODUCT: string;
 
   constructor(private store: Store<AppState>,
               private activeRoute: ActivatedRoute,
               private router: Router) {
+    this.FRUIT_VEG_PRODUCT = FRUIT_VEG_PRODUCT;
+    this.DAIRY_PRODUCT = DAIRY_PRODUCT;
     this.dtOptions = {
       order: [[1, 'desc']],
       responsive: false,
@@ -34,13 +39,13 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
         }
         return this.store.select("document");
       })).subscribe((documentState) => {
-          const res = documentState.contracts.find((contract => {
-            return contract.school.id === this.school_id;
-          }));
-          if (res) {
-            this.contract = res;
-          }
-        });
+      const res = documentState.contracts.find((contract => {
+        return contract.school.id === this.school_id;
+      }));
+      if (res) {
+        this.contract = res;
+      }
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,9 +1,25 @@
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
-      <div *ngIf="isLogin" class="p-3">
-      <h5>{{ currentProgram }}</h5>
-      <p>Formularze do wyboru programu</p>
+  <div *ngIf="!isLoggedIn" class="p-3">
+    Zaloguj się aby korzystać z programu.
+  </div>
+  <div *ngIf="isLoggedIn && !program">
+    Wybierz aktualny program w menu 'Programy'
+  </div>
+  <div *ngIf="isLoggedIn && program" class="p-2">
+    <h5>Rok szkolny {{ program.school_year }} Semestr {{ program.semester_no}}</h5>
+    <h6>{{program.start_date}} - {{program.end_date}}</h6>
+  </div>
+  <div *ngIf="isLoggedIn" class="p-3 col-lg">
+    <div *ngFor="let day of days; let i = index">
+      <button [ngStyle]="{'background-color': getDayColor(i), 'margin-bottom': '5px',
+                         'border-color': getDayColor(i), 'width': '100%'}"
+              [disabled]="true"
+              type="button"
+              class="btn btn-large btn-outline-dark">{{day}}</button>
     </div>
+
+  </div>
 </aside>
 <!-- /.control-sidebar -->

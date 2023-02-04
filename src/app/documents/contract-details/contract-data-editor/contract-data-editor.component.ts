@@ -6,6 +6,7 @@ import {Subscription} from "rxjs";
 import {AppState} from "../../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import * as DocumentsActions from "../../store/documents.action";
+import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-contract-data-editor',
@@ -18,10 +19,14 @@ export class ContractDataEditorComponent implements OnInit, OnDestroy {
   documentSub: Subscription | null = null;
 
   contract_id: number = -1;
+  FRUIT_VEG_PRODUCT: string;
+  DAIRY_PRODUCT: string;
 
   constructor(private activeRoute: ActivatedRoute,
               private store: Store<AppState>) {
     this.contractForm = new FormGroup({});
+    this.FRUIT_VEG_PRODUCT = FRUIT_VEG_PRODUCT;
+    this.DAIRY_PRODUCT = DAIRY_PRODUCT;
   }
 
   ngOnInit(): void {

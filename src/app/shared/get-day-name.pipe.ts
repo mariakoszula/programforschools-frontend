@@ -6,7 +6,6 @@ import {convert_date_from_backend_format, get_day} from "./date_converter.utils"
 export class DayName implements PipeTransform {
   transform(value: string): string {
     let day_no = get_day(convert_date_from_backend_format(value));
-    console.log(day_no);
     let day = new Array(7);
     day[0] = "Nd";
     day[1] = "Pn";

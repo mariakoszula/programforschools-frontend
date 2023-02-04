@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT, DayColors} from "../namemapping.utils";
 import {Subscription} from "rxjs";
 import {RecordDataService} from "../../record-planner/record-data.service";
 import {Record} from "../../record-planner/record.model";
@@ -165,24 +165,13 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     return results.length === 1;
   }
 
-  // Put in legend on sidebar
   getColor(record: Record) {
     const date = record.delivery_date;
     let day = date ? get_day(convert_date_from_backend_format(date)) : null
-    switch (day) {
-      case 1:
-        return '#4CAF50';
-      case 2:
-        return '#DC3DB2';
-      case 3:
-        return '#008CBA';
-      case 4:
-        return '#f44336';
-      case 5:
-        return '#EAEA26';
-      default:
-        return 'transparent';
+    if (day && day >= 1 && day <= 5){
+      return DayColors[day-1];
     }
+    return 'transparent';
   }
 
   getColorFruitVeg(contract_index: number, date_index: number) {

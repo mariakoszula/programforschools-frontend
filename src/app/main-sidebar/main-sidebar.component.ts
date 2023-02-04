@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Role, RoleUtils} from '../shared/namemapping.utils';
-import {AuthService} from "../auth/auth.service";
+import {RoleUtils} from '../shared/namemapping.utils';
 import {Subscription} from "rxjs";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../store/app.reducer";
-import {map, take} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {Router} from "@angular/router";
 
 @Component({

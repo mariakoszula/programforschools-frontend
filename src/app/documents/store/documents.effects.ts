@@ -211,7 +211,7 @@ export class DocumentsEffects {
           takeUntil(this.action$.pipe(ofType(DocumentsActions.STOP_POLLING))),
           switchMap(() => {
             return this.http.get<QueuedTaskProgressResponse>(environment.backendUrl +
-              "/create_delivery/" + action.payload.id)
+              "/task_progress/" + action.payload.id)
               .pipe(
                 map(responseData => {
                   let _documents: string[] = [];

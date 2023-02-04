@@ -10,13 +10,13 @@
   </div>
   <div class="card-body">
     <table datatable [dtOptions]="contractDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-      <thead>
+      <thead>owoce
       <tr>
         <th>Umowa</th>
         <th>Skrót</th>
         <th>Nazwa</th>
-        <th>Dzieci owoce</th>
-        <th>Dzieci mleko</th>
+        <th>{{FRUIT_VEG_PRODUCT | titlecase}}</th>
+        <th>{{DAIRY_PRODUCT | titlecase}}</th>
       </tr>
       </thead>
       <tbody>
