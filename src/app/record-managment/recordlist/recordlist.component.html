@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="recordsDtOptions" class="row-border hover">
+    <table datatable table datatable [dtOptions]="dtOptions" class="row-border hover">
       <thead>
       <tr>
         <th>Data</th>
@@ -39,7 +39,7 @@
           </a>
         </td>
         <td *ngIf="isDelivered(record)">
-<!--          TODO delete only in admin view-->
+          <!--          TODO delete only in admin view-->
         </td>
       </tr>
       </tbody>

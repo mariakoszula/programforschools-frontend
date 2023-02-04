@@ -64,7 +64,7 @@ export class RecordEffects {
           .pipe(
             map(responseData => {
               console.log(responseData);
-              return new RecordActions.Fetch(); // TODO refactor to use separate action to update only one item
+              return new RecordActions.UpdateRecordConfirmed(responseData.record)
             }),
             catchError(error => {
               console.log(error);

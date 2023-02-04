@@ -65,7 +65,7 @@ export interface RecordAddResult {
 }
 
 export interface RecordUpdateResult {
-  record: Record | null;
+  record: Record;
 }
 
 export interface AdditionRecordsResponse {

@@ -16,7 +16,7 @@
       <form [formGroup]="contractForm" (ngSubmit)="onContractCreate()">
         <div class="form-group">
           <label>Data podpisania umów</label>
-          <input formControlName="contract_date" type="date" class="form-control text-left" name="contract_date"
+          <input formControlName="contract_date" type="date" class="form-control text-left w-auto" name="contract_date"
                  min="2022-09-01" max="2032-01-01">
           <div style="text-align: justify" class="form-group">
             <div class="form-check">

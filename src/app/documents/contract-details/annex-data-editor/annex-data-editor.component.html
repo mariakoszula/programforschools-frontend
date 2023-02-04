@@ -12,26 +12,38 @@
     </div>
     <div class="card-body">
       <form [formGroup]="annexForm" (ngSubmit)="onSubmitAnnex()">
-        <div class="form-group">
-          <label>Data zawarcia</label>
-          <input formControlName="sign_date" type="date" class="form-control text-left" name="sign_date"
-                 min="2022-09-19" max="2032-01-01">
-          <label>Data obowiązywania</label>
-          <input formControlName="validity_date" type="date" class="form-control text-left" name="validity_date"
-                 min="2022-09-19" max="2032-01-01">
+        <div class="row">
+          <div class="col-sm-4">
+            <label>Data zawarcia</label>
+            <input formControlName="sign_date" type="date" class="form-control w-auto" name="sign_date"
+                   min="2022-09-19" max="2032-01-01">
+          </div>
+          <div class="col-sm-4">
+            <label>Data obowiązywania</label>
+            <input formControlName="validity_date" type="date" class="form-control text-left w-auto"
+                   name="validity_date"
+                   min="2022-09-19" max="2032-01-01">
+          </div>
+          <div class="col-sm-4">
+            <label>Data zakończenie</label>
+            <input formControlName="validity_date_end" type="date" class="form-control text-left w-auto"
+                   name="validity_date_end"
+                   min="2022-09-19" max="2032-01-01">
+          </div>
         </div>
         <label>Produkt owocowo-warzywny</label>
         <input formControlName="fruitVeg_products" type="number" step="1"
-               class="form-control"
+               class="form-control w-auto"
                name="fruitVeg_products">
         <label>Produkt mleczny</label>
         <input formControlName="dairy_products" type="number" step="1"
-               class="form-control"
+               class="form-control w-auto"
                name="dairy_products">
         <br/>
-        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!annexForm.valid">
+        <button type="submit" class="btn btn-primary float-lg-right " [disabled]="!annexForm.valid">
           <i class="fas fa-check-circle"></i> Zatwierdź
         </button>
+
       </form>
     </div>
   </div>

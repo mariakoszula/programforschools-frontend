@@ -1,19 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Record, RecordStates} from "../../record-planner/record.model";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
-import {Subscription, switchMap} from "rxjs";
+import {Subject, Subscription, switchMap} from "rxjs";
 import {Contract} from "../../documents/contract.model";
 import {ProductStore} from "../../programs/program.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
+import {DataTableDirective} from "angular-datatables";
 
 @Component({
   selector: 'app-recordlist',
   templateUrl: './recordlist.component.html'
 })
 export class RecordListComponent implements OnInit, OnDestroy {
-  recordsDtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {};
+
+  @ViewChild(DataTableDirective)
+  dtElement?: DataTableDirective;
+
+  loading: boolean = false;
   records: Record[] = [];
   contracts: Contract[] = [];
   product_storage: ProductStore[] = [];
@@ -25,6 +31,13 @@ export class RecordListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 50,
+      responsive: true,
+      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+      stateSave: true
+    };
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
         this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
@@ -69,16 +82,37 @@ export class RecordListComponent implements OnInit, OnDestroy {
 
   onDeleteRecord(id: number) {
     this.store.dispatch(new RecordActions.DeleteRecord(id));
+    window.location.reload();
   }
 
   onConfirmDelivered(record: Record) {
     let updated_record = {...record, state: RecordStates.DELIVERED};
     this.store.dispatch(new RecordActions.UpdateRecord(updated_record));
+    window.location.reload();
   }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
   }
+
+  redirectTo(uri:string){
+   this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+   this.router.navigate([uri]));
+}
+  // rerender(): void {
+  //   if (this.dtElement && this.dtElement?.dtInstance) {
+  //     this.dtElement?.dtInstance.then((dtInstance: DataTables.Api) => {
+  //       // Destroy the table first
+  //       dtInstance.destroy();
+  //       this.loading = true;
+  //       this.loading = false;
+  //       setTimeout(() => {
+  //         this.dtTrigger.next(true);
+  //       });
+  //     });
+  //
+  //   }
+  // }
 
 
 }

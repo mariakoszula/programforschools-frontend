@@ -44,6 +44,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
     if (validity_date) validity_date = formatDate(convert_date_from_backend_format(validity_date), "yyyy-MM-dd", 'en');
     this.annexForm.addControl('sign_date', new FormControl("", [Validators.required]));
     this.annexForm.addControl('validity_date', new FormControl(validity_date, [Validators.required]));
+    this.annexForm.addControl('validity_date_end', new FormControl(""));
     this.annexForm.addControl('fruitVeg_products', new FormControl(fruitVeg_products, [Validators.required, Validators.max(1000)]));
     this.annexForm.addControl('dairy_products', new FormControl(dairy_products, [Validators.required, Validators.max(1000)]));
   }

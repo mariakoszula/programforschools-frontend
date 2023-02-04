@@ -1,5 +1,13 @@
 import {AdditionRecordsResponse, Record} from "../record.model";
-import {ADD_RECORDS, DELETE_RECORD_CONFIRM, FETCH, RecordActions, SET_RECORDS, UPDATE_RECORD} from "./record.action";
+import {
+  ADD_RECORDS,
+  DELETE_RECORD_CONFIRM,
+  FETCH,
+  RecordActions,
+  SET_RECORDS,
+  UPDATE_RECORD,
+  UPDATE_RECORD_CONFIRM
+} from "./record.action";
 
 export interface State {
   records: Record[];
@@ -31,6 +39,24 @@ export function recordReducer(state: State = initialState, action: RecordActions
       return {
         ...state,
         isLoading: true
+      }
+    case UPDATE_RECORD_CONFIRM:
+      // TODO can it be simplified?
+      let records_after_update = [...state.records];
+      const record_to_update = records_after_update.find(record => record.id == action.payload.id);
+      if (record_to_update) {
+        const updated_record = {
+          ...record_to_update,
+          ...action.payload
+        }
+        const indexOfUpdate = state.records.indexOf(record_to_update);
+        records_after_update[indexOfUpdate] = updated_record;
+        console.log(records_after_update);
+      }
+      return {
+        ...state,
+        records: [...records_after_update],
+        isLoading: false
       }
     case DELETE_RECORD_CONFIRM:
       let updated_records = [...state.records];

@@ -3,8 +3,8 @@
 </div>
 <div class="card card-primary">
   <div *ngIf="isLoading" class="overlay dark">
-  <app-loading-spinner></app-loading-spinner>
-</div>
+    <app-loading-spinner></app-loading-spinner>
+  </div>
   <div class="card-header">
     <h3 class="card-title" *ngIf="!editedProgram">Uzupełnij dane dla nowego programu</h3>
     <h3 class="card-title" *ngIf="editedProgram">Edytuj dane</h3>
@@ -23,24 +23,24 @@
         <label>Rok Szkolny 20RR/20RR</label><input formControlName="school_year" class="form-control"
                                                    name="school_year">
         <label>Data rozpoczęcia</label>
-        <input formControlName="start_date" type="date" class="form-control text-left" name="start_date"
+        <input formControlName="start_date" type="date" class="form-control text-left w-auto" name="start_date"
                min="2022-09-19" max="2032-01-01">
         <label>Data zakończenia</label>
-        <input formControlName="end_date" type="date" class="form-control text-left" name="end_date"
+        <input formControlName="end_date" type="date" class="form-control text-left w-auto" name="end_date"
                min="2022-09-19" max="2032-01-01">
         <label>Zwrot za produkt owocowo-warzywny (netto)</label>
         <input formControlName="fruitVeg_price" type="number" step="0.01"
                class="form-control"
                name="fruitVeg_price">
-        <label>Suma podań produktów owocowo-warzywnych</label>
-        <input formControlName="fruitVeg_amount" type="number"
-               class="form-control"
-               name="fruitVeg_amount">
         <label>Min. ilość produktów owocowo-warzywnych w tygodniu</label>
         <input formControlName="fruitVeg_min_per_week"
                type="number"
                class="form-control"
                name="fruitVeg_min_per_week">
+        <label>Suma podań produktów owocowo-warzywnych</label>
+        <input formControlName="fruitVeg_amount" type="number"
+               class="form-control"
+               name="fruitVeg_amount">
         <label>Zwrot za produkt nabiałowy (netto)</label>
         <input formControlName="dairy_price" type="number" step="0.01"
                class="form-control"

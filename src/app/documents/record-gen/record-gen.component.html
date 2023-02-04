@@ -12,12 +12,12 @@
         (selectedWeekEvent)="onSelectWeek($event)"></app-weeks-display>
       <div class="form-group">
         <label>Data dostawy</label>
-        <input formControlName="delivery_date" type="date" class="form-control text-left" name="delivery_date"
+        <input formControlName="delivery_date" type="date" class="form-control text-left w-auto" name="delivery_date"
                min="2022-09-19" max="2032-01-01">
         <label>Kierowca</label><input formControlName="driver" class="form-control" name="driver">
         <br/>
         <div class="alert alert-danger" *ngIf="error">
-          <p>{{ error }}</p>
+          <p>{{ error }}</p>"
         </div>
         <app-record-display
           *ngIf="selectedWeek"
