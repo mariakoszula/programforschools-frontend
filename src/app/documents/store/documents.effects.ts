@@ -78,17 +78,15 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_CONTRACTS),
       switchMap((action: GenerateContracts) => {
-        return this.http.get<ContractsResponse>(environment.backendUrl +
+        return this.http.put<QueuedTaskResponse>(environment.backendUrl +
           "/create_contracts?program_id=" + get_current_program().id
           + "&date=" + convert_date_to_backend_format(action.payload.contract_date)
-          + "&schools_list=" + action.payload.school_ids.join(","))
+          + "&schools_list=" + action.payload.school_ids.join(","), {})
           .pipe(
             map(responseData => {
-              return new DocumentsActions.SetContracts({
-                contracts: responseData.contracts,
-                documents: responseData.documents.filter((document_info: string) => {
-                  return document_info.includes("pdf")
-                })
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Umowy:".concat(action.payload.contract_date)
               });
             }),
             catchError(error => {
@@ -103,15 +101,13 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_REGISTER),
       switchMap((_) => {
-        return this.http.get<ResponseWithDocuments>(environment.backendUrl +
+        return this.http.get<QueuedTaskResponse>(environment.backendUrl +
           "/create_school_register/" + get_current_program().id)
           .pipe(
             map(responseData => {
-              return new DocumentsActions.SetContracts({
-                contracts: [],
-                documents: responseData.documents.filter((document_info: string) => {
-                  return document_info.includes("pdf")
-                })
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Rejestr"
               });
             }),
             catchError(error => {
@@ -182,7 +178,7 @@ export class DocumentsEffects {
       switchMap((action: GenerateDelivery) => {
         let record_ids: number[] = [];
         action.records.forEach(record => record_ids.push(record.id));
-        let prepareBody: {[key: string]: any} = {records: record_ids};
+        let prepareBody: { [key: string]: any } = {records: record_ids};
         if (action.comments) {
           prepareBody['comments'] = action.comments;
         }
@@ -190,11 +186,11 @@ export class DocumentsEffects {
           "/create_delivery?date=" + action.delivery_date + "&driver=" + action.driver,
           {...prepareBody})
           .pipe(
-            map(responseData  => {
+            map(responseData => {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
-                  id: responseData.task_id,
-                  name: "Dostawa:".concat(action.driver, " ", action.delivery_date)
-                });
+                id: responseData.task_id,
+                name: "Dostawa:".concat(action.driver, " ", action.delivery_date)
+              });
             }),
             catchError(error => {
               console.log(error);
@@ -207,7 +203,7 @@ export class DocumentsEffects {
   onQueueGeneratingTask$ = createEffect(() =>
     this.action$.pipe(
       ofType(DocumentsActions.QUEUE_GENERATING_TASK_AND_START_POLLING),
-      switchMap((action:  QueueGeneratingTaskAndStartPolling) => {
+      switchMap((action: QueueGeneratingTaskAndStartPolling) => {
         return timer(0, POLLING_INTERVAL).pipe(
           takeUntil(this.action$.pipe(ofType(DocumentsActions.STOP_POLLING))),
           switchMap(() => {
@@ -220,7 +216,8 @@ export class DocumentsEffects {
                     if (responseData.documents) {
                       _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
                     }
-                  };
+                  }
+                  ;
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: responseData.progress,
