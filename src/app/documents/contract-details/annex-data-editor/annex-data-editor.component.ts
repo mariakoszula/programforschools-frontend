@@ -2,13 +2,14 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Annex} from "../../contract.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {Subscription, switchMap} from "rxjs";
 import {convert_date_from_backend_format, convert_range_dates_and_validate} from "../../../shared/date_converter.utils";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../store/app.reducer";
 import {formatDate} from "@angular/common";
 import * as DocumentsActions from "../../store/documents.action";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../../shared/namemapping.utils";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-annex-data-editor',
@@ -22,7 +23,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
   contract_id: number = -1;
   school_nick: string = "";
   annex_id: number = -1;
-  paramsSub: Subscription | null = null;
+  sub: Subscription | null = null;
   documentSub: Subscription | null = null;
   error: string = "";
   FRUIT_VEG_PRODUCT: string;
@@ -43,10 +44,12 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
     let dairy_products = null;
     if (this.editAnnex) {
       validity_date = this.editAnnex.validity_date;
+      if (validity_date) validity_date = formatDate(convert_date_from_backend_format(validity_date), "yyyy-MM-dd", 'en');
       fruitVeg_products = this.editAnnex.fruitVeg_products;
       dairy_products = this.editAnnex.dairy_products;
+       this.annexForm.patchValue({'validity_date': validity_date, 'fruitVeg_products': fruitVeg_products,
+       'dairy_products': dairy_products});
     }
-    if (validity_date) validity_date = formatDate(convert_date_from_backend_format(validity_date), "yyyy-MM-dd", 'en');
     this.annexForm.addControl('sign_date', new FormControl("", [Validators.required]));
     this.annexForm.addControl('validity_date', new FormControl(validity_date, [Validators.required]));
     this.annexForm.addControl('validity_date_end', new FormControl(""));
@@ -55,21 +58,17 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.paramsSub = this.activeRoute.params.subscribe(
-      (params: Params) => {
-        if (params["school_id"] && params["contract_id"]) {
+    this.sub = this.activeRoute.params.pipe(
+      switchMap((params: Params) => {
+        if (params["school_id"] && params["contract_id"] && params["annex_id"]) {
           this.school_id = +params["school_id"];
           this.contract_id = +params["contract_id"];
+          this.annex_id = +params["annex_id"];
         } else {
           this.router.navigate([".."], {relativeTo: this.activeRoute});
         }
-        if (params["annex_id"]) {
-          this.annex_id = +params["annex_id"];
-        } else {
-          this.editAnnex = null;
-        }
-      });
-    this.documentSub = this.store.select("document").subscribe(documentsState => {
+        return this.store.select("document");
+      })).subscribe((documentsState) => {
       this.isGenerating = documentsState.isGenerating;
       const contract = documentsState.contracts.find((contract) => {
         return contract.id === this.contract_id;
@@ -82,6 +81,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
           });
           if (annex) {
             this.editAnnex = annex;
+            this.initForm();
           } else {
             this.editAnnex = null;
           }
@@ -101,7 +101,7 @@ export class AnnexDataEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.paramsSub) this.paramsSub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
     if (this.documentSub) this.documentSub.unsubscribe();
   }
 }

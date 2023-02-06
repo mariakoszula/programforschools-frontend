@@ -17,6 +17,7 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
+  base_url: string = 'dokumenty/umowy/';
 
   constructor(private store: Store<AppState>,
               private activeRoute: ActivatedRoute,
@@ -54,22 +55,19 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
 
   onEditContract(contract_id: number) {
     if (this.contract) {
-      this.router.navigate([contract_id + "/edycja"],
-        {relativeTo: this.activeRoute});
+      this.router.navigate([this.base_url + this.school_id + "/" + contract_id + "/edycja"]);
     }
   }
 
   onEditAnnex(annex_id: number) {
     if (this.contract) {
-      this.router.navigate([this.contract.id + "/" + annex_id + "/edycja"],
-        {relativeTo: this.activeRoute});
+      this.router.navigate([this.base_url + this.school_id + "/" + this.contract.id + "/" + annex_id + "/edycja"]);
     }
   }
 
   onNewAnnex(contract_id: number) {
     if (this.contract) {
-      this.router.navigate([this.contract.id + "/nowy_aneks"],
-        {relativeTo: this.activeRoute});
+      this.router.navigate([this.base_url + this.school_id + "/" + this.contract.id + "/nowy_aneks"]);
     }
   }
 

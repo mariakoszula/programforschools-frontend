@@ -9,16 +9,6 @@
     <h1 *ngIf="!contract" class="card-title">Wybrana szkoła nie ma umowy</h1>
   </div>
   <br/>
-  <div *ngIf="contract" class="col-md-4 col-sm-6 col-12">
-    <div (click)="onNewAnnex(contract.id)" class="info-box cursor">
-    <span class="info-box-icon bg-gradient-warning">
-    <i class="far fa-copy">
-    </i></span>
-      <div class="info-box-content">
-        <span class="info-box-text">Dodaj Aneks</span>
-      </div>
-    </div>
-  </div>
   <div *ngIf="contract" class="card-body">
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead>
@@ -54,6 +44,16 @@
       </tr>
       </tbody>
     </table>
-    <p class="help-block">*kwarantanna i lockdown</p>
+    <p class="help-block">*aneks okresowy</p>
+  </div>
+  <div *ngIf="contract" class="col-md-4 col-sm-6 col-12">
+    <div (click)="onNewAnnex(contract.id)" class="info-box cursor">
+    <span class="info-box-icon bg-gradient-warning">
+    <i class="far fa-copy">
+    </i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Dodaj Aneks</span>
+      </div>
+    </div>
   </div>
 </div>
