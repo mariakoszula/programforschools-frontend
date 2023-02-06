@@ -16,16 +16,27 @@ export function convert_date_from_backend_format(date: string, join_separator=".
   return `${year}.${month}.${day}`;
 }
 
+export function validate_date_range(start_date: string, end_date: string) {
+  if (start_date && end_date && !validate_date(start_date, end_date)) {
+    return "Data: " + start_date + " musi być wcześniejsza niż data: " + end_date;
+  }
+  return "";
+}
+
 export function convert_range_dates_and_validate(fileds: any, _start_date: string = "start_date",
-                                                 _end_date: string = "end_date") {
+                                                 _end_date: string = "end_date", _next_end_date: string | null = null) {
+  let error = "";
   const start_date = fileds[_start_date];
   const end_date = fileds[_end_date];
-  if (start_date && end_date && !validate_date(start_date, end_date)) {
-    return "Data:: " + start_date + " musi być wcześniejsza niż data: " + end_date;
+  error += validate_date_range(start_date, end_date);
+  if (_next_end_date){
+    const next_end = fileds[_next_end_date];
+    error += validate_date_range(end_date, next_end);
+    if (next_end) fileds[_next_end_date] = convert_date_to_backend_format(next_end);
   }
   if (start_date) fileds[_start_date] = convert_date_to_backend_format(start_date);
   if (end_date) fileds[_end_date] = convert_date_to_backend_format(end_date);
-  return "";
+  return error;
 }
 
 export function get_next_date(current_date:string): string {

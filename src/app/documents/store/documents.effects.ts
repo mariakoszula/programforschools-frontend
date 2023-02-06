@@ -11,6 +11,7 @@ import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
 import * as RecordsActions from "../../record-planner/store/record.action";
 import {
+  FETCH_CONTRACTS,
   FetchContracts,
   GenerateContracts,
   GenerateDelivery,
