@@ -44,6 +44,9 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
       switchMap(programState => {
         this.fruitVegProducts = programState.fruitVegProducts;
         this.dairyProducts = programState.dairyProducts;
+        if(programState.indexOfSelectedProgram !== -1){
+          this.recordDataService.setProgram(programState.programs[programState.indexOfSelectedProgram]);
+        }
         return this.store.select("document");
       }),
       switchMap(documentState => {

@@ -5,14 +5,20 @@
       <thead>
       <tr>
         <th class="w-10">{{fruitVeg}}</th>
+        <th>#</th>
         <th class="w-20" *ngFor="let date of dates">{{date | dayName}}<br/>{{date | cutYearFromDate}}</th>
         <th class="w-10">{{dairy}}</th>
+        <th>#</th>
         <th class="w-20" *ngFor="let date of dates">{{date | dayName}}<br/>{{date | cutYearFromDate}}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let contract of contracts; let contract_index = index">
         <td>{{contract.school.nick}}</td>
+        <td [ngStyle]="{'background-color': getPerWeekColor(fruitVegPerWeek(contract_index), min_fruit_veg_items),
+                'opacity': 0.7}">
+          {{ fruitVegPerWeek(contract_index) }}
+        </td>
         <td *ngFor="let date of dates; let date_index = index">
           <button *ngIf="productFruitVegStorage[contract_index][date_index]"
                   [ngStyle]="{'background-color': getColorFruitVeg(contract_index, date_index)}"
@@ -24,6 +30,10 @@
                   class="btn btn-sm btn-outline-dark">{{productFruitVegStorage[contract_index][date_index]}}</button>
         </td>
         <td>{{contract.school.nick}}</td>
+        <td
+          [ngStyle]="{'background-color': getPerWeekColor(dairyPerWeek(contract_index), min_dairy_items), 'opacity': 0.7}">
+          {{ dairyPerWeek(contract_index) }}
+        </td>
         <td *ngFor="let date of dates; let date_index = index">
           <button *ngIf="productDairyStorage[contract_index][date_index]"
                   [ngStyle]="{'background-color': getColorDairy(contract_index, date_index)}"

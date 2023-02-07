@@ -30,6 +30,8 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   dairy = DAIRY_PRODUCT;
   productsMapping: { [key: string]: ProductStore[] } = {};
 
+  min_dairy_items: number = 0;
+  min_fruit_veg_items: number = 0;
   productFruitVegStorage: string[][];
   productDairyStorage: string[][];
 
@@ -39,6 +41,13 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     this.productDairyStorage = [];
     RecordDisplayComponent.initEmptyProducts(this.productFruitVegStorage);
     RecordDisplayComponent.initEmptyProducts(this.productDairyStorage);
+    let program = this.recordDataService.getProgram();
+    if (program && program.dairy_min_per_week && program.fruitVeg_min_per_week) {
+      this.min_dairy_items = program.dairy_min_per_week;
+      this.min_fruit_veg_items = program.fruitVeg_min_per_week;
+    } else{
+      console.error("No program found or minimum per week for dairy and fruitVeg not setup");
+    }
     this.dates = this.recordDataService.getDates();
   }
 
@@ -207,6 +216,22 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     this.changeToDefaultColor($event, this.getColorFruitVeg(contract_index, date_index));
   }
 
+  fruitVegPerWeek(contract_index: number) {
+    return  this.productFruitVegStorage[contract_index].filter(item=> item !== "").length;
+  }
+
+  dairyPerWeek(contract_index: number) {
+    return  this.productDairyStorage[contract_index].filter(item=> item !== "").length;
+  }
+  getPerWeekColor(no_of_items: number, min_items: number){
+    if (no_of_items < min_items) {
+      return '#FBFF04';
+    }
+    if (no_of_items > min_items) {
+      return '#FF5404'
+    }
+    return 'transparent';
+  }
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
   }

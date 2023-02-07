@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AdditionRecordsResponse, SchoolWithRecordDemand} from "./record.model";
-import {Week} from "../programs/program.model";
+import {Program, Week} from "../programs/program.model";
 import {generate_dates} from "../shared/common.functions";
 import {Subject} from "rxjs";
 
@@ -11,6 +11,7 @@ export class RecordDataService {
   private data: Array<SchoolWithRecordDemand> = [];
   private dates: string[] = [];
   private failedRecords: AdditionRecordsResponse | null = null;
+  private program: Program | null = null;
   recordDemandChanged: Subject<Array<SchoolWithRecordDemand>> = new Subject<Array<SchoolWithRecordDemand>>;
   datesChanged: Subject<string[]> = new Subject<string[]>;
   failedRecordChanged: Subject<AdditionRecordsResponse | null> = new Subject<AdditionRecordsResponse | null>;
@@ -43,5 +44,13 @@ export class RecordDataService {
 
   getFailedRecords() {
     return this.failedRecords;
+  }
+
+  setProgram(program: Program){
+    this.program = program;
+  }
+
+  getProgram(){
+    return this.program;
   }
 }
