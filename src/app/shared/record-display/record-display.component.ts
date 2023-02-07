@@ -26,12 +26,14 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   selectedDairyRecords: Record[] = [];
   sub: Subscription | null = null;
   dates: string[];
-  fruitVeg = FRUIT_VEG_PRODUCT;
-  dairy = DAIRY_PRODUCT;
+  FRUIT_VEG_PRODUCT = FRUIT_VEG_PRODUCT;
+  DAIRY_PRODUCT = DAIRY_PRODUCT;
   productsMapping: { [key: string]: ProductStore[] } = {};
 
   min_dairy_items: number = 0;
   min_fruit_veg_items: number = 0;
+  max_dairy_items: number = 0;
+  max_fruit_veg_items: number = 0;
   productFruitVegStorage: string[][];
   productDairyStorage: string[][];
 
@@ -42,11 +44,19 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     RecordDisplayComponent.initEmptyProducts(this.productFruitVegStorage);
     RecordDisplayComponent.initEmptyProducts(this.productDairyStorage);
     let program = this.recordDataService.getProgram();
-    if (program && program.dairy_min_per_week && program.fruitVeg_min_per_week) {
-      this.min_dairy_items = program.dairy_min_per_week;
-      this.min_fruit_veg_items = program.fruitVeg_min_per_week;
-    } else{
-      console.error("No program found or minimum per week for dairy and fruitVeg not setup");
+    if (program) {
+      if (program.dairy_min_per_week && program.fruitVeg_min_per_week) {
+        this.min_dairy_items = program.dairy_min_per_week;
+        this.min_fruit_veg_items = program.fruitVeg_min_per_week;
+      } else {
+        console.error("Minimum per week for dairy and fruitVeg not setup");
+      }
+      if (program.dairy_amount && program.fruitVeg_amount) {
+        this.max_dairy_items = program.dairy_amount;
+        this.max_fruit_veg_items = program.fruitVeg_amount;
+      } else {
+        console.error("Maximum for dairy and fruitVeg not setup");
+      }
     }
     this.dates = this.recordDataService.getDates();
   }
@@ -78,10 +88,10 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
 
 
   private setRecordsInProductStorages() {
-    this.productsMapping[this.fruitVeg] = this.fruitVegProducts;
-    this.productsMapping[this.dairy] = this.dairyProducts;
-    this.setProducts(this.productFruitVegStorage, this.fruitVeg);
-    this.setProducts(this.productDairyStorage, this.dairy);
+    this.productsMapping[this.FRUIT_VEG_PRODUCT] = this.fruitVegProducts;
+    this.productsMapping[this.DAIRY_PRODUCT] = this.dairyProducts;
+    this.setProducts(this.productFruitVegStorage, this.FRUIT_VEG_PRODUCT);
+    this.setProducts(this.productDairyStorage, this.DAIRY_PRODUCT);
   }
 
   private setProducts(storage_list: string[][], product_type: string) {
@@ -111,7 +121,6 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     const date = this.dates[data_index];
     return list_of_records.filter(record => record.contract_id === contract.id && record.date === date);
   }
-
 
   private get_record(contract_index: number, date_index: number, product_type: string): Record | null {
     const records = this.find_records(this.records, contract_index, date_index);
@@ -177,8 +186,8 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   getColor(record: Record) {
     const date = record.delivery_date;
     let day = date ? get_day(convert_date_from_backend_format(date)) : null
-    if (day && day >= 1 && day <= 5){
-      return DayColors[day-1];
+    if (day && day >= 1 && day <= 5) {
+      return DayColors[day - 1];
     }
     return 'transparent';
   }
@@ -217,21 +226,41 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   fruitVegPerWeek(contract_index: number) {
-    return  this.productFruitVegStorage[contract_index].filter(item=> item !== "").length;
+    return this.productFruitVegStorage[contract_index].filter(item => item !== "").length;
   }
 
   dairyPerWeek(contract_index: number) {
-    return  this.productDairyStorage[contract_index].filter(item=> item !== "").length;
+    return this.productDairyStorage[contract_index].filter(item => item !== "").length;
   }
-  getPerWeekColor(no_of_items: number, min_items: number){
+
+  getPerWeekColor(no_of_items: number, min_items: number) {
+    if (no_of_items == min_items) {
+      return '#2ECC71'
+    }
     if (no_of_items < min_items) {
-      return '#FBFF04';
+      return '#fcf92b';
     }
     if (no_of_items > min_items) {
-      return '#FF5404'
+      return '#ffcc33'
     }
     return 'transparent';
   }
+
+  getSummarisedColor(no_of_items: number, min_items: number) {
+    if (no_of_items == min_items) {
+      return '#2ECC71'
+    }
+    if (no_of_items > min_items) {
+      return '#ffcc33'
+    }
+    return 'transparent';
+  }
+
+  getSummarisedRecord(contract_index: number, product_type: string) {
+    const contract = this.contracts[contract_index];
+    return this.records.filter(record => record.contract_id === contract.id && record.product_type === product_type).length;
+  }
+
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
   }

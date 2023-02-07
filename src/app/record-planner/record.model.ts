@@ -29,7 +29,7 @@ export class Record {
               public delivered_kids_no: string | null,
               public state: string,
               public product_store_id: number,
-              public product_type_id: number,
+              public product_type: string,
               public contract_id: number,
               public week_id: number) {
   }
