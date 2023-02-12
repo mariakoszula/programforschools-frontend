@@ -11,7 +11,7 @@
       </select>
     </div>
     <div *ngIf="products.length !== 0" class="form-group">
-      <select formControlName="name" class="form-control custom-select" name="type">
+      <select  formControlName="name" class="form-control custom-select" name="type" (ngModelChange)="setDefaultWeight()">
         <option *ngFor="let product of get_products_by_type();" value="{{product.name}}">{{product.name}} [{{product.weight_type}}]</option>
       </select>
       <label>Ilość podań</label><input formControlName="min_amount" type="number" class="form-control" name="min_amount">

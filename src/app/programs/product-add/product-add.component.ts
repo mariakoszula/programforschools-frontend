@@ -23,7 +23,7 @@ export class ProductAddComponent implements OnInit {
       "product_type": new FormControl("", []),
       "name": new FormControl("", [Validators.required]),
       "min_amount": new FormControl("", [Validators.required, Validators.min(1), Validators.max(100)]),
-      "weight": new FormControl("", [Validators.required, Validators.min(0.09), Validators.max(1)])
+      "weight": new FormControl("0.15", [Validators.required, Validators.min(0.09), Validators.max(1)])
     });
   }
 
@@ -60,5 +60,20 @@ export class ProductAddComponent implements OnInit {
       return this.products.filter(product => product.product_type === this.selectedProductType);
     }
     return [];
+  }
+
+  setDefaultWeight() {
+    let value = 0.15;
+    let product = this.productTypeForm.getRawValue()["name"];
+    if (product === "mleko") {
+      value = 0.25;
+    } else if (product === "truskawka") {
+      value = 0.1;
+    } else if (product === "marchew" || product === "rzodkiewka" || product === "pomidor" || product === "kalarepa" || product === "papryka") {
+      value = 0.09;
+    } else if (product === "sok owocowy") {
+      value = 0.2;
+    }
+    this.productTypeForm.patchValue({'weight': value});
   }
 }
