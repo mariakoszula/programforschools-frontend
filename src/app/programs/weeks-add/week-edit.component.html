@@ -1,7 +1,7 @@
 <div class="alert alert-danger" *ngIf="error">
   <p>{{ error }}</p>
 </div>
-<div class="col-lg-12">
+<div class="row-cols-lg-auto">
   <form [formGroup]="weekForm" (ngSubmit)="addOrEditWeek()" autocomplete="off">
     <div class="form-group">
       <label>Numer </label><input formControlName="week_no" class="form-control" name="week_no" type="number">
@@ -12,8 +12,17 @@
       <input formControlName="end_date" type="date" class="form-control text-left w-auto" name="end_date"
              min="2022-09-19" max="2032-01-01">
     </div>
-    <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!weekForm.valid">
-      <i class="fas fa-save"></i> Zapisz
-    </button>
+    <div class="row">
+      <div class="col-lg-6">
+        <button *ngIf="editWeek"  (click)="removeWeek()" type="button" class="btn btn-danger float-lg-left">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      <div class="col-lg-6">
+        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!weekForm.valid">
+          <i class="fas fa-save"></i> Zapisz
+        </button>
+      </div>
+    </div>
   </form>
 </div>

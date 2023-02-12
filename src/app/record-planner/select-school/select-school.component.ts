@@ -19,7 +19,7 @@ const recordInfoMapping: string[] = [
   "Istnieje już WZ dla produktu dla zadanej daty",
   "Przekroczono możliwą liczbę produktu",
   "Brak dzieci w umowie dla podanego produktu",
-  "Wystąpił nieznany problem"
+  "Wystąpił nieznany problem skontaktuj się z administratorem"
 ]
 
 @Component({

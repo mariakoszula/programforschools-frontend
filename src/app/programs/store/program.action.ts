@@ -13,6 +13,7 @@ export const SAVE = "[Program] SAVE";
 export const ADD_WEEK = "[Week] ADD_WEEK";
 export const EDIT_WEEK = "[Week] EDIT_WEEK";
 export const SAVE_WEEK = "[Week] SAVE_WEEK";
+export const DELETE_WEEK = "[Week] DELETE_WEEK";
 export const ERROR_HANDLER = "[Program] ERROR_HANDLER";
 export const FETCH_PRODUCT_TYPE = "[Product] FETCH_PRODUCT_TYPE"
 export const SET_PRODUCT_TYPE = "[Product] SET_PRODUCT_TYPE"
@@ -69,6 +70,7 @@ export class AddWeek implements Action {
 
 export class EditWeek implements Action {
   readonly type = EDIT_WEEK;
+
   constructor(public payload: Week) {
   }
 }
@@ -77,6 +79,13 @@ export class SaveWeek implements Action {
   readonly type = SAVE_WEEK;
 
   constructor(public payload: Week) {
+  }
+}
+
+export class DeleteWeek implements Action {
+  readonly type = DELETE_WEEK;
+
+  constructor(public payload: number) {
   }
 }
 
@@ -158,6 +167,7 @@ export type ProgramActions =
   | AddWeek
   | EditWeek
   | SaveWeek
+  | DeleteWeek
   | SetAllWeek
   | ErrorHandler
   | SetAllDairyProducts

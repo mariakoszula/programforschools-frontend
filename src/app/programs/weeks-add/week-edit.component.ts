@@ -10,7 +10,7 @@ import {
 import {Subscription, switchMap} from "rxjs";
 import {Week} from "../program.model";
 import {formatDate} from "@angular/common";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {map} from "rxjs/operators";
 
 @Component({
@@ -25,6 +25,7 @@ export class WeekEditComponent implements OnInit, OnDestroy {
   selected_week_id: number = -1;
 
   constructor(private store: Store<AppState>,
+              private router: Router,
               private activeRoute: ActivatedRoute) {
     this.weekForm = new FormGroup({});
   }
@@ -69,32 +70,39 @@ export class WeekEditComponent implements OnInit, OnDestroy {
       })).subscribe(programState => {
       if (programState.error) {
         this.error = programState.error;
-      } else {
-        const foundWeek = programState.weeks.find((_week, index) => {
-          return _week.id === this.selected_week_id;
-        });
-        if (foundWeek) {
-          this.editWeek = foundWeek;
-        } else {
-          this.editWeek = null;
-          this.selected_week_id = -1;
-        }
-        this.error = "";
       }
-
+      const foundWeek = programState.weeks.find((_week, index) => {
+        return _week.id === this.selected_week_id;
+      });
+      if (foundWeek) {
+        this.editWeek = foundWeek;
+      } else {
+        this.editWeek = null;
+        this.selected_week_id = -1;
+        this.weekForm.reset();
+      }
+      this.initForm();
     });
-    this.initForm();
+    this.error = "";
   }
 
   addOrEditWeek() {
     let formValues = this.weekForm.getRawValue();
     this.error = convert_range_dates_and_validate(formValues);
     if (this.error) return;
-    if (this.editWeek){
+    if (this.editWeek) {
       let week = {...this.editWeek, ...formValues};
       this.store.dispatch(new ProgramActions.EditWeek({...week}));
-    }else {
+    } else {
       this.store.dispatch(new ProgramActions.AddWeek(formValues));
+    }
+  }
+
+  removeWeek() {
+    if (confirm("Czy chesz usunąć tydzien: " + this.editWeek?.week_no)) {
+      if (this.editWeek) {
+        this.store.dispatch(new ProgramActions.DeleteWeek(this.editWeek?.id));
+      }
     }
   }
 }

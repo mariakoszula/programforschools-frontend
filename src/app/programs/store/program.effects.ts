@@ -11,6 +11,7 @@ import {Product, ProductStore, Program, ProgramResponse, Week, WeeksResponse} fr
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DeleteWeek} from "../store/program.action";
 
 
 interface ProgramAddResponse {
@@ -19,6 +20,10 @@ interface ProgramAddResponse {
 
 interface WeekAddResponse {
   week: Week;
+}
+
+interface WeekDeleteResponse {
+  deleted_week: number
 }
 
 interface ProductResponse {
@@ -109,6 +114,23 @@ export class ProgramEffects {
           catchError((error: HttpErrorResponse) => {
             return of(new ProgramActions.ErrorHandler(error.error.message));
           }));
+      }));
+  });
+  onDeleteWeek$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.DELETE_WEEK),
+      withLatestFrom(this.store$.select('program')),
+      switchMap(([action, currentState]) => {
+        let deleteWeek: DeleteWeek = action;
+        return this.http.delete<WeekDeleteResponse>(
+          environment.backendUrl + '/week/' + deleteWeek.payload).pipe(
+          map((respData) => {
+            return new ProgramActions.Select(currentState.indexOfSelectedProgram);
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(new ProgramActions.ErrorHandler(error.error.message));
+            }
+          ));
       }));
   });
   onUpdate$ = createEffect(() => {

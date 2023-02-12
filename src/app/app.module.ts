@@ -10,7 +10,6 @@ import {ContentModule} from "./content-wrapper/content.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./auth/auth-interceptor.service";
-import * as fromApp from "./store/app.reducer"
 import { StoreModule } from '@ngrx/store';
 import {EffectsModule} from "@ngrx/effects";
 import {AuthEffects} from "./auth/store/auth.effects";
@@ -22,6 +21,7 @@ import {SchoolsEffects} from "./schools/store/schools.effects";
 import {DocumentsEffects} from "./documents/store/documents.effects";
 import {RecordEffects} from "./record-planner/store/record.effects";
 import {SharedModule} from "./shared/shared.module";
+import {metaReducers, appReducer} from "./store/app.reducer";
 
 @NgModule({
   declarations: [
@@ -37,7 +37,7 @@ import {SharedModule} from "./shared/shared.module";
         ContentModule,
         ReactiveFormsModule,
         HttpClientModule,
-        StoreModule.forRoot(fromApp.appReducer),
+        StoreModule.forRoot(appReducer, { metaReducers} ),
         EffectsModule.forRoot([
             AuthEffects,
             ProgramEffects,

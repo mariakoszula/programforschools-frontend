@@ -91,13 +91,9 @@ export class AuthEffects {
         const userDataJson = localStorage.getItem("userData");
         if (userDataJson) {
           const userData: UserInterface = JSON.parse(userDataJson);
-          this.authService.removeToken(userData.refresh_token);
           this.authService.removeToken(userData.access_token);
-          localStorage.removeItem("userData");
-          localStorage.removeItem("currentProgram");
-          localStorage.removeItem("currentWeeks");
-          localStorage.removeItem("currentDiaryProducts");
-          localStorage.removeItem("currentFruitVegProducts");
+          this.authService.removeToken(userData.refresh_token);
+          localStorage.clear();
           this.router.navigate(['/logowanie']);
         }
       })),
