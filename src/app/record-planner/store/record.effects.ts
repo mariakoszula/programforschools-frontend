@@ -144,8 +144,7 @@ export class RecordEffects {
             let weeks = get_weeks();
             const week = weeks.find((week: Week) => is_date_in_range(date, week.start_date, week.end_date));
             if (week) {
-              this.router.navigate(["planowanie/" + week.id + "/" + date
-              + "/wybierz-szkoly"]); //TODO Task 1. better approch will be to iplement routerState
+              this.router.navigate(["planowanie/" + week.id ]); //TODO Task 1. better approach will be to implement routerState
             }
           } else if (actionResp.payload.records.length !== 0) {
             const week_id = actionResp.payload.records[0].week_id;

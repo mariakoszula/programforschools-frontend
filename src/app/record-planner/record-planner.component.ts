@@ -3,7 +3,7 @@ import {ProductStore, Week} from "../programs/program.model";
 import {AppState} from "../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {Subscription, switchMap} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {RecordDataService} from "./record-data.service";
 import {Record} from "./record.model";
 import {Contract} from "../documents/contract.model";
@@ -15,13 +15,13 @@ import * as RecordActions from "./store/record.action";
 })
 export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
   sub: Subscription | null = null;
-  recordSub: Subscription | null = null;
   isLoading: boolean = false;
   records: Record[] = [];
   contracts: Contract[] = [];
   fruitVegProducts: ProductStore[] = [];
   dairyProducts: ProductStore[] = [];
-  selectedWeek: Week | null = null;
+  selectedWeek: Week | undefined = undefined;
+  selectedWeekId: number | null = null;
 
   constructor(private store: Store<AppState>,
               private router: Router,
@@ -30,22 +30,35 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-    }
+    console.log(changes);
+  }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
-    if (this.recordSub) this.recordSub.unsubscribe();
     this.recordDataService.resetDates();
   }
 
   ngOnInit(): void {
-    this.sub = this.store.select("program").pipe(
+    this.sub = this.activeRoute.params.pipe(
+      switchMap((params: Params) => {
+        if (params['week_id']) {
+          this.selectedWeekId = +params['week_id'];
+        } else {
+          this.selectedWeekId = null;
+        }
+        return this.store.select("program");
+      }),
       switchMap(programState => {
         this.fruitVegProducts = programState.fruitVegProducts;
         this.dairyProducts = programState.dairyProducts;
-        if(programState.indexOfSelectedProgram !== -1){
+        if (programState.indexOfSelectedProgram !== -1) {
           this.recordDataService.setProgram(programState.programs[programState.indexOfSelectedProgram]);
+        }
+        if (this.selectedWeekId !== null) {
+          this.selectedWeek = programState.weeks.find(week => week.id === this.selectedWeekId);
+          if (this.selectedWeek) {
+            this.recordDataService.setDates(this.selectedWeek);
+          }
         }
         return this.store.select("document");
       }),
@@ -60,10 +73,11 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
       }
     );
   }
+
   onSelectWeek(selectedWeek: Week) {
-      this.selectedWeek = selectedWeek;
-      this.recordDataService.setDates(this.selectedWeek);
-      this.router.navigate([this.selectedWeek.id], {relativeTo: this.activeRoute});
+    this.selectedWeek = selectedWeek;
+    this.recordDataService.setDates(this.selectedWeek);
+    this.router.navigate([this.selectedWeek.id], {relativeTo: this.activeRoute});
   }
 
   fetchRecords() {

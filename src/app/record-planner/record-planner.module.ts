@@ -32,9 +32,9 @@ import {RecordResolverService} from "./record-resolver.service";
         component: RecordPlannerComponent,
         resolve: [ProgramResolverService, ContractResolverService, RecordResolverService],
         children: [
-          {path: ':id', component: SelectDateComponent},
-          {path: ':id/:date/wybierz-szkoly', component: SelectSchoolComponent},
-          {path: ':id/:date/wybierz-produkty', component: SelectProductComponent}
+          {path: ':week_id', component: SelectDateComponent},
+          {path: ':week_id/:date/wybierz-szkoly', component: SelectSchoolComponent},
+          {path: ':week_id/:date/wybierz-produkty', component: SelectProductComponent}
         ]
       }
     ])
