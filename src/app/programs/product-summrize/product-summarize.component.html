@@ -10,18 +10,17 @@
           <th>Nazwa</th>
           <th>Ilość podań</th>
           <th>Waga</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let _product of productsFruitVeg" class="table-success">
+        <tr *ngFor="let _product of productsFruitVeg.concat(productsDairy)" class="{{getColor(_product.id)}}">
           <td>{{ _product.product.name }}</td>
           <td>{{ _product.min_amount }}</td>
           <td>{{ _product.weight }} {{ _product.product.weight_type }}</td>
-        </tr>
-        <tr *ngFor="let _product of productsDairy" class="table-warning">
-          <td>{{ _product.product.name }}</td>
-          <td>{{ _product.min_amount }}</td>
-          <td>{{ _product.weight }} {{ _product.product.weight_type }}</td>
+          <td><a class="btn btn-info btn-sm" (click)="onEditProduct(_product.id)">
+            <i class="fas fa-pencil-alt"></i>Edycja
+          </a></td>
         </tr>
         </tbody>
       </table>

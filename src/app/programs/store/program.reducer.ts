@@ -65,6 +65,18 @@ function prepareInitialState() {
 
 }
 
+function updated_product(product_store: ProductStore[], product: ProductStore) {
+  const found_product: ProductStore | undefined = product_store.find((_product, index) => {
+    return _product.id === product.id && _product.program_id === product.program_id;
+  });
+  if (found_product) {
+    const index = product_store.indexOf(found_product);
+    product_store[index] = {...found_product, ...product};
+    return true;
+  }
+  return false;
+}
+
 export function programReducer(state = initialState, action: ProgramActions) {
   switch (action.type) {
     case ADD:
@@ -97,9 +109,15 @@ export function programReducer(state = initialState, action: ProgramActions) {
     case SAVE_PRODUCT:
       let updatedProducts: ProductStore[] = [];
       if (action.product_type === FRUIT_VEG_PRODUCT) {
-        updatedProducts = [...state.fruitVegProducts, action.payload]
+        updatedProducts = [...state.fruitVegProducts];
+        if (!updated_product(updatedProducts, action.payload)) {
+          updatedProducts.push(action.payload);
+        }
       } else if (action.product_type === DAIRY_PRODUCT) {
-        updatedProducts = [...state.dairyProducts, action.payload]
+        updatedProducts = [...state.dairyProducts];
+        if (!updated_product(updatedProducts, action.payload)) {
+            updatedProducts.push(action.payload);
+        }
       }
       return {
         ...state,

@@ -128,7 +128,7 @@ export class ProgramEffects {
             return new ProgramActions.Select(currentState.indexOfSelectedProgram);
           }),
           catchError((error: HttpErrorResponse) => {
-            return of(new ProgramActions.ErrorHandler(error.error.message));
+              return of(new ProgramActions.ErrorHandler(error.error.message));
             }
           ));
       }));
@@ -309,6 +309,26 @@ export class ProgramEffects {
           prepareBody).pipe(
           map((respData) => {
             return new ProgramActions.SaveProduct(programData.product_type, respData.product_store);
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.log(error);
+            return of(new ProgramActions.ErrorHandler(error.error.message));
+          }));
+      }));
+  });
+
+  onEditProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(ProgramActions.EDIT_PRODUCT),
+      switchMap((action: ProgramActions.EditProduct) => {
+        return this.http.put<{ product_store: ProductStore }>(
+          environment.backendUrl + '/product_store/' + action.payload.id,
+          {
+            'min_amount': action.payload.min_amount,
+            'weight': action.payload.weight
+          }).pipe(
+          map((respData) => {
+            return new ProgramActions.SaveProduct(respData.product_store.product.product_type, respData.product_store);
           }),
           catchError((error: HttpErrorResponse) => {
             console.log(error);

@@ -15,12 +15,12 @@ import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-week-edit',
-  templateUrl: './week-edit.component.html',
+  templateUrl: './week-editor.component.html',
 })
-export class WeekEditComponent implements OnInit, OnDestroy {
+export class WeekEditorComponent implements OnInit, OnDestroy {
   weekForm: FormGroup;
   error: string = "";
-  programSub: Subscription | null = null;
+  sub: Subscription | null = null;
   editWeek: Week | null = null;
   selected_week_id: number = -1;
 
@@ -54,11 +54,11 @@ export class WeekEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.programSub) this.programSub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.activeRoute.params.pipe(
+    this.sub = this.activeRoute.params.pipe(
       map((param: Params) => {
         if (param["week_id"])
           return +param["week_id"];

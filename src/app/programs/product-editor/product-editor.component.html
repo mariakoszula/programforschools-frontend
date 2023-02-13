@@ -2,24 +2,25 @@
   <p>{{ error }}</p>
 </div>
 <div class="col-lg-12">
-  <form [formGroup]="productTypeForm" (ngSubmit)="onAddProduct()" autocomplete="off">
+  <form [formGroup]="productTypeForm" (ngSubmit)="onAddOrEditProduct()" autocomplete="off">
     <div class="form-group">
       <select formControlName="product_type" (change)="onTypeChange($event.currentTarget)"
               class="form-control custom-select" name="type">
-        <option *ngIf="products.length === 0" selected>Wybierz typ produktu</option>
+        <option *ngIf="products.length === 0 && !this.editProduct" selected>Wybierz typ produktu</option>
         <option *ngFor="let type of products_types;">{{type}}</option>
       </select>
     </div>
-    <div *ngIf="products.length !== 0" class="form-group">
+    <div *ngIf="products.length !== 0 || this.editProduct" class="form-group">
       <select  formControlName="name" class="form-control custom-select" name="type" (ngModelChange)="setDefaultWeight()">
-        <option *ngFor="let product of get_products_by_type();" value="{{product.name}}">{{product.name}} [{{product.weight_type}}]</option>
+        <option *ngIf="this.editProduct" selected>{{get_product_disp(this.editProduct.product.name, this.editProduct.product.weight_type)}}</option>
+        <option *ngFor="let product of products;" value="{{product.name}}">{{get_product_disp(product.name, product.weight_type)}}</option>
       </select>
       <label>Ilość podań</label><input formControlName="min_amount" type="number" class="form-control" name="min_amount">
       <label>Waga (netto)</label><input formControlName="weight" type="number" step="0.01" class="form-control" name="product_weight">
       <br/>
-      <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!productTypeForm.valid">Dodaj
+      <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!productTypeForm.valid">Zapisz
       </button>
     </div>
   </form>
 </div>
-<app-product-summarize [productsDairy]="fruitVegProduct" [productsFruitVeg]="dairyProducts"></app-product-summarize>
+<app-product-summarize [productsDairy]="dairyProducts" [productsFruitVeg]="fruitVegProduct"></app-product-summarize>

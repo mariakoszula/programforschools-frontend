@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ProductStore, Program, Week} from "../program.model";
 import {map} from "rxjs/operators";
-import {Subscription, switchMap} from "rxjs";
+import {switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 

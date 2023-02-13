@@ -20,6 +20,7 @@ export const SET_PRODUCT_TYPE = "[Product] SET_PRODUCT_TYPE"
 export const FETCH_PRODUCT = "[Product] FETCH_PRODUCT"
 export const SET_PRODUCTS = "[Product] SET_PRODUCTS"
 export const ADD_PRODUCT = "[Product] ADD_PRODUCT"
+export const EDIT_PRODUCT = "[Product] EDIT_PRODUCT"
 export const SAVE_PRODUCT = "[Product] SAVE_PRODUCT"
 
 export class Fetch implements Action {
@@ -150,6 +151,13 @@ export class AddProduct implements Action {
   }
 }
 
+export class EditProduct implements Action {
+  readonly type = EDIT_PRODUCT;
+
+  constructor(public payload: ProductStore) {
+  }
+}
+
 export class SaveProduct implements Action {
   readonly type = SAVE_PRODUCT;
 
@@ -177,4 +185,5 @@ export type ProgramActions =
   | FetchProduct
   | SetProducts
   | SaveProduct
-  | AddProduct;
+  | AddProduct
+  | EditProduct
