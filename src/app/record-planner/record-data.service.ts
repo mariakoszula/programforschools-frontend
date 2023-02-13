@@ -11,7 +11,7 @@ export class RecordDataService {
   private data: Array<SchoolWithRecordDemand> = [];
   private dates: string[] = [];
   private failedRecords: AdditionRecordsResponse | null = null;
-  private program: Program | null = null;
+  private program!: Program;
   recordDemandChanged: Subject<Array<SchoolWithRecordDemand>> = new Subject<Array<SchoolWithRecordDemand>>;
   datesChanged: Subject<string[]> = new Subject<string[]>;
   failedRecordChanged: Subject<AdditionRecordsResponse | null> = new Subject<AdditionRecordsResponse | null>;

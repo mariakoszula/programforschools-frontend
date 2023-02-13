@@ -1,7 +1,7 @@
 <app-weeks-display
   [title]="'Zaplanuj tydzień'"
   (selectedWeekEvent)="onSelectWeek($event)"
-  ></app-weeks-display>
+></app-weeks-display>
 
 <div class="card card-success" style="transition: all 0.15s ease 0s; height: inherit; width: inherit;">
   <div class="card-header">
@@ -51,3 +51,10 @@
     <router-outlet *ngIf="selectedWeek"></router-outlet>
   </div>
 </div>
+
+<app-sum-record-by-product
+  [contracts]="contracts"
+  [fruitVegProducts]="fruitVegProducts"
+  [dairyProducts]="dairyProducts"
+  [records]="records">
+</app-sum-record-by-product>

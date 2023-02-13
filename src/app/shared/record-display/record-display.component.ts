@@ -22,6 +22,7 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   @Input() dairyProducts: ProductStore[] = [];
 
   @Output() selectedRecordsEvent = new EventEmitter<Record[]>();
+
   selectedFruitVegRecords: Record[] = [];
   selectedDairyRecords: Record[] = [];
   sub: Subscription | null = null;
@@ -44,19 +45,17 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     RecordDisplayComponent.initEmptyProducts(this.productFruitVegStorage);
     RecordDisplayComponent.initEmptyProducts(this.productDairyStorage);
     let program = this.recordDataService.getProgram();
-    if (program) {
-      if (program.dairy_min_per_week && program.fruitVeg_min_per_week) {
-        this.min_dairy_items = program.dairy_min_per_week;
-        this.min_fruit_veg_items = program.fruitVeg_min_per_week;
-      } else {
-        console.error("Minimum per week for dairy and fruitVeg not setup");
-      }
-      if (program.dairy_amount && program.fruitVeg_amount) {
-        this.max_dairy_items = program.dairy_amount;
-        this.max_fruit_veg_items = program.fruitVeg_amount;
-      } else {
-        console.error("Maximum for dairy and fruitVeg not setup");
-      }
+    if (program.dairy_min_per_week && program.fruitVeg_min_per_week) {
+      this.min_dairy_items = program.dairy_min_per_week;
+      this.min_fruit_veg_items = program.fruitVeg_min_per_week;
+    } else {
+      console.error("Minimum per week for dairy and fruitVeg not setup");
+    }
+    if (program.dairy_amount && program.fruitVeg_amount) {
+      this.max_dairy_items = program.dairy_amount;
+      this.max_fruit_veg_items = program.fruitVeg_amount;
+    } else {
+      console.error("Maximum for dairy and fruitVeg not setup");
     }
     this.dates = this.recordDataService.getDates();
   }

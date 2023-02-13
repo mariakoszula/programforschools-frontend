@@ -12,13 +12,15 @@ import {ContractResolverService} from "../documents/documents-resolver.service";
 import {AngularDualListBoxModule} from 'angular-dual-listbox';
 import {FormsModule} from "@angular/forms";
 import {RecordResolverService} from "./record-resolver.service";
+import { SumRecordByProductComponent } from './sum-record-by-product/sum-record-by-product.component';
 
 @NgModule({
   declarations: [
     RecordPlannerComponent,
     SelectDateComponent,
     SelectSchoolComponent,
-    SelectProductComponent
+    SelectProductComponent,
+    SumRecordByProductComponent
   ],
   imports: [
     AngularDualListBoxModule,
