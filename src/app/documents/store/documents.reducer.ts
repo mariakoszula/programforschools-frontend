@@ -35,7 +35,7 @@ export interface State {
   isGenerating: boolean;
 }
 
-const initialState = {
+export const initialState = {
   contracts: [],
   generatedDocuments: [],
   queuedTasks: queuedTaskInfoEntityAdapter.getInitialState(),

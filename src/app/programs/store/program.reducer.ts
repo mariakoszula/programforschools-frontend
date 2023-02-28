@@ -12,7 +12,7 @@ import {
   SET_ALL_FRUIT_VEG_PRODUCTS,
   SET_PRODUCT_TYPE,
   SET_PRODUCTS,
-  SET_WEEK_ALL,
+  SET_WEEK_ALL, SetAll,
   UPDATE
 } from "./program.action";
 import {Product, ProductStore, Program, Week} from "../program.model";
@@ -30,12 +30,7 @@ export interface State {
   error: string;
 }
 
-const initialState: State = prepareInitialState();
-
-function prepareInitialState() {
-  const programDataJson = localStorage.getItem("currentProgram");
-  if (!programDataJson) {
-    return {
+export const clearState: State = {
       programs: [],
       indexOfSelectedProgram: -1,
       isLoading: false,
@@ -46,6 +41,11 @@ function prepareInitialState() {
       dairyProducts: [],
       fruitVegProducts: []
     };
+const initialState: State = prepareInitialState();
+function prepareInitialState() {
+  const programDataJson = localStorage.getItem("currentProgram");
+  if (!programDataJson) {
+    return clearState;
   }
   const weeksDataJson = localStorage.getItem("currentWeeks");
   const diaryProductsDataJson = localStorage.getItem("currentDiaryProducts");
@@ -116,7 +116,7 @@ export function programReducer(state = initialState, action: ProgramActions) {
       } else if (action.product_type === DAIRY_PRODUCT) {
         updatedProducts = [...state.dairyProducts];
         if (!updated_product(updatedProducts, action.payload)) {
-            updatedProducts.push(action.payload);
+          updatedProducts.push(action.payload);
         }
       }
       return {
@@ -145,17 +145,20 @@ export function programReducer(state = initialState, action: ProgramActions) {
       };
     case FETCH:
       return {
-        ...state,
-        programs: [...state.programs],
+        programs: [],
         indexOfSelectedProgram: -1,
-        isLoading: true,
-        error: ""
+        isLoading: false,
+        weeks: [],
+        product_type: [],
+        availableProduct: [],
+        error: "",
+        dairyProducts: [],
+        fruitVegProducts: []
       };
     case SET_ALL:
       return {
         ...state,
         programs: [...action.payload],
-        isLoading: false
       };
     case SET_WEEK_ALL:
       return {

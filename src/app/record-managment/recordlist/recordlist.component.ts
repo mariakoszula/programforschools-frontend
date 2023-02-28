@@ -8,13 +8,15 @@ import {ProductStore} from "../../programs/program.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
+import {ADTSettings} from "angular-datatables/src/models/settings";
 
 @Component({
   selector: 'app-recordlist',
   templateUrl: './recordlist.component.html'
 })
-export class RecordListComponent implements OnInit, OnDestroy {
-  dtOptions: DataTables.Settings = {};
+export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
+  dtOptions: ADTSettings = {};
+  dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
 
   @ViewChild(DataTableDirective)
   dtElement?: DataTableDirective;
@@ -31,13 +33,14 @@ export class RecordListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 50,
-      responsive: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
-      stateSave: true
-    };
+    setTimeout(() => {
+      this.dtOptions = {
+        pagingType: 'full_numbers',
+        pageLength: 50,
+        responsive: true,
+        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
+      };
+    });
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
         this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
@@ -45,6 +48,7 @@ export class RecordListComponent implements OnInit, OnDestroy {
       }),
       switchMap(recordState => {
         this.records = recordState.records;
+        console.log("records: " + this.records.length +  this.records);
         return this.store.select("document");
       })).subscribe(documentState => {
       this.contracts = documentState.contracts;
@@ -80,15 +84,9 @@ export class RecordListComponent implements OnInit, OnDestroy {
     this.router.navigate([record.id], {relativeTo: this.activeRoute});
   }
 
-  onDeleteRecord(id: number) {
-    this.store.dispatch(new RecordActions.DeleteRecord(id));
-    window.location.reload();
-  }
-
   onConfirmDelivered(record: Record) {
     let updated_record = {...record, state: RecordStates.DELIVERED};
     this.store.dispatch(new RecordActions.UpdateRecord(updated_record));
-    window.location.reload();
   }
 
   ngOnDestroy(): void {
@@ -99,6 +97,9 @@ export class RecordListComponent implements OnInit, OnDestroy {
    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
    this.router.navigate([uri]));
 }
+
+  ngAfterViewInit(): void {
+  }
   // rerender(): void {
   //   if (this.dtElement && this.dtElement?.dtInstance) {
   //     this.dtElement?.dtInstance.then((dtInstance: DataTables.Api) => {

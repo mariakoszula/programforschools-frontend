@@ -155,6 +155,15 @@ export class ProgramEffects {
       }));
   });
 
+  redirectOnSetAll = createEffect(() =>
+      this.action$.pipe(
+        ofType(ProgramActions.SET_ALL),
+        tap((actionResp: ProgramActions.SetAll) => {
+          this.router.navigate(["/programy"]);
+        })),
+    {dispatch: false});
+
+
   redirectOnSave = createEffect(() =>
       this.action$.pipe(
         ofType(ProgramActions.SAVE),
@@ -258,10 +267,6 @@ export class ProgramEffects {
         return this.http.get<ProgramResponse>(environment.backendUrl + '/program/all')
           .pipe(
             map(responseData => {
-              localStorage.removeItem("currentProgram");
-              localStorage.removeItem("currentWeeks");
-              localStorage.removeItem("currentDiaryProducts");
-              localStorage.removeItem("currentFruitVegProducts");
               return new ProgramActions.SetAll(responseData.programs);
             }),
           );

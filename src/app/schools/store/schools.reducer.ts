@@ -6,7 +6,7 @@ export interface State {
   isLoading: boolean;
 }
 
-const initialState = {
+export const initialState = {
   schools: [],
   isLoading:  false
 }

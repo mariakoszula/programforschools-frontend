@@ -15,7 +15,7 @@ export interface State {
   isLoading: boolean
 }
 
-const initialState = {
+export const initialState = {
   records: [],
   recordsFailedResponse: null,
   isLoading: false

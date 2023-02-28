@@ -18,14 +18,14 @@ export interface State {
   isLoading: boolean;
 }
 
-const initialState: State = {
+export const initialStateAuth: State = {
   user: null,
   authError: null,
   isLoading: false
 };
 
 
-export function authReducer(state = initialState, action: AuthActions): State {
+export function authReducer(state = initialStateAuth, action: AuthActions): State {
   switch (action.type) {
     case LOGIN_BEGIN:
       return {
