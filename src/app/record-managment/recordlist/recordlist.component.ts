@@ -33,10 +33,12 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log("ngAfterViewInit");
     this.dtTrigger.next(this.dtOptions);
   }
 
   ngOnInit(): void {
+    console.log("ngOnInit");
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 50,
@@ -53,6 +55,7 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       switchMap(recordState => {
         this.records = recordState.records;
+        console.log(this.dtOptions);
         this.rerender();
         return this.store.select("document");
       })).subscribe(documentState => {
@@ -85,7 +88,6 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onEditRecord(record: Record) {
-    //TODO do we need onEdit method for records? to change the product
     this.router.navigate([record.id], {relativeTo: this.activeRoute});
   }
 

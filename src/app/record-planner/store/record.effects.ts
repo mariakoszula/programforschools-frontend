@@ -10,7 +10,7 @@ import {
   AdditionRecordsResponse,
   Record,
   RecordAddResult,
-  RecordAdditionResultInfo, RecordUpdateResult, get_sate_number,
+  RecordAdditionResultInfo, RecordUpdateResult, get_state_number,
 } from "../record.model";
 import {get_current_program, get_weeks} from "../../shared/common.functions";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -59,7 +59,8 @@ export class RecordEffects {
       switchMap((action: UpdateRecord) => {
         return this.http.put<RecordUpdateResult>(environment.backendUrl +
           "/record/" + action.payload.id, {
-          'state': get_sate_number(action.payload.state)
+          'state': get_state_number(action.payload.state),
+          'product_store_id': action.payload.product_store_id
         })
           .pipe(
             map(responseData => {
@@ -143,7 +144,7 @@ export class RecordEffects {
             let weeks = get_weeks();
             const week = weeks.find((week: Week) => is_date_in_range(date, week.start_date, week.end_date));
             if (week) {
-              this.router.navigate(["planowanie/" + week.id ]); //TODO Task 1. better approach will be to implement routerState
+              this.router.navigate(["planowanie/" + week.id + "/" + date + "/wybierz-szkoly"]);
             }
           } else if (actionResp.payload.records.length !== 0) {
             const week_id = actionResp.payload.records[0].week_id;

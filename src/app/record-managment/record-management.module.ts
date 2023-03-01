@@ -1,4 +1,4 @@
-import {RecordListComponent} from "../record-managment/recordlist/recordlist.component";
+import {RecordListComponent} from "./recordlist/recordlist.component";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {SharedModule} from "../shared/shared.module";
@@ -8,15 +8,18 @@ import {ProgramResolverService} from "../programs/program-resolver.service";
 import {RecordResolverService} from "../record-planner/record-resolver.service";
 import {NgModule} from "@angular/core";
 import {RecordEditComponent} from "./record-edit/record-edit.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     RecordListComponent,
-    RecordManagementComponent
+    RecordManagementComponent,
+    RecordEditComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       {
         path: '',

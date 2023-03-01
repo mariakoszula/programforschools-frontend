@@ -42,7 +42,8 @@
             <div class="btn-group w-100 h-25">
               <button class="btn btn-outline-secondary" routerLink="../wybierz-szkoly">Powrót</button>
               <br/>
-              <button class="btn btn-success" type="submit">Prześlij</button>
+              <button *ngIf="!displayWarning" class="btn btn-success" type="submit">Prześlij</button>
+              <button *ngIf="displayWarning" class="btn btn-success" type="submit">Prześlij mimo, że nie wybrano produktu</button>
             </div>
           </form>
         </div>

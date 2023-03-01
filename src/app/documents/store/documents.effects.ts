@@ -62,6 +62,7 @@ export class DocumentsEffects {
           "/contracts/" + action.payload + "/all")
           .pipe(
             map(responseData => {
+              localStorage.setItem("currentContract",  JSON.stringify(responseData.contracts));
               return new DocumentsActions.SetContracts({
                 contracts: responseData.contracts,
                 documents: []

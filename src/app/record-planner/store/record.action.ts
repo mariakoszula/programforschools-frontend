@@ -8,6 +8,8 @@ export const UPDATE_RECORD = "[Record] UPDATE_RECORD";
 export const UPDATE_RECORD_CONFIRM = "[Record] UPDATE_RECORD_CONFIRM";
 export const DELETE_RECORD = "[Record] DELETE_RECORD";
 export const DELETE_RECORD_CONFIRM = "[Record] DELETE_RECORD_CONFIRM";
+export const RECORD_ERROR_HANDLER = "[Program] RECORD_ERROR_HANDLER";
+
 
 export class Fetch implements Action {
   readonly type = FETCH;

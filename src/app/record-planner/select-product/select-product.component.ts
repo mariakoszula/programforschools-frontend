@@ -79,20 +79,23 @@ export class SelectProductComponent implements OnInit {
       });
     });
   }
+  private hasNotAcceptedMissingProduct(values: any): boolean {
+    return this.missing_product_selection(values) && !this.displayWarning;
+  }
 
   onSend(values: any) {
-    if (this.missing_product_selection(values)) {
+    if (this.hasNotAcceptedMissingProduct(values)) {
       this.displayWarning = true;
       this.messageBody = this.schoolsWithoutSelectedProduct.join(", ");
-    } else {
-      this.messageBody = "";
-      this.displayWarning = false;
-      if (this.date && this.recordRequiredForSchools) {
-        this.store.dispatch(new RecordActions.AddRecords({
-          date: this.date,
-          recordsDemand: this.recordRequiredForSchools
-        }));
-      }
+      return;
+    }
+    this.messageBody = "";
+    this.displayWarning = false;
+    if (this.date && this.recordRequiredForSchools) {
+      this.store.dispatch(new RecordActions.AddRecords({
+        date: this.date,
+        recordsDemand: this.recordRequiredForSchools
+      }));
     }
   }
 

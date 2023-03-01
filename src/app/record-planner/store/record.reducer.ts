@@ -9,10 +9,12 @@ import {
   UPDATE_RECORD_CONFIRM
 } from "./record.action";
 
+//TODO display record with error
 export interface State {
   records: Record[];
   recordsFailedResponse: AdditionRecordsResponse | null;
   isLoading: boolean
+
 }
 
 export const initialState = {

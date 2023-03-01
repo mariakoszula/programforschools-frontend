@@ -5,7 +5,7 @@
 <app-alert-simple *ngIf="failedRecords"
                   [messageHead]="'Błędy przy generowaniu dokumentów'"
                   [alertType]="'alert-warning'"
-                  [messageBody]="error" >
+                  [messageBody]="error">
 </app-alert-simple>
 <div class="card card-default">
   <div class="card-header">
@@ -27,9 +27,12 @@
       </div>
     </div>
   </div>
-  <div class="card-footer" style="display: block;">
-    <button class="btn-lg btn-outline-info float-lg-right" (click)="selectProducts()">Przejdź do wyboru produktów
-    </button>
+  <div class="card-footer">
+    <div class="btn-group-lg w-100">
+      <button class="btn-lg btn-outline-secondary float-lg-start mr-1" routerLink="../..">Powrót</button>
+      <button class="btn-lg btn-outline-info float-lg-end" (click)="selectProducts()">Przejdź do wyboru produktów
+      </button>
+    </div>
   </div>
 </div>
 

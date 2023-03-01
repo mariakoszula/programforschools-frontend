@@ -4,21 +4,28 @@
   </div>
 
   <div class="col-12 align-content-center">
-    <a (click)="addProgram()" class="btn-lg btn-info float-right cursor">
-      <i class="fas fa-sign"></i> Dodaj nowy program
-    </a>
-    <form [formGroup]="programsForm" (ngSubmit)="onSelectProgram()">
-      <div class="form-group">
-        <div *ngFor="let _program of programs; let i = index" class="form-check">
-          <input formControlName="program_id" class="form-check-input" type="radio" name="program_id" [value]=i>
-          <label class="form-check-label">Program {{_program.school_year}} na semestr {{ _program.semester_no}}</label>
-        </div>
+    <div class="row col-lg-6 mb-3">
+      <a (click)="addProgram()" class="btn-lg btn-info float-right cursor">
+        <i class="fas fa-sign"></i> Dodaj nowy program
+      </a>
+    </div>
+    <div class="card col-lg-6 ">
+      <div class="card-body">
+        <form [formGroup]="programsForm" (ngSubmit)="onSelectProgram()">
+          <div class="form-group">
+            <div *ngFor="let _program of programs; let i = index" class="form-check">
+              <input formControlName="program_id" class="form-check-input" type="radio" name="program_id" [value]=i>
+              <label class="form-check-label">Program {{_program.school_year}} na
+                semestr {{ _program.semester_no}}</label>
+            </div>
+          </div>
+          <button *ngIf="programs.length" type="submit" class="btn-sm btn-primary float-lg-right cursor"
+                  [disabled]="!programsForm.valid">
+            <i class="fas fa-check-circle"></i> Zatwierdż
+          </button>
+        </form>
       </div>
-      <button *ngIf="programs.length" type="submit" class="btn-sm btn-primary float-lg-right cursor"
-              [disabled]="!programsForm.valid">
-        <i class="fas fa-check-circle"></i> Zatwierdż
-      </button>
-    </form>
+    </div>
   </div>
 </div>
 <div *ngIf="selectedProgram" class="row">

@@ -63,6 +63,9 @@ export class SumRecordByProductComponent implements OnInit {
     if (expected_amount && amount === expected_amount) {
       return '#2ECC71';
     }
+    if (expected_amount && amount > expected_amount) {
+      return '#FF4136';
+    }
     return 'transparent';
   }
 

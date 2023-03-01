@@ -41,9 +41,12 @@ export enum RecordStates {
   DELIVERED = "DELIVERED"
 }
 
-export function get_sate_number(state: string): number {
+export function get_state_number(state: string): number {
   if (state == RecordStates.DELIVERED) {
     return 3;
+  }
+  if (state == RecordStates.PLANNED) {
+    return 1;
   }
   return 0;
 }

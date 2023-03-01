@@ -1,1 +1,25 @@
-<p>record-edit works!</p>
+<div class="col-lg-12">
+  <div *ngIf="currentRecord && currentSchool" class="card">
+    <div class="card-header">Edycja WZ dla {{currentSchool.nick}}</div>
+    <div class="card-body">
+      <div class="row-cols-lg-auto">
+        <form [formGroup]="recordForm" (ngSubmit)="updateRecord()">
+          <div class="form-group">
+            <input formControlName="recordDate" type="date" class="form-control text-left w-auto" >
+            <label>Obecny produkt: <b>{{currentProductName}}</b></label>
+            <select formControlName="productName" class="form-control custom-select" name="type">
+              <option *ngFor="let product of products;"
+                      [ngValue]="product.id">{{product.product.name}}</option>
+            </select>
+          </div>
+          <div class="col-lg-12">
+          <button type="submit" class="btn btn-primary float-lg-left mr-1" [disabled]="!recordForm.valid"><i
+            class="fas fa-save"></i> Zapisz
+          </button>
+          <button class="btn btn-outline-dark float-lg-right" routerLink="/wz">Anuluj</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
