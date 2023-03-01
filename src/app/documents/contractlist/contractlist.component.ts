@@ -7,6 +7,7 @@ import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataTableDirective} from "angular-datatables";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../shared/namemapping.utils";
+import {ADTSettings} from "angular-datatables/src/models/settings";
 
 @Component({
   selector: 'app-contractlist',
@@ -16,10 +17,10 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective, {static: false})
   dtElement!: DataTableDirective;
 
-  contractDtOptions: DataTables.Settings = {};
+  contractDtOptions: ADTSettings = {};
   contracts: Contract[] = [];
   programSub: Subscription | null = null;
-  dtTrigger: Subject<any> = new Subject();
+  dtTrigger: Subject<ADTSettings> = new Subject();
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
 
@@ -35,7 +36,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next(true);
+    this.dtTrigger.next(this.contractDtOptions);
   }
 
 
@@ -74,7 +75,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
       // Destroy the table first
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
-      this.dtTrigger.next(true);
+      this.dtTrigger.next(this.contractDtOptions);
     });
   }
 

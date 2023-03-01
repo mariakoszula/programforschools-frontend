@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit,  Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Record, RecordStates} from "../../record-planner/record.model";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
@@ -15,11 +15,10 @@ import {ADTSettings} from "angular-datatables/src/models/settings";
   templateUrl: './recordlist.component.html'
 })
 export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
-  dtOptions: ADTSettings = {};
-  dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
-
   @ViewChild(DataTableDirective)
   dtElement?: DataTableDirective;
+  dtOptions:  ADTSettings = {};
+  dtTrigger: Subject<ADTSettings> = new Subject();
 
   loading: boolean = false;
   records: Record[] = [];
@@ -30,17 +29,24 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private store: Store<AppState>,
               private router: Router,
               private activeRoute: ActivatedRoute) {
+
+  }
+
+  ngAfterViewInit(): void {
+    console.log("ngAfterViewInit");
+    this.dtTrigger.next(this.dtOptions);
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.dtOptions = {
-        pagingType: 'full_numbers',
-        pageLength: 50,
-        responsive: true,
-        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
-      };
-    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 50,
+      responsive: true,
+      destroy: true,
+      language: {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Polish.json"},
+      stateSave: true,
+      stateDuration: -1
+    }
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
         this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
@@ -48,7 +54,7 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       switchMap(recordState => {
         this.records = recordState.records;
-        console.log("records: " + this.records.length +  this.records);
+        this.rerender();
         return this.store.select("document");
       })).subscribe(documentState => {
       this.contracts = documentState.contracts;
@@ -80,40 +86,44 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onEditRecord(record: Record) {
-    //TODO do we need onEdit method for records?
+    //TODO do we need onEdit method for records? to change the product
     this.router.navigate([record.id], {relativeTo: this.activeRoute});
   }
 
   onConfirmDelivered(record: Record) {
     let updated_record = {...record, state: RecordStates.DELIVERED};
+    console.log("record to deliver: " + updated_record.id);
     this.store.dispatch(new RecordActions.UpdateRecord(updated_record));
   }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
-  redirectTo(uri:string){
-   this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-   this.router.navigate([uri]));
-}
-
-  ngAfterViewInit(): void {
+  redirectTo(uri: string) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+      this.router.navigate([uri]));
   }
-  // rerender(): void {
-  //   if (this.dtElement && this.dtElement?.dtInstance) {
-  //     this.dtElement?.dtInstance.then((dtInstance: DataTables.Api) => {
-  //       // Destroy the table first
-  //       dtInstance.destroy();
-  //       this.loading = true;
-  //       this.loading = false;
-  //       setTimeout(() => {
-  //         this.dtTrigger.next(true);
-  //       });
-  //     });
-  //
-  //   }
-  // }
+
+  onDeleteRecord(record: Record) {
+    let school = this.get_school_name(record);
+    let product = this.get_product_name(record);
+    if (confirm("Czy usunąć WZ <" + record.date + ": " + product + "> dla " + school +"?")){
+        this.store.dispatch(new RecordActions.DeleteRecord(record.id));
+    }
+  }
 
 
+  rerender(): void {
+    if (this.dtElement) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        // Destroy the table first
+        dtInstance.destroy();
+        // Call the dtTrigger to rerender again
+        this.dtTrigger.next(this.dtOptions);
+      });
+    }
+  }
 }

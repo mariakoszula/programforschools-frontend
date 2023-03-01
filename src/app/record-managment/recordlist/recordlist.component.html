@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="dtOptions"  class="row-border hover">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
       <thead>
       <tr>
         <th>Data</th>
@@ -16,6 +16,8 @@
         <th>Produkt</th>
         <th>Typ</th>
         <th>Ilość</th>
+        <th></th>
+        <th></th>
         <th></th>
       </tr>
       </thead>
@@ -26,21 +28,24 @@
         <td>{{ get_product_name(record) }}</td>
         <td>{{ get_product_type(record) }}</td>
         <td>{{ record.delivered_kids_no }}</td>
-<!--        <td *ngIf="isPlanned(record)">-->
-
-          <!--          <a class="btn btn-info btn-sm" (click)="onEditRecord(record)">-->
-          <!--            <i class="fas fa-pencil-alt"></i> </a>-->
-<!--          <a class="btn btn-danger btn-sm" (click)="onDeleteRecord(record.id)">-->
-<!--            <i class="fas fa-trash"></i></a>-->
-<!--        </td>-->
+        <td *ngIf="!isDelivered(record);">
+          <a class="btn btn-info btn-sm" (click)="onEditRecord(record)">
+            <i class="fas fa-pencil-alt"></i> </a>
+        </td>
+        <td *ngIf="!isDelivered(record);">
+          <a class="btn btn-danger btn-sm" (click)="onDeleteRecord(record)">
+            <i class="fas fa-trash"></i></a>
+        </td>
         <td *ngIf="isGenerated(record)">
           <a class="btn btn-success btn-sm" (click)="onConfirmDelivered(record)">
             <i class="fas fa-check"></i>
           </a>
         </td>
-        <td *ngIf="isDelivered(record)">
-          <!--          TODO delete only in admin view-->
-        </td>
+<!--        Dummy columns for proper alignment-->
+        <td *ngIf="isDelivered(record);"></td>
+        <td *ngIf="isDelivered(record);"></td>
+        <td *ngIf="!isGenerated(record);"></td>
+
       </tr>
       </tbody>
     </table>

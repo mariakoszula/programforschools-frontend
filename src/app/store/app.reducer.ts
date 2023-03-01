@@ -19,7 +19,6 @@ export interface AppState {
 
 export function resetStoreState(reducer: ActionReducer<AppState>): ActionReducer<any>{
   return function (state: AppState, action: Action) {
-    console.log("action.type: " + action.type);
     let _state = {...state};
     if (action.type === programAction.FETCH || action.type === LOGOUT || action.type === AUTH_ERROR) {
       localStorage.clear();
