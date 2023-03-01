@@ -51,7 +51,6 @@ export function recordReducer(state: State = initialState, action: RecordActions
         }
         const indexOfUpdate = state.records.indexOf(record_to_update);
         records_after_update[indexOfUpdate] = updated_record;
-        console.log(records_after_update);
       }
       return {
         ...state,

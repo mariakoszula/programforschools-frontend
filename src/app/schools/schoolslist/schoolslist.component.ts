@@ -6,6 +6,7 @@ import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {Subscription} from "rxjs";
 import {State} from "../store/schools.reducer";
+import {ADTSettings} from "angular-datatables/src/models/settings";
 
 @Component({
   selector: 'app-schoolslist',
@@ -13,7 +14,7 @@ import {State} from "../store/schools.reducer";
 })
 export class SchoolslistComponent implements OnInit, OnDestroy {
   schools: School[] = [];
-  schoolDtOptions: DataTables.Settings = {};
+  schoolDtOptions: ADTSettings = {};
   schoolsSub: Subscription | null = null;
 
   constructor(private router: Router,
@@ -32,10 +33,12 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
       pageLength: 50,
       responsive: true,
       language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
-      rowCallback: (row: Node, data: any[] | Object, index:number) => {
+      rowCallback: (row: Node, data: any | Object, _:number) => {
+        const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.onEdit(this.schools[index]);
+          const school_idx = data[0];
+          self.onEdit(school_idx);
         });
         return row;
       }};
@@ -45,8 +48,8 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
     this.router.navigate(["nowa"], {relativeTo: this.activeRoute});
   }
 
-  onEdit(school: School) {
-    this.router.navigate([school.id + "/edycja"], {relativeTo: this.activeRoute});
+  onEdit(school_id: number) {
+    this.router.navigate([school_id + "/edycja"], {relativeTo: this.activeRoute});
   }
 
   ngOnDestroy(): void {

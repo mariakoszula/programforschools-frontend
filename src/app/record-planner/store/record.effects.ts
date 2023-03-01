@@ -63,7 +63,6 @@ export class RecordEffects {
         })
           .pipe(
             map(responseData => {
-              console.log(responseData);
               return new RecordActions.UpdateRecordConfirmed(responseData.record)
             }),
             catchError(error => {

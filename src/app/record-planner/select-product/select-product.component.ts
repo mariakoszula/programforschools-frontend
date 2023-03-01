@@ -71,11 +71,9 @@ export class SelectProductComponent implements OnInit {
       this.recordRequiredForSchools = this.shareRecordDataService.getRecordDemand();
       this.recordRequiredForSchools.forEach(recordRequired => {
         if (recordRequired.fruitVeg.isRequired && this.__all_reached_min_amount(this.fruitVegProducts, recordRequired.nick)) {
-          console.log("1this is a problem??");
           recordRequired.fruitVeg.isRequired = false;
         }
         if (recordRequired.dairy.isRequired && this.__all_reached_min_amount(this.dairyProducts, recordRequired.nick)) {
-          console.log("2this is a problem??");
           recordRequired.dairy.isRequired = false;
         }
       });

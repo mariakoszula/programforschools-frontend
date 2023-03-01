@@ -6,7 +6,6 @@ import * as ProductActions from "../store/program.action";
 import {Product, ProductStore} from "../program.model";
 import {Subscription, switchMap} from "rxjs";
 import {ActivatedRoute, Params} from "@angular/router";
-import {param} from "jquery";
 import {map} from "rxjs/operators";
 
 @Component({

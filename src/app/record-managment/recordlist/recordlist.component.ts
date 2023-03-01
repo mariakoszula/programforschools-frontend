@@ -33,7 +33,6 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("ngAfterViewInit");
     this.dtTrigger.next(this.dtOptions);
   }
 
@@ -92,7 +91,6 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onConfirmDelivered(record: Record) {
     let updated_record = {...record, state: RecordStates.DELIVERED};
-    console.log("record to deliver: " + updated_record.id);
     this.store.dispatch(new RecordActions.UpdateRecord(updated_record));
   }
 
