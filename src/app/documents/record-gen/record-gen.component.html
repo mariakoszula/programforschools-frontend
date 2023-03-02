@@ -22,7 +22,7 @@
         <app-record-display
           *ngIf="selectedWeek"
           [records]="get_records()"
-          [contracts]="contracts"
+          [contracts]="contracts | sortArray: 'contract_no'"
           [fruitVegProducts]="fruitVegProducts"
           [dairyProducts]="dairyProducts"
           (selectedRecordsEvent)="onSelectRecords($event)"

@@ -27,7 +27,7 @@
       *ngIf="selectedWeek"
       [clickableView]="false"
       [records]="records"
-      [contracts]="contracts"
+      [contracts]="contracts | sortArray: 'contract_no'"
       [fruitVegProducts]="fruitVegProducts"
       [dairyProducts]="dairyProducts"
     ></app-record-display>

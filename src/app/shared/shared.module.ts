@@ -11,6 +11,7 @@ import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
 import {NotificationsComponent} from "../documents/notifications/notifications.component";
 import {RouterModule} from "@angular/router";
 import {ProgressBarModule} from "angular-progress-bar";
+import {SortArrayPipe} from "./sort-array.pipe";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {ProgressBarModule} from "angular-progress-bar";
     RecordDisplayComponent,
     CutYearFromDate,
     DayName,
+    SortArrayPipe,
     WeeksDisplayComponent,
     NotificationsComponent
   ],
@@ -37,7 +39,8 @@ import {ProgressBarModule} from "angular-progress-bar";
     ReactiveFormsModule,
     RecordDisplayComponent,
     WeeksDisplayComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    SortArrayPipe
   ]
 })
 export class SharedModule {
