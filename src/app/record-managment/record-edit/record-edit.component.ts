@@ -93,7 +93,6 @@ export class RecordEditComponent implements OnInit, OnDestroy {
 
   isMinProductValueExceeded(record: Record) {
       let records = this.allRecords.filter(r => r.product_store_id === record.product_store_id);
-      let product_store = this.products.filter(p => p.id === record.product_store_id);
       return records.length + 1 > this.products.filter(p => p.id === record.product_store_id)[0].min_amount;
   }
 

@@ -139,8 +139,9 @@ export class RecordEffects {
       this.action$.pipe(
         ofType(RecordActions.SET_RECORDS),
         tap((actionResp: RecordActions.SetRecords) => {
-          if (actionResp.payload.recordsFailedResponse) {
-            let date = actionResp.payload.recordsFailedResponse.date;
+          const failedResp = actionResp.payload.recordsFailedResponse;
+          if (failedResp && failedResp.records.length !== 0) {
+            let date = failedResp.date;
             let weeks = get_weeks();
             const week = weeks.find((week: Week) => is_date_in_range(date, week.start_date, week.end_date));
             if (week) {
