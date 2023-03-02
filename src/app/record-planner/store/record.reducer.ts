@@ -37,11 +37,6 @@ export function recordReducer(state: State = initialState, action: RecordActions
         ...state,
         isLoading: true
       }
-    case UPDATE_RECORD:
-      return {
-        ...state,
-        isLoading: true
-      }
     case UPDATE_RECORD_CONFIRM:
       // TODO can it be simplified?
       let records_after_update = [...state.records];
