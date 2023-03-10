@@ -24,17 +24,19 @@
               </p>
               <select *ngIf="record.fruitVeg.isRequired" class="form-control custom-select"
                       name="{{fruitVegSuffix}}{{record.nick}}" ngModel>
+                <option></option>
                 <ng-container *ngFor="let product of fruitVegProducts;">
-                <option *ngIf="!reached_min_amount(product, record.nick)"
-                        [value]="product.product.name">{{product.product.name}}</option>
-                  </ng-container>
+                  <option *ngIf="!reached_min_amount(product, record.nick)"
+                          [value]="product.product.name">{{product.product.name}}</option>
+                </ng-container>
               </select>
               <select *ngIf="record.dairy.isRequired" class="form-control custom-select"
                       name="{{dairySuffix}}{{record.nick}}" ngModel>
+                <option></option>
                 <ng-container *ngFor="let product of dairyProducts;">
-                <option  *ngIf="!reached_min_amount(product, record.nick)"
-                        [value]="product.product.name">{{product.product.name}}</option>
-                 </ng-container>
+                  <option *ngIf="!reached_min_amount(product, record.nick)"
+                          [value]="product.product.name">{{product.product.name}}</option>
+                </ng-container>
               </select>
               <br/>
             </div>
@@ -43,7 +45,9 @@
               <button class="btn btn-outline-secondary" routerLink="../wybierz-szkoly">Powrót</button>
               <br/>
               <button *ngIf="!displayWarning" class="btn btn-success" type="submit">Prześlij</button>
-              <button *ngIf="displayWarning" class="btn btn-success" type="submit">Prześlij mimo, że nie wybrano produktu</button>
+              <button *ngIf="displayWarning" class="btn btn-success" type="submit">Prześlij mimo, że nie wybrano
+                produktu
+              </button>
             </div>
           </form>
         </div>

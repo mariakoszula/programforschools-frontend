@@ -11,18 +11,24 @@
     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
       <thead>
       <tr>
+        <th><i class="fas fa-check"></i></th>
         <th>Data</th>
         <th>Szkoła</th>
         <th>Produkt</th>
         <th>Typ</th>
         <th>Ilość</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th><i class="fas fa-pencil-alt"></i></th>
+        <th><i class="fas fa-trash"></i></th>
       </tr>
       </thead>
       <tbody>
       <tr class="cursor" *ngFor="let record of records;">
+        <td *ngIf="isGenerated(record)">
+          <a class="btn btn-success btn-sm" (click)="onConfirmDelivered(record)">
+            <i class="fas fa-check"></i>
+          </a>
+        </td>
+        <td *ngIf="!isGenerated(record);"></td>
         <td>{{ record.date }}</td>
         <td>{{ get_school_name(record) }}</td>
         <td>{{ get_product_name(record) }}</td>
@@ -36,15 +42,9 @@
           <a class="btn btn-danger btn-sm" (click)="onDeleteRecord(record)">
             <i class="fas fa-trash"></i></a>
         </td>
-        <td *ngIf="isGenerated(record)">
-          <a class="btn btn-success btn-sm" (click)="onConfirmDelivered(record)">
-            <i class="fas fa-check"></i>
-          </a>
-        </td>
-<!--        Dummy columns for proper alignment-->
+        <!--        Dummy columns for proper alignment-->
         <td *ngIf="isDelivered(record);"></td>
         <td *ngIf="isDelivered(record);"></td>
-        <td *ngIf="!isGenerated(record);"></td>
 
       </tr>
       </tbody>

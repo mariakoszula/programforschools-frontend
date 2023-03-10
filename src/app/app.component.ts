@@ -9,7 +9,7 @@ import * as AuthActions from "./auth/store/auth.actions";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  title = 'rykosystem-frontend';
+  title = 'programforschools-frontend';
   constructor(private store: Store<fromApp.AppState>) {
   }
 
