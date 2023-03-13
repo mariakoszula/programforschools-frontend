@@ -13,8 +13,10 @@ import {AngularDualListBoxModule} from 'angular-dual-listbox';
 import {FormsModule} from "@angular/forms";
 import {RecordResolverService} from "./record-resolver.service";
 import { SumRecordByProductComponent } from './sum-record-by-product/sum-record-by-product.component';
+import {SortArrayPipe} from "../shared/sort-array.pipe";
 
 @NgModule({
+  providers: [SortArrayPipe],
   declarations: [
     RecordPlannerComponent,
     SelectDateComponent,

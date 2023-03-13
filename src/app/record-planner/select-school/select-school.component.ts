@@ -12,6 +12,7 @@ import {
   SchoolWithRecordDemand
 } from "../record.model";
 import {RecordDataService} from "../record-data.service";
+import {SortArrayPipe} from "../../shared/sort-array.pipe";
 
 
 const recordInfoMapping: string[] = [
@@ -45,7 +46,8 @@ export class SelectSchoolComponent implements OnInit, OnDestroy {
   constructor(private activeRoute: ActivatedRoute,
               private router: Router,
               private store: Store<AppState>,
-              private recordDataService: RecordDataService) {
+              private recordDataService: RecordDataService,
+              private sortPipe: SortArrayPipe) {
     this.sourceData = new Array<SchoolWithRecordDemand>();
     this.source = new Array<any>();
     this.confirmed = new Array<any>();
@@ -89,6 +91,7 @@ export class SelectSchoolComponent implements OnInit, OnDestroy {
       let filtered_contracts = documentState.contracts.filter((contract: Contract) => {
         return SelectSchoolComponent.isFruitVeg(contract) || SelectSchoolComponent.isDairy(contract);
       });
+      filtered_contracts = this.sortPipe.transform(filtered_contracts, "contract_no");
       filtered_contracts.forEach(contract => {
         let new_record_school = new SchoolWithRecordDemand(
           contract.school.nick,
