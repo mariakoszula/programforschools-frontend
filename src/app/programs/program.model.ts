@@ -3,7 +3,7 @@ export interface ProgramResponse {
 }
 
 export interface WeeksResponse {
-  weeks: Week[];
+  week: Week[];
 }
 
 export class Program {
@@ -34,8 +34,8 @@ export class Week {
 
 export class Product {
   constructor(public name: string,
-              public product_type: string,
-              public weight_type: string) {
+              public weight_type: string,
+              public product_type: string) {
   }
 }
 

@@ -10,7 +10,7 @@ import {Store} from "@ngrx/store";
 import {Product, ProductStore, Program, ProgramResponse, Week, WeeksResponse} from "../program.model";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_PRODUCT, FRUIT_VEG_PRODUCT, VEGETABLE_PRODUCT} from "../../shared/namemapping.utils";
 import {DeleteWeek} from "../store/program.action";
 
 
@@ -185,7 +185,7 @@ export class ProgramEffects {
       this.action$.pipe(
         ofType(ProgramActions.SAVE_PRODUCT),
         tap((actionResp: ProgramActions.SaveProduct) => {
-          if (actionResp.product_type === FRUIT_VEG_PRODUCT) {
+          if (actionResp.product_type === FRUIT_PRODUCT || actionResp.product_type === VEGETABLE_PRODUCT || actionResp.product_type === FRUIT_VEG_PRODUCT) {
             update_in_storage_list("currentFruitVegProducts", actionResp.payload);
 
           } else if (actionResp.product_type === DAIRY_PRODUCT) {
@@ -206,8 +206,8 @@ export class ProgramEffects {
         return this.http.get<WeeksResponse>(environment.backendUrl + '/week/all?program_id=' + id)
           .pipe(
             map(responseData => {
-              localStorage.setItem("currentWeeks", JSON.stringify(responseData.weeks));
-              return new ProgramActions.SetAllWeek(responseData.weeks);
+              localStorage.setItem("currentWeeks", JSON.stringify(responseData.week));
+              return new ProgramActions.SetAllWeek(responseData.week);
             }),
             catchError((error: HttpErrorResponse) => {
               return of(new ProgramActions.ErrorHandler(error.error.message));

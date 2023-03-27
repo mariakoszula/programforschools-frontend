@@ -16,7 +16,7 @@ import {
   UPDATE
 } from "./program.action";
 import {Product, ProductStore, Program, Week} from "../program.model";
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_PRODUCT, FRUIT_VEG_PRODUCT, VEGETABLE_PRODUCT} from "../../shared/namemapping.utils";
 
 export interface State {
   programs: Program[];
@@ -77,6 +77,10 @@ function updated_product(product_store: ProductStore[], product: ProductStore) {
   return false;
 }
 
+function is_fruit_veg_product(type: string) {
+  return type === FRUIT_PRODUCT || type === VEGETABLE_PRODUCT || type === FRUIT_VEG_PRODUCT;
+}
+
 export function programReducer(state = initialState, action: ProgramActions) {
   switch (action.type) {
     case ADD:
@@ -108,7 +112,7 @@ export function programReducer(state = initialState, action: ProgramActions) {
       };
     case SAVE_PRODUCT:
       let updatedProducts: ProductStore[] = [];
-      if (action.product_type === FRUIT_VEG_PRODUCT) {
+      if (is_fruit_veg_product(action.product_type)) {
         updatedProducts = [...state.fruitVegProducts];
         if (!updated_product(updatedProducts, action.payload)) {
           updatedProducts.push(action.payload);
@@ -122,7 +126,7 @@ export function programReducer(state = initialState, action: ProgramActions) {
       return {
         ...state,
         dairyProducts: action.product_type === DAIRY_PRODUCT ? updatedProducts : [...state.dairyProducts],
-        fruitVegProducts: action.product_type === FRUIT_VEG_PRODUCT ? updatedProducts : [...state.fruitVegProducts]
+        fruitVegProducts: is_fruit_veg_product(action.product_type) ? updatedProducts : [...state.fruitVegProducts]
       };
     case UPDATE:
     case SAVE:

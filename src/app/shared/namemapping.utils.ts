@@ -21,7 +21,9 @@ export const DayColors = [
 ]
 
 
-export const FRUIT_VEG_PRODUCT = "owoce-warzywa";
+export const FRUIT_PRODUCT = "owoce";
+export const VEGETABLE_PRODUCT = "warzywa";
+export const FRUIT_VEG_PRODUCT = VEGETABLE_PRODUCT+"-"+FRUIT_PRODUCT
 export const DAIRY_PRODUCT = "nabiał";
 
 

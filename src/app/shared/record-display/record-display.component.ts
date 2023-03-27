@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT, DayColors} from "../namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT, DayColors, FRUIT_PRODUCT, VEGETABLE_PRODUCT} from "../namemapping.utils";
 import {Subscription} from "rxjs";
 import {RecordDataService} from "../../record-planner/record-data.service";
 import {Record} from "../../record-planner/record.model";
@@ -255,9 +255,18 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     return 'transparent';
   }
 
-  getSummarisedRecord(contract_index: number, product_type: string) {
+  getSummarisedRecordPerType(contract_index: number, product_type: string) {
     const contract = this.contracts[contract_index];
     return this.records.filter(record => record.contract_id === contract.id && record.product_type === product_type).length;
+  }
+
+  getSummarisedRecord(contract_index: number, product_type: string) {
+    if (product_type === FRUIT_VEG_PRODUCT) {
+      return this.getSummarisedRecordPerType(contract_index, FRUIT_PRODUCT)
+        + this.getSummarisedRecordPerType(contract_index, VEGETABLE_PRODUCT);
+    } else {
+      return this.getSummarisedRecordPerType(contract_index, product_type);
+    }
   }
 
   ngOnDestroy(): void {
