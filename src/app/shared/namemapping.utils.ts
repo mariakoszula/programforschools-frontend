@@ -8,9 +8,12 @@ export enum Role {
   Undefined
 }
 
-export interface CommonResponse{
-  message: string;
-}
+export const FRUIT_PRODUCT = "owoce";
+export const VEGETABLE_PRODUCT = "warzywa";
+export const FRUIT_VEG_PRODUCT = VEGETABLE_PRODUCT+"-"+FRUIT_PRODUCT
+export const DAIRY_PRODUCT = "nabiał";
+
+
 
 export const DayColors = [
   '#4CAF50',
@@ -20,11 +23,9 @@ export const DayColors = [
   '#EAEA26'
 ]
 
-
-export const FRUIT_PRODUCT = "owoce";
-export const VEGETABLE_PRODUCT = "warzywa";
-export const FRUIT_VEG_PRODUCT = VEGETABLE_PRODUCT+"-"+FRUIT_PRODUCT
-export const DAIRY_PRODUCT = "nabiał";
+export interface CommonResponse{
+  message: string;
+}
 
 
 export class RoleUtils {

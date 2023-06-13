@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {Annex, Contract} from "../contract.model";
+import {Annex, Contract, Application} from "../contract.model";
 import {Record} from "../../record-planner/record.model";
 
 export const FETCH_CONTRACTS = "[Documents] FETCH_CONTRACTS";
@@ -14,11 +14,14 @@ export const QUEUE_GENERATING_TASK_AND_START_POLLING = "[Documents] QUEUE_GENERA
 export const STOP_POLLING = "[Documents] STOP_POLLING";
 export const SET_TASK_PROGRESS = "[Documents] SET_TASK_PROGRESS";
 export const RESET_NOTIFICATION_COUNTER = "[Documents] RESET_NOTIFICATION_COUNTER";
+export const FETCH_APPLICATION = "[Documents] FETCH_APPLICATION";
+export const GENERATE_APPLICATION = "[Documents] GENERATE_APPLICATION";
+export const SET_APPLICATIONS = "[Documents] SET_APPLICATIONS";
 
 export class FetchContracts implements Action {
   readonly type = FETCH_CONTRACTS;
 
-  constructor(public payload: number) {
+  constructor() {
 
   }
 }
@@ -96,6 +99,22 @@ export class ResetNotificationCounter implements Action {
   readonly type = RESET_NOTIFICATION_COUNTER;
 }
 
+export class FetchApplication implements Action {
+  readonly type = FETCH_APPLICATION;
+
+  constructor() {
+
+  }
+}
+
+export class SetApplications implements Action {
+  readonly type = SET_APPLICATIONS;
+
+  constructor(public applications: Application[]) {
+
+  }
+}
+
 export type DocumentsActions =
   SetContracts
   | FetchContracts
@@ -108,4 +127,6 @@ export type DocumentsActions =
   | QueueGeneratingTaskAndStartPolling
   | SetTaskProgress
   | StopPolling
-  | ResetNotificationCounter;
+  | ResetNotificationCounter
+  | FetchApplication
+  | SetApplications;

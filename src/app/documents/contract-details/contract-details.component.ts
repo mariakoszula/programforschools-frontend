@@ -65,7 +65,7 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onNewAnnex(contract_id: number) {
+  onNewAnnex() {
     if (this.contract) {
       this.router.navigate([this.base_url + this.school_id + "/" + this.contract.id + "/nowy_aneks"]);
     }

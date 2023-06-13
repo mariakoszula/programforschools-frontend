@@ -1,4 +1,4 @@
-import {Annex, Contract} from "../contract.model";
+import {Annex, Contract, Application} from "../contract.model";
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, of, switchMap, takeUntil, tap, timer, withLatestFrom} from "rxjs";
@@ -11,7 +11,7 @@ import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
 import * as RecordsActions from "../../record-planner/store/record.action";
 import {
-  FETCH_CONTRACTS,
+  FetchApplication,
   FetchContracts,
   GenerateContracts,
   GenerateDelivery,
@@ -52,6 +52,7 @@ interface QueuedTaskProgressResponse {
   documents: string[];
 }
 
+
 @Injectable()
 export class DocumentsEffects {
   onFetchContracts$ = createEffect(() => {
@@ -59,7 +60,7 @@ export class DocumentsEffects {
       ofType(DocumentsActions.FETCH_CONTRACTS),
       switchMap((action: FetchContracts) => {
         return this.http.get<ContractsResponse>(environment.backendUrl +
-          "/contracts/" + action.payload + "/all")
+          "/contracts/" + get_current_program().id + "/all")
           .pipe(
             map(responseData => {
               localStorage.setItem("currentContract",  JSON.stringify(responseData.contracts));
@@ -247,6 +248,25 @@ export class DocumentsEffects {
           }
         })),
     {dispatch: false});
+
+    onFetchApplication$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.FETCH_APPLICATION),
+      switchMap((action: FetchApplication) => {
+        console.log("mimimimi");
+        return this.http.get<{application: Application[]}>(environment.backendUrl +
+          "/application/all?program_id=" +  get_current_program().id)
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.SetApplications(responseData.application)
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
 
   constructor(private action$: Actions, private http: HttpClient,
               private router: Router,

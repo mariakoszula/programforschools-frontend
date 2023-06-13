@@ -1,6 +1,7 @@
-import {Annex, Contract} from "../contract.model";
+import {Annex, Application, Contract} from "../contract.model";
 import {
   DocumentsActions,
+  FETCH_APPLICATION,
   FETCH_CONTRACTS,
   GENERATE_CONTRACTS,
   GENERATE_DELIVERY,
@@ -8,6 +9,7 @@ import {
   QUEUE_GENERATING_TASK_AND_START_POLLING,
   RESET_NOTIFICATION_COUNTER,
   SET_ANNEX,
+  SET_APPLICATIONS,
   SET_CONTRACTS,
   SET_TASK_PROGRESS,
   STOP_POLLING,
@@ -29,6 +31,7 @@ export const queuedTaskInfoEntityAdapter: EntityAdapter<QueuedTaskInfo> = create
 
 export interface State {
   contracts: Contract[];
+  applications: Application[];
   generatedDocuments: string[];
   queuedTasks: QueuedTaskInfoState;
   notificationCounter: number;
@@ -37,6 +40,7 @@ export interface State {
 
 export const initialState = {
   contracts: [],
+  applications: [],
   generatedDocuments: [],
   queuedTasks: queuedTaskInfoEntityAdapter.getInitialState(),
   notificationCounter: 0,
@@ -135,6 +139,18 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
       return {
         ...state,
         notificationCounter: state.notificationCounter + 1,
+        isGenerating: false
+      }
+     case FETCH_APPLICATION:
+      return {
+        ...state,
+        applications: [],
+        isGenerating: false
+      }
+    case SET_APPLICATIONS:
+      return {
+        ...state,
+        applications: [...action.applications],
         isGenerating: false
       }
     default:

@@ -1,4 +1,5 @@
 import {School} from "../schools/school.model";
+import {Week} from "../programs/program.model";
 
 export class Annex {
   constructor(public id: number,
@@ -25,5 +26,17 @@ export class Contract{
               public validity_date: string,
               public school: School,
               public annex: Annex[]) {
+  }
+}
+
+
+export class Application {
+  constructor(public id: number,
+              public no: number,
+              public type: string,
+              public program_id: number,
+              public contracts: Contract[],
+              public weeks: Week[]) {
+
   }
 }

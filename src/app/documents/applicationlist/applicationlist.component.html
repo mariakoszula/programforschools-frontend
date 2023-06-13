@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Lista wniosków</h1>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div *ngIf="!applications.length">Brak wniosków. Dodaj wniosek używając formularza poniżej.</div>
+    <table *ngIf="applications.length"  datatable [dtOptions]="dtOptions" class="table">
+      <thead>
+      <tr>
+        <th>Numer</th>
+        <th>Typ</th>
+        <th>Tygodnie</th>
+        <th>Szkoły</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let application of applications;">
+        <td>{{application.no}}</td>
+        <td>{{application.type}}</td>
+        <td>{{get_weeks(application.weeks)}}</td>
+        <td>{{get_schools(application.contracts)}}</td>
+        <td>
+          <div *ngIf="has_no_errors(application.no)">
+            <button style="cursor:pointer" class='btn btn-success btn-sm' [disabled]="true"><i class='fas fa-check'></i>OK
+            </button>
+          </div>
+          <div *ngIf="!has_no_errors(application.no)">Wyswietl bledy</div>
+        </td>
+        <td>
+          <div class="float-lg-start">
+            <a class="btn btn-info btn-sm" (click)="onEditApplication(application)">
+              <i class="fas fa-pencil-alt"></i>Edycja
+            </a>
+          </div>
+          <div class="float-lg-end">
+            <button type="submit" class='btn btn-success btn-sm' [disabled]="!has_no_errors(application.no)"><i
+              class='fa fa-check-circle'></i>Generuj
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <br/>
+  <br/>
+</div>
+<app-application-add></app-application-add>
+

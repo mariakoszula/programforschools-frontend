@@ -8,7 +8,7 @@ import {ContractsGenComponent} from "./contracts-gen/contracts-gen.component";
 import {RegisterGenComponent} from "./register-gen/register-gen.component";
 import {ContractDetailsComponent} from "./contract-details/contract-details.component";
 import {ProgramResolverService} from "../programs/program-resolver.service";
-import {ContractResolverService} from "./documents-resolver.service";
+import {ApplicationResolverService, ContractResolverService} from "./documents-resolver.service";
 import {SchoolResolverService} from "../schools/school-resolver.service";
 import {DocumentGenerationInfoComponent} from "./document-generation-info/document-generation-info.component";
 import {ContractDataEditorComponent} from "./contract-details/contract-data-editor/contract-data-editor.component";
@@ -16,6 +16,8 @@ import {AnnexDataEditorComponent} from "./contract-details/annex-data-editor/ann
 import {RecordGenComponent} from "./record-gen/record-gen.component";
 import {RecordDataService} from "../record-planner/record-data.service";
 import {RecordResolverService} from "../record-planner/record-resolver.service";
+import {ApplicationAddComponent} from "./application-add/application-add.component";
+import {ApplicationListComponent} from "./applicationlist/applicationlist.component";
 
 @NgModule(({
   declarations: [
@@ -27,7 +29,9 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
     ContractDataEditorComponent,
     AnnexDataEditorComponent,
     ContractDetailsComponent,
-    RecordGenComponent],
+    RecordGenComponent,
+    ApplicationListComponent,
+    ApplicationAddComponent],
   imports: [
     SharedModule,
     RouterModule.forChild([
@@ -48,7 +52,8 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
             path: 'wydanie-na-zewnatrz',
             component: RecordGenComponent,
             resolve: [RecordResolverService]
-          }
+          },
+          {path: 'wnioski', component: ApplicationListComponent, resolve: [ApplicationResolverService]}
         ]
       }
     ])
