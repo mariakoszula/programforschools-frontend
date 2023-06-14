@@ -4,6 +4,7 @@ import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {State} from "../store/documents.reducer";
 import {Week} from "../../programs/program.model";
+import {School} from "../../schools/school.model";
 
 @Component({
   selector: 'app-applicationlist',
@@ -33,12 +34,12 @@ export class ApplicationListComponent implements OnInit {
       console.log("Edit schools add/remove or weeks add/remove: " + application.id);
     }
 
-    public get_weeks(weeks: Week[]){
-        return "tygodnie";
-    }
-
     public get_schools(contracts: Contract[]){
-      return "schoools";
+      let schools: School[] = [];
+      for (let contract of contracts){
+        schools.push(contract.school);
+      }
+      return schools;
     }
     public has_no_errors(application_no: number){
       return !(application_no in this.errors);
