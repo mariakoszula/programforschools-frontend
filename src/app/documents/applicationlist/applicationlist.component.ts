@@ -3,19 +3,31 @@ import {Application, Contract} from "../contract.model";
 import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {State} from "../store/documents.reducer";
-import {Week} from "../../programs/program.model";
 import {School} from "../../schools/school.model";
+import { HttpClient } from '@angular/common/http';
+import {environment} from "../../../environments/environment";
 
+
+
+interface Error {
+  message: string;
+  school: string;
+  type: string;
+}
+interface CheckErrorResponse {
+  application: Application;
+  errors: Error[]
+}
 @Component({
   selector: 'app-applicationlist',
   templateUrl: './applicationlist.component.html'
 })
 export class ApplicationListComponent implements OnInit {
     applications: Application[] = [];
-    errors: { [no: number]: string } = {};
+    errors: { [no: string]: Error[] } = {};
     dtOptions: DataTables.Settings = {};
 
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<AppState>, private http: HttpClient) {
     this.dtOptions = {
       order: [[1, 'asc']],
       responsive: false,
@@ -26,7 +38,15 @@ export class ApplicationListComponent implements OnInit {
     ngOnInit(){
       this.store.select("document").subscribe((state: State) => {
         this.applications = state.applications;
-                console.log(this.applications);
+        for (let app of this.applications){
+          this.http.get<CheckErrorResponse>(environment.backendUrl + "/validate_application/" + app.id).subscribe(
+            resp => {
+              if (resp.errors.length !== 0){
+                this.errors[app.no] = resp.errors;
+              }
+            }
+          )
+        }
       });
 
     }
@@ -45,4 +65,14 @@ export class ApplicationListComponent implements OnInit {
       return !(application_no in this.errors);
     }
 
+    public get_errors(): string[]{
+      return Object.keys(this.errors);
+    }
+
+    public error_message(error: Error){
+      let val = error.school;
+      val += "\n";
+      val += error.message;
+      return val;
+    }
 }

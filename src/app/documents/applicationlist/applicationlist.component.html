@@ -1,4 +1,18 @@
-<div class="card">
+<div *ngFor="let app_no of get_errors();" class="card">
+  <div class="card-header">
+    <h1 class="card-title">Błędy we wniosku {{app_no}}</h1>
+  </div>
+  <div class="card-body">
+  <div *ngFor="let err of this.errors[app_no]">
+            <app-alert-simple
+                    [messageHead]="'Wykryto błędy'"
+                    [alertType]="'alert-warning'"
+                    [messageBody]="error_message(err)"></app-alert-simple>
+  </div>
+  </div>
+</div>
+
+  <div class="card">
   <div class="card-header">
     <h1 class="card-title">Lista wniosków</h1>
     <div class="card-tools">
@@ -9,7 +23,7 @@
   </div>
   <div class="card-body">
     <div *ngIf="!applications.length">Brak wniosków. Dodaj wniosek używając formularza poniżej.</div>
-    <table *ngIf="applications.length"  datatable [dtOptions]="dtOptions" class="table">
+    <table *ngIf="applications.length" datatable [dtOptions]="dtOptions" class="table">
       <thead>
       <tr>
         <th>Numer</th>
@@ -25,7 +39,7 @@
         <td>{{application.no}}</td>
         <td>{{application.type}}</td>
         <td>
-            <table class="table">
+          <table class="table">
             <tbody>
             <tr *ngFor="let week of application.weeks">
               <td>{{ week.week_no }}</td>
@@ -36,7 +50,7 @@
           </table>
         </td>
         <td>
-            <table class="table">
+          <table class="table">
             <tbody>
             <tr *ngFor="let school of get_schools(application.contracts)">
               <td>{{ school.nick }}</td>
@@ -49,7 +63,10 @@
             <button style="cursor:pointer" class='btn btn-success btn-sm' [disabled]="true"><i class='fas fa-check'></i>OK
             </button>
           </div>
-          <div *ngIf="!has_no_errors(application.no)">Wyswietl bledy</div>
+          <div *ngIf="!has_no_errors(application.no)">
+            <button style="cursor:pointer" class='btn btn-danger btn-sm'><i class='fas fa-check'></i>Wykryto błędy
+            </button>
+          </div>
         </td>
         <td>
           <div class="float-lg-start">
