@@ -10,6 +10,23 @@
   <div *ngIf="isLoggedIn && program" class="p-2">
     <h5>Rok szkolny {{ program.school_year }} Semestr {{ program.semester_no}}</h5>
     <h6>{{program.start_date}} - {{program.end_date}}</h6>
+    <h5>Tygodnie</h5>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Początek</th>
+        <th>Koniec</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let week of weeks">
+        <td>{{ week.week_no }}</td>
+        <td>{{ week.start_date }}</td>
+        <td>{{ week.end_date }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
   <div *ngIf="isLoggedIn" class="p-3 col-lg">
     <div *ngFor="let day of days; let i = index">
@@ -19,7 +36,6 @@
               type="button"
               class="btn btn-large btn-outline-dark">{{day}}</button>
     </div>
-
   </div>
 </aside>
 <!-- /.control-sidebar -->

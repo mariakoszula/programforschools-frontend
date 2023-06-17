@@ -1,0 +1,32 @@
+<div class="card card-outline card-success">
+  <div class="card-header">
+    <h3 class="card-title">Utwórz wniosek typu: {{appType}}</h3>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <dual-list [key]="'id'" [display]="unique_key_school" [source]="allSchools" [format]="format_school"
+                     [(destination)]="selectedSchools"
+                     height="400px">
+          </dual-list>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <dual-list [key]="'id'" [display]="unique_key_weeks" [source]="allWeeks" [format]="format_weeks"
+                     [(destination)]="selectedWeeks" height="200px">
+          </dual-list>
+        </div>
+      </div>
+    </div>
+    <div class="float-lg-end">
+      <button
+        [disabled]="!is_data_selected()"
+        class="btn-lg btn-outline-info float-lg-end" (click)="addApplication()">Dodaj Wniosek
+      </button>
+    </div>
+  </div>
+</div>

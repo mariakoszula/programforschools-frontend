@@ -14,10 +14,11 @@ import {DocumentGenerationInfoComponent} from "./document-generation-info/docume
 import {ContractDataEditorComponent} from "./contract-details/contract-data-editor/contract-data-editor.component";
 import {AnnexDataEditorComponent} from "./contract-details/annex-data-editor/annex-data-editor.component";
 import {RecordGenComponent} from "./record-gen/record-gen.component";
-import {RecordDataService} from "../record-planner/record-data.service";
 import {RecordResolverService} from "../record-planner/record-resolver.service";
 import {ApplicationAddComponent} from "./application-add/application-add.component";
 import {ApplicationListComponent} from "./applicationlist/applicationlist.component";
+import {SelectAppTypeComponent} from "./select-app-type/select-app-type.component";
+import {AngularDualListBoxModule} from "angular-dual-listbox";
 
 @NgModule(({
   declarations: [
@@ -31,8 +32,10 @@ import {ApplicationListComponent} from "./applicationlist/applicationlist.compon
     ContractDetailsComponent,
     RecordGenComponent,
     ApplicationListComponent,
+    SelectAppTypeComponent,
     ApplicationAddComponent],
   imports: [
+    AngularDualListBoxModule,
     SharedModule,
     RouterModule.forChild([
       {
@@ -53,7 +56,10 @@ import {ApplicationListComponent} from "./applicationlist/applicationlist.compon
             component: RecordGenComponent,
             resolve: [RecordResolverService]
           },
-          {path: 'wnioski', component: ApplicationListComponent, resolve: [ApplicationResolverService]}
+          {path: 'wnioski', component: ApplicationListComponent, resolve: [ApplicationResolverService]},
+          {path: 'wnioski/nowy_wniosek/wybor-typu', component: SelectAppTypeComponent},
+          {path: 'wnioski/nowy_wniosek/:type', component: ApplicationAddComponent},
+          {path: 'wnioski/:app_id/edycja', component: ApplicationAddComponent}
         ]
       }
     ])

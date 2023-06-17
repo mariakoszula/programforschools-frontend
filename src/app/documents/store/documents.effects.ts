@@ -4,15 +4,16 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, of, switchMap, takeUntil, tap, timer, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import * as DocumentsActions from "./documents.action";
 import * as RecordsActions from "../../record-planner/store/record.action";
 import {
+  CreateApplication,
   FetchApplication,
-  FetchContracts,
+  FetchContracts, GenerateApplications,
   GenerateContracts,
   GenerateDelivery,
   QueueGeneratingTaskAndStartPolling,
@@ -24,6 +25,8 @@ import {get_current_program} from "../../shared/common.functions";
 import {
   FINISHED_TASK_PROGRESS, getQueueEntities, POLLING_INTERVAL
 } from "./documents.reducer";
+import {ProductStore} from "../../programs/program.model";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 interface ContractsResponse {
   contracts: Contract[];
@@ -110,6 +113,31 @@ export class DocumentsEffects {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
                 id: responseData.task_id,
                 name: "Rejestr"
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
+    onGenerateApplications$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_APPLICATION),
+      switchMap((action: GenerateApplications) => {
+        return this.http.put<QueuedTaskResponse>(environment.backendUrl +
+          "/create_application/" + action.payload.id, {
+          "date": convert_date_to_backend_format(action.payload.app_date),
+          "start_week": action.payload.start_week,
+          "is_last": action.payload.is_last
+        })
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Wniosek:".concat(action.payload.no.toString())
               });
             }),
             catchError(error => {
@@ -253,7 +281,6 @@ export class DocumentsEffects {
     return this.action$.pipe(
       ofType(DocumentsActions.FETCH_APPLICATION),
       switchMap((action: FetchApplication) => {
-        console.log("mimimimi");
         return this.http.get<{application: Application[]}>(environment.backendUrl +
           "/application/all?program_id=" +  get_current_program().id)
           .pipe(
@@ -268,6 +295,44 @@ export class DocumentsEffects {
       }));
   });
 
+    onAddApplication = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.CREATE_APPLICATION),
+      switchMap((action: CreateApplication) => {
+        // FULL = 0
+        // DAIRY = 1
+        // FRUIT_VEG = 2
+        let contracts_ids: number[] = [];
+        let weeks_ids: number[] = [];
+        let type: number = 0;
+        for(let contract of action.payload.contracts){
+          contracts_ids.push(contract.id);
+        }
+        for(let week of action.payload.weeks){
+          weeks_ids.push(week.id);
+        }
+        if (action.payload.type === DAIRY_PRODUCT) {
+          type = 1;
+        } else if (action.payload.type === FRUIT_VEG_PRODUCT) {
+          type = 2;
+        }
+        return this.http.post<{ application: Application}>(
+          environment.backendUrl + '/application',
+          {
+              program_id: get_current_program().id,
+              contracts: contracts_ids,
+              weeks: weeks_ids,
+              app_type: type,
+          }).pipe(
+          map((respData) => {
+            return new DocumentsActions.FetchApplication();
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.log(error);
+            return of({type: "Dummy_action"});
+          }));
+      }));
+  });
   constructor(private action$: Actions, private http: HttpClient,
               private router: Router,
               private store: Store<AppState>) {

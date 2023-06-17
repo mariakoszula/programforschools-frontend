@@ -1,6 +1,7 @@
 import {Action} from "@ngrx/store";
 import {Annex, Contract, Application} from "../contract.model";
 import {Record} from "../../record-planner/record.model";
+import {Week} from "../../programs/program.model";
 
 export const FETCH_CONTRACTS = "[Documents] FETCH_CONTRACTS";
 export const SET_CONTRACTS = "[Documents] SET_CONTRACTS";
@@ -17,6 +18,7 @@ export const RESET_NOTIFICATION_COUNTER = "[Documents] RESET_NOTIFICATION_COUNTE
 export const FETCH_APPLICATION = "[Documents] FETCH_APPLICATION";
 export const GENERATE_APPLICATION = "[Documents] GENERATE_APPLICATION";
 export const SET_APPLICATIONS = "[Documents] SET_APPLICATIONS";
+export const CREATE_APPLICATION = "[Documents] CREATE_APPLICATION";
 
 export class FetchContracts implements Action {
   readonly type = FETCH_CONTRACTS;
@@ -45,6 +47,12 @@ export class GenerateRegister implements Action {
   readonly type = GENERATE_REGISTER;
 }
 
+export class GenerateApplications implements Action {
+  readonly type = GENERATE_APPLICATION;
+  constructor(public payload: {id: number, no: number, app_date: string, is_last: boolean, start_week: number}) {
+
+  }
+}
 
 export class UpdateAnnex implements Action {
   readonly type = UPDATE_ANNEX;
@@ -115,6 +123,18 @@ export class SetApplications implements Action {
   }
 }
 
+export class CreateApplication implements Action {
+  readonly type = CREATE_APPLICATION;
+
+  constructor(public payload: {
+    type: string,
+    contracts: Contract[],
+    weeks: Week[]
+  }) {
+
+  }
+}
+
 export type DocumentsActions =
   SetContracts
   | FetchContracts
@@ -129,4 +149,6 @@ export type DocumentsActions =
   | StopPolling
   | ResetNotificationCounter
   | FetchApplication
-  | SetApplications;
+  | SetApplications
+  | GenerateApplications
+  | CreateApplication;

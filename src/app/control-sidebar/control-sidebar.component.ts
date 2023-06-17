@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription, switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../store/app.reducer";
-import {Program} from "../programs/program.model";
+import {Program, Week} from "../programs/program.model";
 import {DayColors} from '../shared/namemapping.utils'
 
 @Component({
@@ -12,6 +12,7 @@ import {DayColors} from '../shared/namemapping.utils'
 export class ControlSidebarComponent implements OnInit, OnDestroy {
   program: Program | null = null;
   isLoggedIn = false;
+  weeks: Week[] = [];
   days = [
   "Poniedziałek",
   "Wtorek",
@@ -34,6 +35,7 @@ export class ControlSidebarComponent implements OnInit, OnDestroy {
         let isProgramSelected = programState.indexOfSelectedProgram !== -1;
         if (isProgramSelected){
           this.program = programState.programs[programState.indexOfSelectedProgram];
+          this.weeks = programState.weeks;
         }
       });
   }

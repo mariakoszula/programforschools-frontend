@@ -9,7 +9,6 @@ import {AppState} from "../../../store/app.reducer";
 import {formatDate} from "@angular/common";
 import * as DocumentsActions from "../../store/documents.action";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../../shared/namemapping.utils";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-annex-data-editor',
