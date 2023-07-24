@@ -21,7 +21,7 @@ import {SchoolsEffects} from "./schools/store/schools.effects";
 import {DocumentsEffects} from "./documents/store/documents.effects";
 import {RecordEffects} from "./record-planner/store/record.effects";
 import {SharedModule} from "./shared/shared.module";
-import {metaReducers, appReducer, resetStoreState} from "./store/app.reducer";
+import {metaReducers, appReducer} from "./store/app.reducer";
 
 @NgModule({
   declarations: [

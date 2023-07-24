@@ -67,6 +67,35 @@
             </li>
           </ul>
         </li>
+        <li *ngIf="isProgramSelected" class="nav-item">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-clipboard-list"></i>
+            <p>
+              Faktury
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" routerLink="faktury/dostawcy">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Dostawcy</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" routerLink="faktury/faktury">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Faktury</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" routerLink="faktury/zestawienia">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Zestawienia</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item">
           <a class="nav-link cursor" routerLinkActive="active" routerLink="/programy">
             <i class="nav-icon fas fa-list"></i>
