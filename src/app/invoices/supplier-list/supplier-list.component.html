@@ -1,1 +1,34 @@
-<p>supplier-list works!</p>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Lista dostawców</h1>
+  </div>
+  <div class="card-body">
+    <table datatable [dtOptions]="suppliersDtOptions" class="row-border hover">
+      <thead>
+      <tr>
+        <th>Lp</th>
+        <th>Skrót</th>
+        <th>Nazwa</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="cursor" *ngFor="let supplier of suppliers; let i = index;">
+        <td>{{ i+1 }}</td>
+        <td>{{ supplier.nick }}</td>
+        <td>{{ supplier.name }}</td>
+        <td><a class="btn btn-info btn-sm" (click)="onEditSupplier(supplier.id)">
+          <i class="fas fa-pencil-alt"></i>Edycja
+        </a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="col-12">
+    <a (click)="addSupplier()" class="btn-lg btn-info float-left cursor">
+    <i class="fas fa-sign"></i> Dodaj dostawce
+  </a>
+<br/>
+<br/>
+</div>

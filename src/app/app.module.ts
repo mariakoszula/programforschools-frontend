@@ -22,6 +22,7 @@ import {DocumentsEffects} from "./documents/store/documents.effects";
 import {RecordEffects} from "./record-planner/store/record.effects";
 import {SharedModule} from "./shared/shared.module";
 import {metaReducers, appReducer} from "./store/app.reducer";
+import {InvoiceEffects} from "./invoices/store/invoice.effects";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {metaReducers, appReducer} from "./store/app.reducer";
             CompanyEffects,
             SchoolsEffects,
             DocumentsEffects,
-            RecordEffects
+            RecordEffects,
+            InvoiceEffects
         ]),
         StoreDevtoolsModule.instrument({logOnly: environment.production}),
         SharedModule

@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {School} from "../school.model";
-import * as SchoolActions from "../store/schools.action";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {Subscription} from "rxjs";

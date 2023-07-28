@@ -5,8 +5,10 @@ import * as fromCompany from "../companies/store/company.reducer";
 import * as fromSchool from "../schools/store/schools.reducer";
 import * as fromDocuments from "../documents/store/documents.reducer";
 import * as fromRecord from "../record-planner/store/record.reducer";
+import * as fromInvoice from "../invoices/store/invoice.reducer";
 import {AUTH_ERROR, LOGOUT} from "../auth/store/auth.actions";
 import * as programAction from "../programs/store/program.action";
+import {invoiceReducer} from "../invoices/store/invoice.reducer";
 
 export interface AppState {
   auth: fromAuth.State;
@@ -15,6 +17,7 @@ export interface AppState {
   school: fromSchool.State;
   document: fromDocuments.State;
   record: fromRecord.State;
+  invoice: fromInvoice.State;
 }
 
 export function resetStoreState(reducer: ActionReducer<AppState>): ActionReducer<any>{
@@ -25,6 +28,7 @@ export function resetStoreState(reducer: ActionReducer<AppState>): ActionReducer
       _state.document = fromDocuments.initialState;
       _state.record = fromRecord.initialState;
       _state.program = fromProgram.clearState;
+      _state.invoice = fromInvoice.initialState;
       localStorage.setItem("userData", JSON.stringify(state.auth.user));
     }
     if (action.type === LOGOUT || action.type === AUTH_ERROR) {
@@ -43,6 +47,7 @@ export const appReducer: ActionReducerMap<AppState, any> = {
   company: fromCompany.companyReducer,
   school: fromSchool.schoolReducer,
   document: fromDocuments.documentsReducer,
-  record: fromRecord.recordReducer
+  record: fromRecord.recordReducer,
+  invoice: fromInvoice.invoiceReducer
 };
 

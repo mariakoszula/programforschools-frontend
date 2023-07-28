@@ -13,7 +13,7 @@ import {
   RecordAdditionResultInfo, RecordUpdateResult, get_state_number,
 } from "../record.model";
 import {get_current_program, get_weeks} from "../../shared/common.functions";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Router} from "@angular/router";
 import {is_date_in_range} from "../../shared/date_converter.utils";
 import {Week} from "../../programs/program.model";
 
