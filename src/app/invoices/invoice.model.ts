@@ -5,6 +5,16 @@ export class Supplier {
   }
 }
 
+
+export class Invoice {
+  constructor(public id: number,
+              public name: string,
+              public date: string,
+              public supplier_id: number,
+              public program_id: number) {
+  }
+}
+
 export class InvoiceProduct {
   constructor(public id: number,
               public invoice_id: number,
@@ -13,11 +23,3 @@ export class InvoiceProduct {
   }
 }
 
-export class Invoice {
-  constructor(public  id: number,
-              public name: string,
-              public date: string,
-              public supplier_id: number,
-              public program_id: number) {
-  }
-}

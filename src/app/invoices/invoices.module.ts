@@ -9,6 +9,9 @@ import { SummaryComponent } from './summary/summary.component';
 import {InvoicesComponent} from "./invoices.component";
 import {SharedModule} from "../shared/shared.module";
 import {SuppliersResolverService} from "./supplier-resolver.service";
+import {ProgramResolverService} from "../programs/program-resolver.service";
+import {InvoiceResolverService} from "./invoice-resolver.service";
+import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
 
 
 
@@ -32,7 +35,7 @@ import {SuppliersResolverService} from "./supplier-resolver.service";
           {path: 'dostawcy', component: SupplierListComponent, resolve: [SuppliersResolverService]},
           {path: 'dostawcy/nowy', component: SupplierEditComponent},
           {path: 'dostawcy/:supplier_id/edycja', component: SupplierEditComponent},
-          {path: 'faktury', component: InvoiceListComponent},
+          {path: 'faktury', component: InvoiceListComponent, resolve: [ProgramResolverService, SuppliersResolverService, InvoiceResolverService, InvoiceProductResolverService]},
           {path: 'faktury/nowa', component: InvoiceEditComponent},
           {path: 'faktury/:invoice_id/edycja', component: InvoiceEditComponent},
           {path: 'zestawienia', component: SummaryComponent}

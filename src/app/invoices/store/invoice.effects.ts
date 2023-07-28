@@ -33,11 +33,11 @@ export class InvoiceEffects {
     return this.action$.pipe(
       ofType(InvoiceAction.FETCH_INVOICE_PRODUCTS),
       switchMap((action: InvoiceAction.FetchInvoiceProducts) => {
-        return this.http.get<{ invoice_products: InvoiceProduct[] }>(
-          environment.backendUrl + 'invoice_product/all?program_id=' + get_current_program().id)
+        return this.http.get<{ invoice_product: InvoiceProduct[] }>(
+          environment.backendUrl + '/invoice_product/all?program_id=' + get_current_program().id)
           .pipe(
             map(responseData => {
-              return new InvoiceAction.SetInvoiceProducts(responseData.invoice_products)
+              return new InvoiceAction.SetInvoiceProducts(responseData.invoice_product)
             }),
             catchError(error => {
               console.log(error);
