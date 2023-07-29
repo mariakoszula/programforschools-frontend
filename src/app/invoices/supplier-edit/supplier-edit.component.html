@@ -1,1 +1,18 @@
-<p>supplier-edit works!</p>
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 *ngIf="!edit" class="card-title">Podaj dane nowego dostawcy</h1>
+      <h1 *ngIf="edit" class="card-title">Edytuj dane dostawcy</h1>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Nick</label><input formControlName="nick" class="form-control" name="nick">
+          <label>Nazwa</label><input formControlName="name" class="form-control" name="name">
+        </div>
+        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!form.valid">
+          <i class="fas fa-check-circle"></i> Zatwierdź
+        </button>
+      </form>
+    </div>
+  </div>

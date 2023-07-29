@@ -3,12 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {AppState} from "src/app/store/app.reducer";
 import {Store} from "@ngrx/store";
-import {catchError, of, switchMap} from "rxjs";
+import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
 import * as InvoiceAction from "./invoice.action";
 import {map} from "rxjs/operators";
 import {get_current_program} from "../../shared/common.functions";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class InvoiceEffects {
@@ -63,8 +64,53 @@ export class InvoiceEffects {
       }))
   });
 
+  onAddSupplier$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.ADD_SUPPLIER),
+      switchMap((data: InvoiceAction.AddSupplier) => {
+        return this.http.post<{supplier: Supplier}>(
+          environment.backendUrl + '/supplier',
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveSupplier(respData.supplier);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Error during adding supplier"});
+          }));
+      }));
+  });
+
+    onUpdateSupplier$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.UPDATE_SUPPLIER),
+      withLatestFrom(this.store$.select('invoice')),
+      switchMap(([currentAction, _]) => {
+        let data: InvoiceAction.UpdateSupplier = currentAction;
+        return this.http.put<{supplier: Supplier}>(
+          environment.backendUrl + '/supplier/' + data.supplier_id,
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveSupplier(respData.supplier);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Failed on update suppliers"});
+          }));
+      }));
+  });
+
+    redirectOnSaveSupplier = createEffect(() =>
+      this.action$.pipe(
+        ofType(InvoiceAction.SAVE_SUPPLIER),
+        tap(() => {
+          this.router.navigate(["/faktury/dostawcy"]);
+        })),
+    {dispatch: false});
+
   constructor(private action$: Actions,
               private http: HttpClient,
-              private store: Store<AppState>) {
+              private router: Router,
+              private store$: Store<AppState>) {
   }
 }

@@ -26,7 +26,6 @@ export class SchoolDataEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //TODO how to chain this subscriptions?
     this.paramsSub = this.activeRoute.params.subscribe(
       (params: Params) => {
         if (params["id"])

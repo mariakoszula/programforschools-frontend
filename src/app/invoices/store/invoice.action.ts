@@ -1,6 +1,7 @@
 import {Action} from "@ngrx/store";
 import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
-
+import {School} from "../../schools/school.model";
+import {SAVE} from "../../schools/store/schools.action";
 
 export const FETCH_INVOICE = "[INVOICE] FETCH_INVOICE";
 export const ADD_INVOICE = "[INVOICE] ADD_INVOICE";
@@ -12,6 +13,7 @@ export const FETCH_SUPPLIERS = "[INVOICE] FETCH_SUPPLIERS";
 export const ADD_SUPPLIER = "[INVOICE] ADD_SUPPLIER";
 export const UPDATE_SUPPLIER = "[INVOICE] UPDATE_SUPPLIER";
 export const SET_SUPPLIERS = "[INVOICE] SET_SUPPLIERS";
+export const SAVE_SUPPLIER = "[INVOICE] SAVE_SUPPLIER";
 
 
 export const FETCH_INVOICE_PRODUCTS = "[INVOICE] FETCH_INVOICE_PRODUCTS";
@@ -70,12 +72,25 @@ export class SetSuppliers implements Action {
 
 export class AddSupplier implements Action {
   readonly type = ADD_SUPPLIER;
+
+  constructor(public payload: Supplier) {
+  }
 }
 
 export class UpdateSupplier implements Action {
   readonly type = UPDATE_SUPPLIER;
+    constructor(public payload: Supplier, public supplier_id: number) {
+  }
+}
+
+export class SaveSupplier implements Action {
+  readonly type = SAVE_SUPPLIER;
+
+  constructor(public payload: Supplier) {
+  }
 }
 
 export type InvoiceAction = FetchInvoice |
   AddInvoice | UpdateInvoice | FetchSupplier | AddSupplier | UpdateSupplier |
-  SetSuppliers | SetInvoices | FetchInvoiceProducts | AddInvoiceProduct | UpdateInvoiceProduct | SetInvoiceProducts;
+  SetSuppliers | SetInvoices | FetchInvoiceProducts | AddInvoiceProduct | UpdateInvoiceProduct | SetInvoiceProducts |
+  SaveSupplier;
