@@ -6,7 +6,6 @@ import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {ActivatedRoute, Params} from "@angular/router";
 import * as InvoiceAction from "../store/invoice.action";
-import {AddSupplier, UpdateSupplier} from "../store/invoice.action";
 
 @Component({
   selector: 'app-supplier-edit',

@@ -31,11 +31,12 @@ import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
         path: '',
         canActivate: [AuthGuard],
         component: InvoicesComponent,
+        resolve: [ProgramResolverService, SuppliersResolverService, InvoiceProductResolverService, InvoiceResolverService],
         children: [
-          {path: 'dostawcy', component: SupplierListComponent, resolve: [SuppliersResolverService]},
+          {path: 'dostawcy', component: SupplierListComponent},
           {path: 'dostawcy/nowy', component: SupplierEditComponent},
           {path: 'dostawcy/:supplier_id/edycja', component: SupplierEditComponent},
-          {path: 'faktury', component: InvoiceListComponent, resolve: [ProgramResolverService, SuppliersResolverService, InvoiceResolverService, InvoiceProductResolverService]},
+          {path: 'faktury', component: InvoiceListComponent },
           {path: 'faktury/nowa', component: InvoiceEditComponent},
           {path: 'faktury/:invoice_id/edycja', component: InvoiceEditComponent},
           {path: 'zestawienia', component: SummaryComponent}

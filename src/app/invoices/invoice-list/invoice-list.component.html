@@ -5,29 +5,46 @@
   <div class="card-body">
     <table datatable [dtOptions]="dtOptions" class="row-border hover">
       <thead>
-        <th>Lp</th>
-        <th>Nazwa</th>
-        <th>Data</th>
-        <th>Dostawca</th>
-        <th>Produkt</th>
-        <th>Ilość</th>
-        <th>Ilość przypisana do tygodni</th>
-        <th></th>
+      <th>Lp</th>
+      <th>Nazwa</th>
+      <th>Data</th>
+      <th>Dostawca</th>
+      <th>Produkt</th>
+      <th>Ilość</th>
+      <th>Ilość przypisana do tygodni</th>
+      <th></th>
       </thead>
       <tbody>
       <ng-container *ngFor="let invoice of invoices; let i = index;">
-        <tr  class="cursor"  *ngFor="let invoiceProduct of getInvoicesProduct(invoice.id) as ip;">
-          <td [attr.rowspan]="ip.length">{{ i+1 }}</td>
-          <td [attr.rowspan]="ip.length">{{ invoice.name }}</td>
-          <td [attr.rowspan]="ip">{{ invoice.date }}</td>
-          <td [attr.rowspan]="ip">{{ getSupplier(invoice.supplier_id) }}</td>
-          <td>{{ getProduct(invoiceProduct.product_store_id).name }}</td>
-          <td>{{ invoiceProduct.amount }} {{getProduct(invoiceProduct.product_store_id).weight_type}}</td>
-          <td>Placeholder to fix for product->perwekk</td>
-          <td [attr.rowspan]="ip">
+        <ng-container *ngIf="getInvoicesProduct(invoice.id).length !== 0;">
+          <ng-container *ngFor="let invoiceProduct of getInvoicesProduct(invoice.id) as ip;">
+            <tr class="cursor">
+              <td [attr.rowspan]="ip.length">{{ i + 1 }}</td>
+              <td [attr.rowspan]="ip.length">{{ invoice.name }}</td>
+              <td [attr.rowspan]="ip">{{ invoice.date }}</td>
+              <td [attr.rowspan]="ip">{{ getSupplier(invoice.supplier_id) }}</td>
+              <td>{{ getProduct(invoiceProduct.product_store_id).name }}</td>
+              <td>{{ invoiceProduct.amount }} {{getProduct(invoiceProduct.product_store_id).weight_type}}</td>
+              <td>Placeholder to fix for product->perwekk</td>
+              <td [attr.rowspan]="ip">
+                <a class="btn btn-info btn-sm" (click)="onEditInvoice(invoice.id)">
+                  <i class="fas fa-pencil-alt"></i>Edycja
+                </a></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+        <tr *ngIf="getInvoicesProduct(invoice.id).length === 0;" class="cursor">
+          <td>{{ i + 1 }}</td>
+          <td>{{ invoice.name }}</td>
+          <td>{{ invoice.date }}</td>
+          <td>{{ getSupplier(invoice.supplier_id) }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
             <a class="btn btn-info btn-sm" (click)="onEditInvoice(invoice.id)">
-            <i class="fas fa-pencil-alt"></i>Edycja
-          </a></td>
+              <i class="fas fa-pencil-alt"></i>Edycja
+            </a></td>
         </tr>
       </ng-container>
       </tbody>
@@ -35,9 +52,9 @@
   </div>
 </div>
 <div class="col-12">
-    <a (click)="addInvoice()" class="btn-lg btn-info float-left cursor">
+  <a (click)="addInvoice()" class="btn-lg btn-info float-left cursor">
     <i class="fas fa-sign"></i> Dodaj fakture
   </a>
-<br/>
-<br/>
+  <br/>
+  <br/>
 </div>

@@ -30,7 +30,51 @@ export class InvoiceEffects {
       }))
   });
 
-  fetchInvoiceProudcts$ = createEffect(() => {
+  onAddInvoice$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.ADD_INVOICE),
+      switchMap((data: InvoiceAction.AddInvoice) => {
+        return this.http.post<{ invoice: Invoice }>(
+          environment.backendUrl + '/invoice',
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoice(respData.invoice);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Error during adding invoice"});
+          }));
+      }));
+  });
+
+  onUpdateInvoice$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.UPDATE_INVOICE),
+      withLatestFrom(this.store$.select('invoice')),
+      switchMap(([currentAction, _]) => {
+        let data: InvoiceAction.UpdateInvoice = currentAction;
+        return this.http.put<{ invoice: Invoice }>(
+          environment.backendUrl + '/invoice/' + data.invoice_id,
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoice(respData.invoice);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of({type: "Failed on update invoice"});
+          }));
+      }));
+  });
+
+  redirectOnSaveInvoice = createEffect(() =>
+      this.action$.pipe(
+        ofType(InvoiceAction.SAVE_INVOICE),
+        tap(() => {
+          this.router.navigate(["faktury/faktury"]);
+        })),
+    {dispatch: false});
+
+  fetchInvoiceProducts$ = createEffect(() => {
     return this.action$.pipe(
       ofType(InvoiceAction.FETCH_INVOICE_PRODUCTS),
       switchMap((action: InvoiceAction.FetchInvoiceProducts) => {
@@ -68,7 +112,7 @@ export class InvoiceEffects {
     return this.action$.pipe(
       ofType(InvoiceAction.ADD_SUPPLIER),
       switchMap((data: InvoiceAction.AddSupplier) => {
-        return this.http.post<{supplier: Supplier}>(
+        return this.http.post<{ supplier: Supplier }>(
           environment.backendUrl + '/supplier',
           {...data.payload}).pipe(
           map((respData) => {
@@ -81,13 +125,13 @@ export class InvoiceEffects {
       }));
   });
 
-    onUpdateSupplier$ = createEffect(() => {
+  onUpdateSupplier$ = createEffect(() => {
     return this.action$.pipe(
       ofType(InvoiceAction.UPDATE_SUPPLIER),
       withLatestFrom(this.store$.select('invoice')),
       switchMap(([currentAction, _]) => {
         let data: InvoiceAction.UpdateSupplier = currentAction;
-        return this.http.put<{supplier: Supplier}>(
+        return this.http.put<{ supplier: Supplier }>(
           environment.backendUrl + '/supplier/' + data.supplier_id,
           {...data.payload}).pipe(
           map((respData) => {
@@ -100,7 +144,7 @@ export class InvoiceEffects {
       }));
   });
 
-    redirectOnSaveSupplier = createEffect(() =>
+  redirectOnSaveSupplier = createEffect(() =>
       this.action$.pipe(
         ofType(InvoiceAction.SAVE_SUPPLIER),
         tap(() => {

@@ -1,13 +1,11 @@
 import {Action} from "@ngrx/store";
 import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
-import {School} from "../../schools/school.model";
-import {SAVE} from "../../schools/store/schools.action";
 
 export const FETCH_INVOICE = "[INVOICE] FETCH_INVOICE";
 export const ADD_INVOICE = "[INVOICE] ADD_INVOICE";
 export const UPDATE_INVOICE = "[INVOICE] UPDATE_INVOICE";
 export const SET_INVOICES = "[INVOICE] SET_INVOICES";
-
+export const SAVE_INVOICE = "[INVOICE] SAVE_INVOICE";
 
 export const FETCH_SUPPLIERS = "[INVOICE] FETCH_SUPPLIERS";
 export const ADD_SUPPLIER = "[INVOICE] ADD_SUPPLIER";
@@ -27,6 +25,7 @@ export class FetchInvoice implements Action {
 
 export class SetInvoices implements Action {
   readonly type = SET_INVOICES;
+
   constructor(public invoice: Invoice[]) {
   }
 }
@@ -34,10 +33,24 @@ export class SetInvoices implements Action {
 
 export class AddInvoice implements Action {
   readonly type = ADD_INVOICE;
+
+  constructor(public payload: Invoice) {
+  }
 }
 
 export class UpdateInvoice implements Action {
   readonly type = UPDATE_INVOICE;
+
+  constructor(public payload: Invoice, public invoice_id: number) {
+  }
+}
+
+
+export class SaveInvoice implements Action {
+  readonly type = SAVE_INVOICE;
+
+  constructor(public payload: Invoice) {
+  }
 }
 
 export class FetchInvoiceProducts implements Action {
@@ -79,7 +92,8 @@ export class AddSupplier implements Action {
 
 export class UpdateSupplier implements Action {
   readonly type = UPDATE_SUPPLIER;
-    constructor(public payload: Supplier, public supplier_id: number) {
+
+  constructor(public payload: Supplier, public supplier_id: number) {
   }
 }
 
@@ -93,4 +107,4 @@ export class SaveSupplier implements Action {
 export type InvoiceAction = FetchInvoice |
   AddInvoice | UpdateInvoice | FetchSupplier | AddSupplier | UpdateSupplier |
   SetSuppliers | SetInvoices | FetchInvoiceProducts | AddInvoiceProduct | UpdateInvoiceProduct | SetInvoiceProducts |
-  SaveSupplier;
+  SaveSupplier | SaveInvoice;

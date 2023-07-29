@@ -1,1 +1,28 @@
-<p>invoice-edit works!</p>
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 *ngIf="!edit" class="card-title">Podaj dane nowej faktury</h1>
+      <h1 *ngIf="edit" class="card-title">Edytuj dane faktury</h1>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Nazwa</label><input formControlName="name" class="form-control" name="name">
+          <label>Data</label>
+          <input formControlName="date" type="date" class="form-control text-left w-auto" name="date"
+                 min="2022-09-19" max="2032-01-01">
+          <div class="form-group">
+            <label>Dostawca</label>
+            <select formControlName="supplier"
+                    class="form-control custom-select" name="type">
+              <option *ngIf="!this.edit" selected>Wybierz dostawce</option>
+              <option *ngFor="let supplier of suppliers;">{{supplier.name}}</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!form.valid">
+          <i class="fas fa-check-circle"></i> Zatwierdź
+        </button>
+      </form>
+    </div>
+  </div>

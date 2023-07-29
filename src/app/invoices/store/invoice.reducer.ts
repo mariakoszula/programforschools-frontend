@@ -1,12 +1,13 @@
 import {
+  ADD_INVOICE,
   ADD_SUPPLIER,
   FETCH_INVOICE,
   FETCH_INVOICE_PRODUCTS,
   FETCH_SUPPLIERS,
-  InvoiceAction, SAVE_SUPPLIER,
+  InvoiceAction, SAVE_INVOICE, SAVE_SUPPLIER,
   SET_INVOICE_PRODUCTS,
   SET_INVOICES,
-  SET_SUPPLIERS, UPDATE_SUPPLIER
+  SET_SUPPLIERS, UPDATE_INVOICE, UPDATE_SUPPLIER
 } from "./invoice.action";
 import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
 import {ADD, SAVE, UPDATE} from "../../schools/store/schools.action";
@@ -17,6 +18,7 @@ export interface State {
   invoices: Invoice[];
   invoicesProduct: InvoiceProduct[];
 }
+
 export const initialState = {
   suppliers: [],
   invoices: [],
@@ -25,7 +27,7 @@ export const initialState = {
 
 
 export function invoiceReducer(state: State = initialState, action: InvoiceAction) {
-  switch(action.type) {
+  switch (action.type) {
     case FETCH_INVOICE:
       return {
         ...state,
@@ -60,7 +62,7 @@ export function invoiceReducer(state: State = initialState, action: InvoiceActio
       return {
         ...state,
         suppliers: [...state.suppliers, action.payload],
-    }
+      }
     case UPDATE_SUPPLIER:
     case SAVE_SUPPLIER:
       const found_supplier: Supplier | any = state.suppliers.find((_res: Supplier, index) => {
@@ -78,6 +80,34 @@ export function invoiceReducer(state: State = initialState, action: InvoiceActio
       return {
         ...state,
         suppliers: updated_suppliers
+      }
+    case ADD_INVOICE:
+      return {
+        ...state,
+        invoices: [...state.invoices, action.payload],
+      }
+    case UPDATE_INVOICE:
+    case SAVE_INVOICE:
+      let found_invoice: Invoice | any = state.invoices.find((_res: Invoice, index) => {
+        return _res.id === action.payload.id;
+      });
+      if (!found_invoice){
+        found_invoice = state.invoices.find((_res: Invoice, index) => {
+        return _res.name === action.payload.name;
+        });
+      }
+      const updated_invoices = [...state.invoices];
+      if (found_invoice) {
+        const updated_invoice = {
+          ...found_invoice,
+          ...action.payload
+        }
+        const indexOfUpdate = state.invoices.indexOf(found_invoice);
+        updated_invoices[indexOfUpdate] = updated_invoice;
+      }
+      return {
+        ...state,
+        invoices: updated_invoices
       }
     default:
       return state;

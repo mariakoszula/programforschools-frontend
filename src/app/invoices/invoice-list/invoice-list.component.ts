@@ -24,6 +24,11 @@ export class InvoiceListComponent {
     constructor(private router: Router,
               private activeRoute: ActivatedRoute,
               private store: Store<fromApp.AppState>) {
+       this.dtOptions = {
+        responsive: false,
+        searching: false,
+        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+      };
   }
   ngOnDestroy(): void {
     if (this.sub){
@@ -33,7 +38,6 @@ export class InvoiceListComponent {
       this.programSub.unsubscribe();
     }
   }
-
 
   ngOnInit(): void {
     this.sub = this.store.select("invoice").subscribe(
@@ -46,11 +50,6 @@ export class InvoiceListComponent {
     this.programSub = this.store.select("program").subscribe((programState) => {
       this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
     });
-    this.dtOptions = {
-        responsive: false,
-        searching: false,
-        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
-      };
   }
   addInvoice() {
     this.router.navigate(["faktury/faktury/nowa"]);
@@ -59,12 +58,16 @@ export class InvoiceListComponent {
         this.router.navigate(["faktury/faktury/" + invoice_id + '/edycja']);
   }
   getInvoicesProduct(invoice_id: number): InvoiceProduct[] {
-      return this.invoiceProducts.filter((ip: InvoiceProduct) => {
+      let invoiceProducts = this.invoiceProducts.filter((ip: InvoiceProduct) => {
         return ip.invoice_id === invoice_id;
       });
+      if (!invoiceProducts) {
+        invoiceProducts = [];
+      }
+      return invoiceProducts;
   }
   getSupplier(supplier_id: number){
-      return this.suppliers[supplier_id];
+      return this.suppliers.find(supplier => supplier.id === supplier_id)!.nick;
   }
   getProduct(product_store_id: number): Product{
     return this.product_storage.find(product_store => product_store.id === product_store_id)!.product;
