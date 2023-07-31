@@ -11,7 +11,9 @@
       <th>Dostawca</th>
       <th>Produkt</th>
       <th>Ilość</th>
+      <th></th>
       <th>Ilość przypisana do tygodni</th>
+      <th></th>
       <th></th>
       </thead>
       <tbody>
@@ -25,10 +27,19 @@
               <td [attr.rowspan]="ip">{{ getSupplier(invoice.supplier_id) }}</td>
               <td>{{ getProduct(invoiceProduct.product_store_id).name }}</td>
               <td>{{ invoiceProduct.amount }} {{getProduct(invoiceProduct.product_store_id).weight_type}}</td>
-              <td>Placeholder to fix for product->perwekk</td>
+              <td>
+                <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(invoiceProduct.id)">
+                  <i class="fas fa-pencil-alt"></i>
+                </a></td>
+
+              <td><!--- Placeholder to fix for product->perwekk ---></td>
               <td [attr.rowspan]="ip">
-                <a class="btn btn-info btn-sm" (click)="onEditInvoice(invoice.id)">
-                  <i class="fas fa-pencil-alt"></i>Edycja
+                <a class="btn btn-info" (click)="onEditInvoice(invoice.id)">
+                  <i class="fas fa-pencil-alt"></i>
+                </a></td>
+              <td>
+                <a class="btn btn-warning" (click)="onAddProduct(invoice.id)">
+                  <i class="fas fa-cart-plus"></i>
                 </a></td>
             </tr>
           </ng-container>
@@ -41,9 +52,14 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
           <td>
-            <a class="btn btn-info btn-sm" (click)="onEditInvoice(invoice.id)">
-              <i class="fas fa-pencil-alt"></i>Edycja
+            <a class="btn btn-info" (click)="onEditInvoice(invoice.id)">
+              <i class="fas fa-pencil-alt"></i>
+            </a></td>
+          <td>
+            <a class="btn btn-warning" (click)="onAddProduct(invoice.id)">
+              <i class="fas fa-cart-plus"></i>
             </a></td>
         </tr>
       </ng-container>

@@ -9,7 +9,6 @@ import {formatDate} from "@angular/common";
 import {
   convert_date_from_backend_format,
   convert_date_to_backend_format,
-  convert_range_dates_and_validate
 } from "../../shared/date_converter.utils";
 import * as InvoiceAction from "../store/invoice.action";
 import {get_current_program} from "../../shared/common.functions";
@@ -25,6 +24,7 @@ export class InvoiceEditComponent {
   paramsSub: Subscription | null = null;
   editSub: Subscription | null = null;
   suppliers: Supplier[] = [];
+  supplier: Supplier | null | undefined = null;
 
   constructor(private store: Store<fromApp.AppState>,
               private activeRoute: ActivatedRoute) {
@@ -58,7 +58,7 @@ export class InvoiceEditComponent {
     if (this.edit) {
       name = this.edit.name;
       date = this.edit.date;
-      supplier = this.suppliers.find((supplier: Supplier) => {
+      this.supplier = this.suppliers.find((supplier: Supplier) => {
         return supplier.id === this.edit?.supplier_id
       });
 
@@ -67,7 +67,7 @@ export class InvoiceEditComponent {
     this.form.addControl("name", new FormControl(name, [Validators.required]));
     this.form.addControl("date", new FormControl(date, [Validators.required]));
     if (supplier) {
-      this.form.addControl("supplier", new FormControl({value: supplier.name, disabled: true}, [Validators.required]));
+      this.form.addControl("supplier", new FormControl({value: this.supplier, disabled: true}, [Validators.required]));
     } else {
       this.form.addControl("supplier", new FormControl(null, [Validators.required]));
     }

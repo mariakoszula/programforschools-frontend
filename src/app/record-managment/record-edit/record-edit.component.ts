@@ -6,7 +6,7 @@ import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {Record, RecordStates} from "../../record-planner/record.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ProductStore} from "../../programs/program.model";
+import {Product, ProductStore} from "../../programs/program.model";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 import {School} from "../../schools/school.model";
 import {Contract} from "../../documents/contract.model";
@@ -26,14 +26,11 @@ export class RecordEditComponent implements OnInit, OnDestroy {
   allRecords: Record[] = [];
   recordForm: FormGroup;
   products: ProductStore[] = [];
-  currentProductName: string = "";
+  product: ProductStore | null | undefined = null;
 
   constructor(private store: Store<AppState>, private activeRoute: ActivatedRoute,
               private router: Router) {
-    this.recordForm = new FormGroup({
-      productName: new FormControl(null, Validators.required),
-      recordDate: new FormControl({value: null, disabled: true}, Validators.required),
-    });
+        this.recordForm = new FormGroup({});
   }
 
   private setProducts() {
@@ -46,9 +43,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
       res = localStorage.getItem("currentDiaryProducts");
     }
     if (res) this.products = JSON.parse(res);
-    let _product_name = this.products.find(p => p.id === this.currentRecord?.product_store_id);
-    if (_product_name) this.currentProductName = _product_name.product.name;
-    this.products = this.products.filter(p => p.id !== this.currentRecord?.product_store_id);
+    this.product = this.products.find(p => p.id === this.currentRecord?.product_store_id);
   }
 
   private setSchool() {
@@ -60,10 +55,13 @@ export class RecordEditComponent implements OnInit, OnDestroy {
   }
 
   initFormValues() {
+    let date = null;
     if (this.currentRecord?.date) {
-      let date = formatDate(convert_date_from_backend_format(this.currentRecord.date), "yyyy-MM-dd", 'en');
-      this.recordForm.setValue({recordDate: date, productName: null});
+      date = formatDate(convert_date_from_backend_format(this.currentRecord.date), "yyyy-MM-dd", 'en');
     }
+    this.recordForm.addControl("productStore", new FormControl(this.product, [Validators.required]));
+    this.recordForm.addControl("recordDate", new FormControl({value: date, disabled: true}, [Validators.required]));
+
   }
 
   ngOnInit(): void {
@@ -87,8 +85,8 @@ export class RecordEditComponent implements OnInit, OnDestroy {
       }
       this.allRecords = recordState.records.filter(r => r.contract_id === this.currentRecord?.contract_id
         && r.product_type === this.currentRecord?.product_type);
-      this.initFormValues();
     });
+    this.initFormValues();
   }
 
   isMinProductValueExceeded(record: Record) {
@@ -101,7 +99,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
     let updated_record = {
       ...this.currentRecord,
       state: RecordStates.PLANNED,
-      product_store_id: this.recordForm.value.productName
+      product_store_id: this.recordForm.value.productStore.id
     };
     let confirmed = true;
     if (this.isMinProductValueExceeded(updated_record)){

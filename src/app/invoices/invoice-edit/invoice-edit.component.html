@@ -14,9 +14,9 @@
           <div class="form-group">
             <label>Dostawca</label>
             <select formControlName="supplier"
-                    class="form-control custom-select" name="type">
+                    class="form-control custom-select" name="type" [(ngModel)]="supplier">
               <option *ngIf="!this.edit" selected>Wybierz dostawce</option>
-              <option *ngFor="let supplier of suppliers;">{{supplier.name}}</option>
+              <option *ngFor="let supplier of suppliers;" [ngValue]="supplier">{{supplier.nick}}</option>
             </select>
           </div>
         </div>

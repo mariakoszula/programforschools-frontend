@@ -47,7 +47,7 @@ export class InvoiceListComponent {
         this.suppliers = invoiceState.suppliers;
       }
     )
-    this.programSub = this.store.select("program").subscribe((programState) => {
+      this.programSub = this.store.select("program").subscribe((programState) => {
       this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
     });
   }
@@ -71,6 +71,13 @@ export class InvoiceListComponent {
   }
   getProduct(product_store_id: number): Product{
     return this.product_storage.find(product_store => product_store.id === product_store_id)!.product;
+  }
 
+  onAddProduct(invoice_id: number) {
+      this.router.navigate(["faktury/faktury/" + invoice_id + '/nowy_produkt']);
+  }
+
+  onEditInvoiceProduct(invoice_product_id: number) {
+        this.router.navigate(["faktury/faktury/" + invoice_product_id + '/edycja-produktu']);
   }
 }

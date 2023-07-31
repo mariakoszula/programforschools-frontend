@@ -12,6 +12,7 @@ import {SuppliersResolverService} from "./supplier-resolver.service";
 import {ProgramResolverService} from "../programs/program-resolver.service";
 import {InvoiceResolverService} from "./invoice-resolver.service";
 import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
+import {InvoiceproductEditComponent} from "./invoiceproduct-edit/invoiceproduct-edit.component";
 
 
 
@@ -22,7 +23,8 @@ import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
     SupplierEditComponent,
     SupplierListComponent,
     InvoicesComponent,
-    SummaryComponent
+    SummaryComponent,
+    InvoiceproductEditComponent
   ],
   imports: [
     SharedModule,
@@ -39,6 +41,8 @@ import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
           {path: 'faktury', component: InvoiceListComponent },
           {path: 'faktury/nowa', component: InvoiceEditComponent},
           {path: 'faktury/:invoice_id/edycja', component: InvoiceEditComponent},
+          {path: 'faktury/:invoice_id/nowy_produkt', component: InvoiceproductEditComponent},
+          {path: 'faktury/:invoice_product_id/edycja-produktu', component: InvoiceproductEditComponent},
           {path: 'zestawienia', component: SummaryComponent}
         ]
       },

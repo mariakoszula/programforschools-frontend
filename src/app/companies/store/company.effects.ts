@@ -9,7 +9,7 @@ import {Injectable} from "@angular/core";
 import {MAIN_COMPANY} from "../company.model";
 
 export interface CompaniesResponseData {
-  companies: CompanyResponse[]
+  company: CompanyResponse[]
 }
 
 @Injectable()
@@ -21,8 +21,8 @@ export class CompanyEffects {
         return this.http.get<CompaniesResponseData>(environment.backendUrl + '/company/all')
           .pipe(
             map(responseData => {
-              if (responseData.companies.length > 0) {
-                return new CompanyActions.Set({...responseData.companies[MAIN_COMPANY]});
+              if (responseData.company.length > 0) {
+                return new CompanyActions.Set({...responseData.company[MAIN_COMPANY]});
               }
               return {type: "No companies found"};
             }),
