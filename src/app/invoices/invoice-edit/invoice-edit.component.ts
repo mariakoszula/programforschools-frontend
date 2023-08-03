@@ -66,10 +66,10 @@ export class InvoiceEditComponent {
     if (date) date = formatDate(convert_date_from_backend_format(date), "yyyy-MM-dd", 'en');
     this.form.addControl("name", new FormControl(name, [Validators.required]));
     this.form.addControl("date", new FormControl(date, [Validators.required]));
-    if (supplier) {
-      this.form.addControl("supplier", new FormControl({value: this.supplier, disabled: true}, [Validators.required]));
+    if (this.supplier) {
+      this.form.addControl("supplierForm", new FormControl({value: this.supplier, disabled: true}, [Validators.required]));
     } else {
-      this.form.addControl("supplier", new FormControl(null, [Validators.required]));
+      this.form.addControl("supplierForm", new FormControl(null, [Validators.required]));
     }
   }
 
@@ -79,7 +79,7 @@ export class InvoiceEditComponent {
     if (!this.edit) {
        formValues["program_id"] = get_current_program().id;
       let found = this.suppliers.find((supplier: Supplier) => {
-        return supplier.name === formValues["supplier"]
+        return supplier.id === formValues["supplierForm"].id
       });
       if (!found) {
         console.log("Could not find supplier - should not ever happen");
@@ -87,7 +87,7 @@ export class InvoiceEditComponent {
       }
       formValues["supplier_id"] = found.id;
     }
-    delete formValues["supplier"];
+    delete formValues["supplierForm"];
     if (!this.edit) {
       this.store.dispatch(new InvoiceAction.AddInvoice(formValues));
     } else {

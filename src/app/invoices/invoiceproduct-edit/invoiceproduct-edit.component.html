@@ -4,10 +4,10 @@
       <div class="row">
         <div class="col-sm-5 form-group">
           <label>Produkt</label>
-           <select formControlName="product"
-                    class="form-control custom-select" name="product" [(ngModel)]="product">
+           <select formControlName="product_store"
+                    class="form-control custom-select" name="product_store" [(ngModel)]="product_stored">
               <option *ngIf="!this.edit" selected>Wybierz produkt</option>
-              <option *ngFor="let product of product_storage;" [ngValue]="product.product">{{getProductString(product.product)}}</option>
+              <option *ngFor="let product of product_storage;" [ngValue]="product">{{getProductString(product.product)}}</option>
             </select>
         </div>
         <div class="col-sm-3 form-group">

@@ -1,3 +1,6 @@
+<div class="alert alert-danger" *ngIf="error">
+  <p>{{ error }}</p>
+</div>
 <div class="card">
   <div class="card-header">
     <h1 class="card-title">Lista faktur</h1>
@@ -9,58 +12,66 @@
       <th>Nazwa</th>
       <th>Data</th>
       <th>Dostawca</th>
+      <th></th>
+      <th></th>
       <th>Produkt</th>
       <th>Ilość</th>
-      <th></th>
       <th>Ilość przypisana do tygodni</th>
-      <th></th>
       <th></th>
       </thead>
       <tbody>
-      <ng-container *ngFor="let invoice of invoices; let i = index;">
-        <ng-container *ngIf="getInvoicesProduct(invoice.id).length !== 0;">
-          <ng-container *ngFor="let invoiceProduct of getInvoicesProduct(invoice.id) as ip;">
-            <tr class="cursor">
-              <td [attr.rowspan]="ip.length">{{ i + 1 }}</td>
-              <td [attr.rowspan]="ip.length">{{ invoice.name }}</td>
-              <td [attr.rowspan]="ip">{{ invoice.date }}</td>
-              <td [attr.rowspan]="ip">{{ getSupplier(invoice.supplier_id) }}</td>
-              <td>{{ getProduct(invoiceProduct.product_store_id).name }}</td>
-              <td>{{ invoiceProduct.amount }} {{getProduct(invoiceProduct.product_store_id).weight_type}}</td>
-              <td>
-                <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(invoiceProduct.id)">
-                  <i class="fas fa-pencil-alt"></i>
-                </a></td>
-
+      <ng-container *ngFor="let iwp of invoiceWithProducts; let i = index;">
+        <ng-container *ngIf="iwp.products.length !== 0;">
+          <tr>
+            <td [attr.rowspan]="iwp.products.length">{{ i + 1 }}</td>
+            <td [attr.rowspan]="iwp.products.length">{{ iwp.invoice.name }}</td>
+            <td [attr.rowspan]="iwp.products.length">{{ iwp.invoice.date }}</td>
+            <td [attr.rowspan]="iwp.products.length">{{ getSupplier(iwp.invoice.supplier_id) }}</td>
+            <td [attr.rowspan]="iwp.products.length">
+              <a class="btn btn-info" (click)="onEditInvoice(iwp.invoice.id)">
+                <i class="fas fa-pencil-alt"></i>
+              </a></td>
+            <td [attr.rowspan]="iwp.products.length">
+              <a class="btn btn-warning" (click)="onAddProduct(iwp.invoice.id)">
+                <i class="fas fa-cart-plus"></i>
+              </a></td>
+            <td>{{ getProduct(iwp.products[0].product_store_id).name }}</td>
+            <td>{{ iwp.products[0].amount }} {{getProduct(iwp.products[0].product_store_id).weight_type}}</td>
+            <td><!--- Placeholder to fix for product->perwekk ---></td>
+            <td>
+              <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(iwp.products[0].id)">
+                <i class="fas fa-pencil-alt"></i>
+              </a></td>
+          </tr>
+          <ng-container *ngFor="let ip of iwp.products; let i= index;">
+            <tr *ngIf="i != 0;">
+              <td>{{ getProduct(ip.product_store_id).name }}</td>
+              <td>{{ ip.amount }} {{getProduct(ip.product_store_id).weight_type}}</td>
               <td><!--- Placeholder to fix for product->perwekk ---></td>
-              <td [attr.rowspan]="ip">
-                <a class="btn btn-info" (click)="onEditInvoice(invoice.id)">
-                  <i class="fas fa-pencil-alt"></i>
-                </a></td>
               <td>
-                <a class="btn btn-warning" (click)="onAddProduct(invoice.id)">
-                  <i class="fas fa-cart-plus"></i>
+                <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(ip.id)">
+                  <i class="fas fa-pencil-alt"></i>
                 </a></td>
             </tr>
           </ng-container>
         </ng-container>
-        <tr *ngIf="getInvoicesProduct(invoice.id).length === 0;" class="cursor">
+        <tr *ngIf="iwp.products.length === 0;">
           <td>{{ i + 1 }}</td>
-          <td>{{ invoice.name }}</td>
-          <td>{{ invoice.date }}</td>
-          <td>{{ getSupplier(invoice.supplier_id) }}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{ iwp.invoice.name }}</td>
+          <td>{{ iwp.invoice.date }}</td>
+          <td>{{ getSupplier(iwp.invoice.supplier_id) }}</td>
           <td>
-            <a class="btn btn-info" (click)="onEditInvoice(invoice.id)">
+            <a class="btn btn-info" (click)="onEditInvoice(iwp.invoice.id)">
               <i class="fas fa-pencil-alt"></i>
             </a></td>
           <td>
-            <a class="btn btn-warning" (click)="onAddProduct(invoice.id)">
+            <a class="btn btn-warning" (click)="onAddProduct(iwp.invoice.id)">
               <i class="fas fa-cart-plus"></i>
             </a></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </ng-container>
       </tbody>

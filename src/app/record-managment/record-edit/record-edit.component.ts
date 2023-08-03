@@ -6,7 +6,7 @@ import {AppState} from "../../store/app.reducer";
 import {Store} from "@ngrx/store";
 import {Record, RecordStates} from "../../record-planner/record.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Product, ProductStore} from "../../programs/program.model";
+import {ProductStore} from "../../programs/program.model";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 import {School} from "../../schools/school.model";
 import {Contract} from "../../documents/contract.model";

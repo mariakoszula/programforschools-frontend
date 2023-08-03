@@ -18,6 +18,7 @@ export const FETCH_INVOICE_PRODUCTS = "[INVOICE] FETCH_INVOICE_PRODUCTS";
 export const ADD_INVOICE_PRODUCT = "[INVOICE] ADD_INVOICE_PRODUCT";
 export const UPDATE_INVOICE_PRODUCT = "[INVOICE] UPDATE_INVOICE_PRODUCT";
 export const SET_INVOICE_PRODUCTS = "[INVOICE] SET_INVOICE_PRODUCTS";
+export const SAVE_INVOICE_PRODUCTS = "[INVOICE] SAVE_INVOICE_PRODUCTS";
 
 export class FetchInvoice implements Action {
   readonly type = FETCH_INVOICE;
@@ -66,11 +67,25 @@ export class SetInvoiceProducts implements Action {
 
 export class AddInvoiceProduct implements Action {
   readonly type = ADD_INVOICE_PRODUCT;
+  constructor(public payload: InvoiceProduct) {
+  }
 }
 
 export class UpdateInvoiceProduct implements Action {
   readonly type = UPDATE_INVOICE_PRODUCT;
+
+  constructor(public payload: InvoiceProduct, public invoice_product_id: number) {
+  }
 }
+
+
+export class SaveInvoiceProduct implements Action {
+  readonly type = SAVE_INVOICE_PRODUCTS;
+
+  constructor(public payload: InvoiceProduct | null, public error: string) {
+  }
+}
+
 
 export class FetchSupplier implements Action {
   readonly type = FETCH_SUPPLIERS;
@@ -107,4 +122,4 @@ export class SaveSupplier implements Action {
 export type InvoiceAction = FetchInvoice |
   AddInvoice | UpdateInvoice | FetchSupplier | AddSupplier | UpdateSupplier |
   SetSuppliers | SetInvoices | FetchInvoiceProducts | AddInvoiceProduct | UpdateInvoiceProduct | SetInvoiceProducts |
-  SaveSupplier | SaveInvoice;
+  SaveSupplier | SaveInvoice | SaveInvoiceProduct;

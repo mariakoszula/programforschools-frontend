@@ -13,8 +13,8 @@
                  min="2022-09-19" max="2032-01-01">
           <div class="form-group">
             <label>Dostawca</label>
-            <select formControlName="supplier"
-                    class="form-control custom-select" name="type" [(ngModel)]="supplier">
+            <select formControlName="supplierForm"
+                    class="form-control custom-select" name="supplierForm" [(ngModel)]="supplier">
               <option *ngIf="!this.edit" selected>Wybierz dostawce</option>
               <option *ngFor="let supplier of suppliers;" [ngValue]="supplier">{{supplier.nick}}</option>
             </select>

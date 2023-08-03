@@ -7,6 +7,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {InvoiceProduct} from "../invoice.model";
 import {get_current_program} from "../../shared/common.functions";
 import {Product, ProductStore} from "../../programs/program.model";
+import * as InvoiceAction from "../store/invoice.action";
 
 @Component({
   selector: 'app-invoiceproduct-edit',
@@ -22,7 +23,7 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
   invoice_id: number = -1;
   product_storage: ProductStore[] = [];
   programSub: Subscription | null = null;
-  product: Product | null | undefined = null;
+  product_stored: ProductStore | null | undefined = null;
   constructor(private store: Store<fromApp.AppState>,
               private activeRoute: ActivatedRoute) {
     this.productForm = new FormGroup({});
@@ -55,20 +56,28 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
 
   private initForm() {
     let amount = null;
+    let _product_disabled = false;
     if (this.edit) {
       amount = this.edit.amount;
-      this.product = this.getProduct(this.edit.product_store_id);
+      this.product_stored = this.getProduct(this.edit.product_store_id);
+      _product_disabled = true;
     }
-    this.productForm.addControl("product", new FormControl(this.product, [Validators.required]));
+    this.productForm.addControl("product_store", new FormControl({value: this.product_stored, disabled: _product_disabled}, [Validators.required]));
     this.productForm.addControl("amount", new FormControl(amount, [Validators.required, Validators.min(0.01)]));
   }
 
 
   onSubmit() {
     let formValues = this.productForm.getRawValue();
+    formValues["product_store_id"] = formValues["product_store"].id;
+    delete formValues["product_store"];
     if (!this.edit) {
-        formValues["program_id"] = get_current_program().id;
-        formValues["invoice_id"] = get_current_program().id;
+        formValues["invoice_id"] = this.invoice_id;
+        this.store.dispatch(new InvoiceAction.AddInvoiceProduct(formValues));
+    }
+    else{
+      delete formValues["product_store_id"]; // Backend not supporting modifying product
+      this.store.dispatch(new InvoiceAction.UpdateInvoiceProduct(formValues, this.edit.id));
     }
   }
 
@@ -83,8 +92,8 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
     if (this.programSub) this.programSub.unsubscribe();
   }
 
-  getProduct(product_store_id: number): Product{
-    return this.product_storage.find(product_store => product_store.id === product_store_id)!.product;
+  getProduct(product_store_id: number): ProductStore | undefined | null{
+    return this.product_storage.find(product_store => product_store.id === product_store_id);
   }
 
   getProductString(product: Product): string {

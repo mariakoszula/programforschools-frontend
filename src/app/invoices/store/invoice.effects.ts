@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {AppState} from "src/app/store/app.reducer";
 import {Store} from "@ngrx/store";
@@ -10,6 +10,10 @@ import * as InvoiceAction from "./invoice.action";
 import {map} from "rxjs/operators";
 import {get_current_program} from "../../shared/common.functions";
 import {Router} from "@angular/router";
+
+const handleInvoiceProductError = (errorResp: HttpErrorResponse)  => {
+      return of(new InvoiceAction.SaveInvoiceProduct(null, errorResp.error.message));
+}
 
 @Injectable()
 export class InvoiceEffects {
@@ -68,7 +72,7 @@ export class InvoiceEffects {
 
   redirectOnSaveInvoice = createEffect(() =>
       this.action$.pipe(
-        ofType(InvoiceAction.SAVE_INVOICE),
+        ofType(InvoiceAction.SAVE_INVOICE, InvoiceAction.SAVE_INVOICE_PRODUCTS),
         tap(() => {
           this.router.navigate(["faktury/faktury"]);
         })),
@@ -89,6 +93,37 @@ export class InvoiceEffects {
               return of({type: "Error when fetching invoice products"});
             }))
       }))
+  });
+
+
+  onAddInvoiceProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.ADD_INVOICE_PRODUCT),
+      switchMap((data: InvoiceAction.AddInvoiceProduct) => {
+        return this.http.post<{ invoice_product: InvoiceProduct }>(
+          environment.backendUrl + '/invoice_product',
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoiceProduct(respData.invoice_product, "");
+          }),
+          catchError(error => handleInvoiceProductError(error)));
+      }));
+  });
+
+  onUpdateInvoiceProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.UPDATE_INVOICE_PRODUCT),
+      withLatestFrom(this.store$.select('invoice')),
+      switchMap(([currentAction, _]) => {
+        let data: InvoiceAction.UpdateInvoiceProduct = currentAction;
+        return this.http.put<{ invoice_product: InvoiceProduct }>(
+          environment.backendUrl + '/invoice_product/' + data.invoice_product_id,
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoiceProduct(respData.invoice_product, "Produkt juz istnieje");
+          }),
+          catchError(error => handleInvoiceProductError((error))));
+      }));
   });
 
   fetchSuppliers$ = createEffect(() => {
