@@ -39,7 +39,7 @@ export class SummaryComponent implements OnInit, OnDestroy{
     let [amount, weight] =  this.get_product_amount(product);
     let _weight_type = get_str_weight_type(product.product);
     if (_weight_type === SZT){
-      return amount + " " + _weight_type + " [" + weight.toFixed(2) + " L]";
+      return amount + " " + _weight_type + " [" + weight.toFixed(2) + " " + product.product.weight_type + "]";
     }
     return weight.toFixed(2) + " " + _weight_type +  " [" + amount + " " + SZT + "]";
   }
