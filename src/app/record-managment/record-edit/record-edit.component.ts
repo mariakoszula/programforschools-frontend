@@ -7,7 +7,7 @@ import {Store} from "@ngrx/store";
 import {Record, RecordStates} from "../../record-planner/record.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ProductStore} from "../../programs/program.model";
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_PRODUCT, FRUIT_VEG_PRODUCT, VEGETABLE_PRODUCT} from "../../shared/namemapping.utils";
 import {School} from "../../schools/school.model";
 import {Contract} from "../../documents/contract.model";
 import {formatDate} from "@angular/common";
@@ -36,7 +36,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
   private setProducts() {
     if (!this.currentRecord) return;
     let res;
-    if (this.currentRecord.product_type === FRUIT_VEG_PRODUCT) {
+    if (this.currentRecord.product_type === FRUIT_PRODUCT || this.currentRecord.product_type === VEGETABLE_PRODUCT) {
       res = localStorage.getItem("currentFruitVegProducts");
     }
     if (this.currentRecord.product_type === DAIRY_PRODUCT) {
@@ -84,7 +84,8 @@ export class RecordEditComponent implements OnInit, OnDestroy {
         this.router.navigate([".."]);
       }
       this.allRecords = recordState.records.filter(r => r.contract_id === this.currentRecord?.contract_id
-        && r.product_type === this.currentRecord?.product_type);
+        && ((r.product_type === DAIRY_PRODUCT && r.product_type === this.currentRecord?.product_type)  ||
+          (r.product_type === FRUIT_PRODUCT || r.product_type === VEGETABLE_PRODUCT)));
     });
     this.initFormValues();
   }
@@ -96,9 +97,13 @@ export class RecordEditComponent implements OnInit, OnDestroy {
 
   updateRecord() {
     if (!this.currentRecord) return;
+    let _state = RecordStates.PLANNED;
+    if (this.currentRecord.delivery_date !== null){
+      _state = RecordStates.DELIVERY_PLANNED
+    }
     let updated_record = {
       ...this.currentRecord,
-      state: RecordStates.PLANNED,
+      state: _state,
       product_store_id: this.recordForm.value.productStore.id
     };
     let confirmed = true;

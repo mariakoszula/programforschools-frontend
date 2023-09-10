@@ -8,6 +8,7 @@ import {RecordDataService} from "./record-data.service";
 import {Record} from "./record.model";
 import {Contract} from "../documents/contract.model";
 import * as RecordActions from "./store/record.action";
+import * as DocumentsActions from "../documents/store/documents.action";
 
 @Component({
   selector: 'app-record-planner',
@@ -76,11 +77,18 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
 
   onSelectWeek(selectedWeek: Week) {
     this.selectedWeek = selectedWeek;
+    this.selectedWeekId = selectedWeek.id;
     this.recordDataService.setDates(this.selectedWeek);
     this.router.navigate([this.selectedWeek.id], {relativeTo: this.activeRoute});
   }
 
   fetchRecords() {
     this.store.dispatch(new RecordActions.Fetch());
+  }
+
+  summaryGeneration() {
+    if (this.selectedWeekId && this.selectedWeek){
+        this.store.dispatch(new DocumentsActions.GenerateWeekSummary(this.selectedWeek));
+    }
   }
 }

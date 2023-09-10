@@ -1,1 +1,49 @@
-<p>summary works!</p>
+<div class="card card-outline card-dark">
+  <div class="card-header">
+    <h3 class="card-title">Zestawienie z fakturami</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body p-0 text-sm-center">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th></th>
+        <th *ngFor="let f of fruitVegProducts">{{f.product.name}}</th>
+        <th *ngFor="let d of dairyProducts">{{d.product.name}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="table-info table-bordered">
+        <td>Suma FAS</td>
+        <td *ngFor="let f of fruitVegProducts;">{{get_product_from_invoice_str(f)}}</td>
+        <td *ngFor="let d of dairyProducts">{{get_product_from_invoice_str(d)}}</td>
+      </tr>
+      <tr class="table-bordered">
+        <td>Suma WZ</td>
+        <td *ngFor="let f of fruitVegProducts">{{get_product_amount_str(f)}}</td>
+        <td *ngFor="let d of dairyProducts">{{get_product_amount_str(d)}}</td>
+      </tr>
+      <tr class="table-bordered">
+        <td>Różnica FAS-WZ</td>
+        <td *ngFor="let f of fruitVegProducts;">{{get_product_diff_str(f, false)}}</td>
+        <td *ngFor="let d of dairyProducts">{{get_product_diff_str(d, false)}}</td>
+      </tr>
+       <tr class="table-bordered">
+        <td>Różnica [%]</td>
+        <td *ngFor="let f of fruitVegProducts;"
+        [ngStyle]="{'background-color': getColor(get_product_diff(f, true))}">
+          {{get_product_diff_str(f, true)}}</td>
+        <td *ngFor="let d of dairyProducts"
+        [ngStyle]="{'background-color': getColor(get_product_diff(d, true))}">{{get_product_diff_str(d, true)}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

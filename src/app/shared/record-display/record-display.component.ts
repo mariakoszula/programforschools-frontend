@@ -1,8 +1,15 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT, DayColors, FRUIT_PRODUCT, VEGETABLE_PRODUCT} from "../namemapping.utils";
+import {
+  DAIRY_PRODUCT,
+  FRUIT_VEG_PRODUCT,
+  DayColors,
+  FRUIT_PRODUCT,
+  VEGETABLE_PRODUCT,
+  DayColorsPlannedDelivery
+} from "../namemapping.utils";
 import {Subscription} from "rxjs";
 import {RecordDataService} from "../../record-planner/record-data.service";
-import {Record} from "../../record-planner/record.model";
+import {Record, RecordStates} from "../../record-planner/record.model";
 import {Contract} from "../../documents/contract.model";
 import {ProductStore} from "../../programs/program.model";
 import {convert_date_from_backend_format, get_day} from "../date_converter.utils";
@@ -186,6 +193,10 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
     const date = record.delivery_date;
     let day = date ? get_day(convert_date_from_backend_format(date)) : null
     if (day && day >= 1 && day <= 5) {
+      if (record.state === RecordStates.DELIVERY_PLANNED)
+      {
+        return DayColorsPlannedDelivery[day - 1];
+      }
       return DayColors[day - 1];
     }
     return 'transparent';

@@ -15,7 +15,7 @@ import {
   FetchApplication,
   FetchContracts, GenerateApplications,
   GenerateContracts,
-  GenerateDelivery,
+  GenerateDelivery, GenerateWeekSummary,
   QueueGeneratingTaskAndStartPolling,
   UpdateAnnex,
   UpdateKidsNo
@@ -25,7 +25,6 @@ import {get_current_program} from "../../shared/common.functions";
 import {
   FINISHED_TASK_PROGRESS, getQueueEntities, POLLING_INTERVAL
 } from "./documents.reducer";
-import {ProductStore} from "../../programs/program.model";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 interface ContractsResponse {
@@ -212,8 +211,12 @@ export class DocumentsEffects {
         if (action.comments) {
           prepareBody['comments'] = action.comments;
         }
+        let put_driver = "";
+        if (action.driver) {
+          put_driver = "&driver=" + action.driver
+        }
         return this.http.put<QueuedTaskResponse>(environment.backendUrl +
-          "/create_delivery?date=" + action.delivery_date + "&driver=" + action.driver,
+          "/create_delivery?date=" + action.delivery_date + put_driver,
           {...prepareBody})
           .pipe(
             map(responseData => {
@@ -225,6 +228,27 @@ export class DocumentsEffects {
             catchError(error => {
               console.log(error);
               return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
+    onGenerateWeekSummary$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_WEEK_SUMMARY),
+      switchMap((action: GenerateWeekSummary) => {
+        return this.http.get<QueuedTaskResponse>(environment.backendUrl +
+          "/summarize_week_delivery/" + action.week.id)
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Rozpiska: Tydzień_".concat(String(action.week.week_no))
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action failed generate week summary"});
             })
           );
       }));

@@ -6,6 +6,7 @@ import {
   GENERATE_CONTRACTS,
   GENERATE_DELIVERY,
   GENERATE_REGISTER,
+  GENERATE_WEEK_SUMMARY,
   QUEUE_GENERATING_TASK_AND_START_POLLING,
   RESET_NOTIFICATION_COUNTER,
   SET_ANNEX,
@@ -104,6 +105,7 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
     case GENERATE_CONTRACTS:
     case GENERATE_REGISTER:
     case GENERATE_DELIVERY:
+    case GENERATE_WEEK_SUMMARY:
       return {
         ...state,
         isGenerating: true

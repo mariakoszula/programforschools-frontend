@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
 import {ADTSettings} from "angular-datatables/src/models/settings";
+import {DAIRY_PRODUCT, FRUIT_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-recordlist',
@@ -69,7 +70,11 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get_product_type(record: Record) {
-    return this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.product_type;
+    const type =  this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.product_type;
+    if (type === DAIRY_PRODUCT) {
+      return DAIRY_PRODUCT;
+    }
+    return FRUIT_VEG_PRODUCT;
   }
 
   isPlanned(record: Record) {

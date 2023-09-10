@@ -32,6 +32,11 @@
       [dairyProducts]="dairyProducts"
     ></app-record-display>
   </div>
+  <div *ngIf="selectedWeek" class="card-footer">
+      <button type="button" class="btn btn-outline-dark btn-lg btn-block btn-flat" (click)="summaryGeneration()">
+        <i class="fas fa-table"></i>Generuj podsumowanie
+      </button>
+  </div>
 </div>
 
 <div class="card card-outline card-success">

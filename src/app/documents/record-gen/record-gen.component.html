@@ -11,13 +11,32 @@
         [title]="'Tydzień'"
         (selectedWeekEvent)="onSelectWeek($event)"></app-weeks-display>
       <div class="form-group">
-        <label>Data dostawy</label>
-        <input formControlName="delivery_date" type="date" class="form-control text-left w-auto" name="delivery_date"
-               min="2022-09-19" max="2032-01-01">
-        <label>Kierowca</label><input formControlName="driver" class="form-control" name="driver">
+        <fieldset class="border p-2">
+          <legend class="float-none w-auto">Rozpiska</legend>
+          <div class="form-check form-check-inline ml-2">
+            <input (change)="selectType($event)" class="form-check-input" type="radio" name="type" [value]="driver"
+                   checked>
+            <label class="form-check-label">Kierowca z WZ</label>
+          </div>
+          <div class="form-check form-check-inline ml-2">
+            <input (change)="selectType($event)" class="form-check-input" type="radio" name="type" [value]="week">
+            <label class="form-check-label">Tygodniowa</label>
+          </div>
+          <div *ngIf="isDriverCheck" class="form-group ml-2">
+            <label>Kierowca</label><input formControlName="driver" class="form-control" name="driver">
+          </div>
+          <div class="form-group ml-2">
+            <label>Data dostawy</label>
+            <input formControlName="delivery_date" type="date" class="form-control text-left w-auto"
+                   name="delivery_date"
+                   min="2022-09-19" max="2032-01-01">
+          </div>
+        </fieldset>
+
+
         <br/>
         <div class="alert alert-danger" *ngIf="error">
-          <p>{{ error }}</p>"
+          <p>{{ error }}</p>
         </div>
         <app-record-display
           *ngIf="selectedWeek"

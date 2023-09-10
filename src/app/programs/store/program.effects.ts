@@ -67,6 +67,7 @@ export class ProgramEffects {
           environment.backendUrl + '/program',
           prepareBody).pipe(
           map((respData) => {
+            localStorage.clear();
             return new ProgramActions.Save(respData.program);
           }),
           catchError((error: HttpErrorResponse) => {
@@ -154,6 +155,7 @@ export class ProgramEffects {
           ));
       }));
   });
+
 
   redirectOnSetAll = createEffect(() =>
       this.action$.pipe(

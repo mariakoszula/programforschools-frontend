@@ -8,7 +8,6 @@ import * as fromRecord from "../record-planner/store/record.reducer";
 import * as fromInvoice from "../invoices/store/invoice.reducer";
 import {AUTH_ERROR, LOGOUT} from "../auth/store/auth.actions";
 import * as programAction from "../programs/store/program.action";
-import {invoiceReducer} from "../invoices/store/invoice.reducer";
 
 export interface AppState {
   auth: fromAuth.State;

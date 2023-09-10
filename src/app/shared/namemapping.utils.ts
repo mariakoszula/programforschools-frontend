@@ -23,6 +23,14 @@ export const DayColors = [
   '#EAEA26'
 ]
 
+export const DayColorsPlannedDelivery = [
+  'rgba(134,246,138,0.53)',
+  'rgba(253,159,228,0.61)',
+  'rgba(99,205,243,0.64)',
+  'rgba(250,143,134,0.7)',
+  'rgba(248,248,132,0.78)'
+]
+
 export interface CommonResponse{
   message: string;
 }

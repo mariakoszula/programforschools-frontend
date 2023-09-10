@@ -54,7 +54,6 @@ export class InvoiceEditComponent {
   private initForm() {
     let name = null;
     let date = null;
-    let supplier: any | Supplier = null;
     if (this.edit) {
       name = this.edit.name;
       date = this.edit.date;

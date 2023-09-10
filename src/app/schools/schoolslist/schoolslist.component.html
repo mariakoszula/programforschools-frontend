@@ -6,6 +6,7 @@
     <table datatable [dtOptions]="schoolDtOptions" class="row-border hover">
       <thead>
       <tr>
+        <th style="display:none"></th>
         <th>Lp</th>
         <th>Skrót</th>
         <th>Nazwa</th>
@@ -15,6 +16,7 @@
       </thead>
       <tbody>
       <tr class="cursor" *ngFor="let school of schools; let i = index;">
+        <td style="display:none;">{{school.id}}</td>
         <td>{{ i+1 }}</td>
         <td>{{ school.nick }}</td>
         <td>{{ school.name }}</td>

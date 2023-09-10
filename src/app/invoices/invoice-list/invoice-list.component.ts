@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
+import { InvoiceProduct, InvoiceWithProducts, Supplier} from "../invoice.model";
 import {ADTSettings} from "angular-datatables/src/models/settings";
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -7,11 +7,8 @@ import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {State} from "../store/invoice.reducer";
 import {Product, ProductStore} from "../../programs/program.model";
+import {get_str_weight_type} from "../../shared/common.functions";
 
-interface InvoiceWithProducts {
-  invoice: Invoice,
-  products: InvoiceProduct[];
-}
 
 @Component({
   selector: 'app-invoice-list',
@@ -93,5 +90,10 @@ export class InvoiceListComponent {
 
   onEditInvoiceProduct(invoice_product_id: number) {
     this.router.navigate(["faktury/faktury/" + invoice_product_id + '/edycja-produktu']);
+  }
+
+  get_weight(iwp: InvoiceWithProducts)
+  {
+    return get_str_weight_type(this.getProduct(iwp.products[0].product_store_id).weight_type);
   }
 }

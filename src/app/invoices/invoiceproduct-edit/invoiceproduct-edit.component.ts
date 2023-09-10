@@ -5,7 +5,7 @@ import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducer";
 import {ActivatedRoute, Params} from "@angular/router";
 import {InvoiceProduct} from "../invoice.model";
-import {get_current_program} from "../../shared/common.functions";
+import {get_current_program, get_str_weight_type} from "../../shared/common.functions";
 import {Product, ProductStore} from "../../programs/program.model";
 import * as InvoiceAction from "../store/invoice.action";
 
@@ -97,6 +97,6 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
   }
 
   getProductString(product: Product): string {
-    return product.name + " [" + product.weight_type + "]";
+    return product.name + " [" + get_str_weight_type(product.weight_type) + "]";
   }
 }

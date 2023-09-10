@@ -23,3 +23,8 @@ export class InvoiceProduct {
   }
 }
 
+export interface InvoiceWithProducts {
+  invoice: Invoice,
+  products: InvoiceProduct[];
+}
+

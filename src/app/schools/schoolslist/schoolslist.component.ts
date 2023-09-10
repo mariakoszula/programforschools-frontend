@@ -29,6 +29,7 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
     );
     this.schoolDtOptions = {
       pagingType: 'full_numbers',
+      order: [[1, 'asc']],
       pageLength: 50,
       responsive: true,
       language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},

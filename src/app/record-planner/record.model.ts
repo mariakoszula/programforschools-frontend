@@ -26,7 +26,7 @@ export class Record {
   constructor(public id: number,
               public date: string,
               public delivery_date: string | null,
-              public delivered_kids_no: string | null,
+              public delivered_kids_no: number | null,
               public state: string,
               public product_store_id: number,
               public product_type: string,
@@ -38,7 +38,8 @@ export class Record {
 export enum RecordStates {
   PLANNED = "PLANNED",
   GENERATED = "GENERATED",
-  DELIVERED = "DELIVERED"
+  DELIVERED = "DELIVERED",
+  DELIVERY_PLANNED = "DELIVERY_PLANNED"
 }
 
 export function get_state_number(state: string): number {

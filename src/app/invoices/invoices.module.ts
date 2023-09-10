@@ -13,6 +13,7 @@ import {ProgramResolverService} from "../programs/program-resolver.service";
 import {InvoiceResolverService} from "./invoice-resolver.service";
 import {InvoiceProductResolverService} from "./invoiceproduct-resolver.service";
 import {InvoiceproductEditComponent} from "./invoiceproduct-edit/invoiceproduct-edit.component";
+import {RecordResolverService} from "../record-planner/record-resolver.service";
 
 
 
@@ -33,7 +34,8 @@ import {InvoiceproductEditComponent} from "./invoiceproduct-edit/invoiceproduct-
         path: '',
         canActivate: [AuthGuard],
         component: InvoicesComponent,
-        resolve: [ProgramResolverService, SuppliersResolverService, InvoiceProductResolverService, InvoiceResolverService],
+        resolve: [ProgramResolverService, SuppliersResolverService, InvoiceProductResolverService, InvoiceResolverService,
+        RecordResolverService],
         children: [
           {path: 'dostawcy', component: SupplierListComponent},
           {path: 'dostawcy/nowy', component: SupplierEditComponent},

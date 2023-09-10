@@ -36,7 +36,7 @@
                 <i class="fas fa-cart-plus"></i>
               </a></td>
             <td>{{ getProduct(iwp.products[0].product_store_id).name }}</td>
-            <td>{{ iwp.products[0].amount }} {{getProduct(iwp.products[0].product_store_id).weight_type}}</td>
+            <td>{{ iwp.products[0].amount }} {{get_weight(iwp)}}</td>
             <td><!--- Placeholder to fix for product->perwekk ---></td>
             <td>
               <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(iwp.products[0].id)">
@@ -46,7 +46,7 @@
           <ng-container *ngFor="let ip of iwp.products; let i= index;">
             <tr *ngIf="i != 0;">
               <td>{{ getProduct(ip.product_store_id).name }}</td>
-              <td>{{ ip.amount }} {{getProduct(ip.product_store_id).weight_type}}</td>
+              <td>{{ ip.amount }} {{get_weight(iwp)}}</td>
               <td><!--- Placeholder to fix for product->perwekk ---></td>
               <td>
                 <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(ip.id)">

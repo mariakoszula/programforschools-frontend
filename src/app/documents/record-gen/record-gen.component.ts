@@ -27,14 +27,21 @@ export class RecordGenComponent implements OnInit {
   dairyProducts: ProductStore[] = [];
   selectedWeek: Week | null = null;
   isClickableView: boolean = true;
+  isDriverCheck: boolean = true;
+  week: string = "week";
+  driver: string = "driver"
 
   constructor(private store: Store<AppState>,
               private recordDataService: RecordDataService) {
     this.deliveryForm = new FormGroup({
       "delivery_date": new FormControl("", [Validators.required]),
-      "driver": new FormControl("", [Validators.required]),
+      "driver": new FormControl(""),
       "comment": new FormControl("",)
     });
+    if (this.isDriverCheck)
+    {
+      this.deliveryForm.get("driver")?.addValidators(Validators.required);
+    }
   }
 
   ngOnInit(): void {
@@ -64,9 +71,16 @@ export class RecordGenComponent implements OnInit {
     } else {
       this.error = "";
       const comment = this.deliveryForm.value.comment ? this.deliveryForm.value.comment : "";
-      this.store.dispatch(new DocumentsActions.GenerateDelivery(this.selectedRecords,
-        convert_date_to_backend_format(this.deliveryForm.value.delivery_date),
-        this.deliveryForm.value.driver, comment));
+      if (this.isDriverCheck) {
+        this.store.dispatch(new DocumentsActions.GenerateDelivery(this.selectedRecords,
+          convert_date_to_backend_format(this.deliveryForm.value.delivery_date),
+          this.deliveryForm.value.driver, comment));
+      } else {
+        this.store.dispatch(new DocumentsActions.GenerateDelivery(this.selectedRecords,
+          convert_date_to_backend_format(this.deliveryForm.value.delivery_date),
+          "", comment));
+      }
+
     }
   }
 
@@ -84,5 +98,18 @@ export class RecordGenComponent implements OnInit {
       return this.records.filter(record => record.week_id == this.selectedWeek?.id);
     }
     return this.records;
+  }
+
+  selectType($event: any) {
+    if ($event.target.value === this.week) {
+      this.isDriverCheck = false;
+      this.deliveryForm.get("driver")?.clearValidators();
+      this.deliveryForm.get("driver")?.setErrors(null);
+      this.deliveryForm.get("driver")?.updateValueAndValidity();
+    }
+    if ($event.target.value === this.driver) {
+      this.isDriverCheck = true;
+      this.deliveryForm.get("driver")?.addValidators(Validators.required);
+    }
   }
 }

@@ -19,6 +19,7 @@ export const FETCH_APPLICATION = "[Documents] FETCH_APPLICATION";
 export const GENERATE_APPLICATION = "[Documents] GENERATE_APPLICATION";
 export const SET_APPLICATIONS = "[Documents] SET_APPLICATIONS";
 export const CREATE_APPLICATION = "[Documents] CREATE_APPLICATION";
+export const GENERATE_WEEK_SUMMARY = "[Documents] GENERATE_WEEK_SUMMARY";
 
 export class FetchContracts implements Action {
   readonly type = FETCH_CONTRACTS;
@@ -82,6 +83,13 @@ export class GenerateDelivery implements Action {
               public delivery_date: string,
               public driver: string,
               public comments: string) {
+  }
+}
+
+export class GenerateWeekSummary implements Action {
+  readonly type = GENERATE_WEEK_SUMMARY;
+
+  constructor(public week: Week) {
   }
 }
 
@@ -151,4 +159,5 @@ export type DocumentsActions =
   | FetchApplication
   | SetApplications
   | GenerateApplications
-  | CreateApplication;
+  | CreateApplication
+  | GenerateWeekSummary;

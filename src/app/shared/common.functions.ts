@@ -8,6 +8,8 @@ import {
 import {Week} from "../programs/program.model";
 
 export const MAXIMUM_RESOLVER_TIMES = 2;
+export const SZT = "SZT";
+
 
 export function get_current_program() {
   const jsonProgram = localStorage.getItem("currentProgram");
@@ -36,4 +38,12 @@ export function generate_dates(week: Week): string[] {
     next_date = get_next_date(next_date);
   }
   return generated_dates;
+}
+
+export function get_str_weight_type(_weight_type: string)
+{
+    if (_weight_type === "L") {
+      return SZT;
+    }
+    return _weight_type;
 }
