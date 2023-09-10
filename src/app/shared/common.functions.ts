@@ -5,7 +5,8 @@ import {
   is_working_day,
   validate_date
 } from "./date_converter.utils";
-import {Week} from "../programs/program.model";
+import {Product, Week} from "../programs/program.model";
+import {DAIRY_PRODUCT} from "./namemapping.utils";
 
 export const MAXIMUM_RESOLVER_TIMES = 2;
 export const SZT = "SZT";
@@ -40,10 +41,10 @@ export function generate_dates(week: Week): string[] {
   return generated_dates;
 }
 
-export function get_str_weight_type(_weight_type: string)
+export function get_str_weight_type(_product: Product)
 {
-    if (_weight_type === "L") {
+    if (_product.weight_type === "L" || _product.product_type === DAIRY_PRODUCT) {
       return SZT;
     }
-    return _weight_type;
+    return _product.weight_type;
 }

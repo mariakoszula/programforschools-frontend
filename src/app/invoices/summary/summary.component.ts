@@ -37,7 +37,7 @@ export class SummaryComponent implements OnInit, OnDestroy{
   get_product_amount_str(product: ProductStore): string
   {
     let [amount, weight] =  this.get_product_amount(product);
-    let _weight_type = get_str_weight_type(product.product.weight_type);
+    let _weight_type = get_str_weight_type(product.product);
     if (_weight_type === SZT){
       return amount + " " + _weight_type + " [" + weight.toFixed(2) + " L]";
     }
@@ -55,20 +55,20 @@ export class SummaryComponent implements OnInit, OnDestroy{
 
   get_product_from_invoice_str(product: ProductStore): string
   {
-    return this.get_product_amount_from_invoices(product)  + " " + get_str_weight_type(product.product.weight_type);
+    return this.get_product_amount_from_invoices(product)  + " " + get_str_weight_type(product.product);
   }
   get_product_diff_str(product: ProductStore, percent: boolean): string {
     let diff_value = this.get_product_diff(product, percent);
     if (percent){
       return diff_value.toFixed(2) + " %";
     }
-    return diff_value.toFixed(2) + " " + get_str_weight_type(product.product.weight_type);
+    return diff_value.toFixed(2) + " " + get_str_weight_type(product.product);
   }
 
   get_product_diff(product: ProductStore, percent: boolean): number {
     let [amount, weight] =  this.get_product_amount(product);
     let invoice_amount = this.get_product_amount_from_invoices(product);
-    let _weight_type = get_str_weight_type(product.product.weight_type)
+    let _weight_type = get_str_weight_type(product.product)
     let diff: number;
     let amount_for_calc: number = _weight_type === SZT ? amount : weight;
     diff = invoice_amount - amount_for_calc;

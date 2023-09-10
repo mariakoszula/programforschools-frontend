@@ -94,6 +94,6 @@ export class InvoiceListComponent {
 
   get_weight(iwp: InvoiceWithProducts)
   {
-    return get_str_weight_type(this.getProduct(iwp.products[0].product_store_id).weight_type);
+    return get_str_weight_type(this.getProduct(iwp.products[0].product_store_id));
   }
 }

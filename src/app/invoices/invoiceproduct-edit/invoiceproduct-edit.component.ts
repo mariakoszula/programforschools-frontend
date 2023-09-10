@@ -97,6 +97,6 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
   }
 
   getProductString(product: Product): string {
-    return product.name + " [" + get_str_weight_type(product.weight_type) + "]";
+    return product.name + " [" + get_str_weight_type(product) + "]";
   }
 }
