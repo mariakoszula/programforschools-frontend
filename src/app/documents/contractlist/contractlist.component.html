@@ -19,7 +19,21 @@
       </tr>
       </thead>
       <tbody>
-      <tr  class="cursor" *ngFor="let contract of contracts; let i = index;" (click)="onSelectContract(contract)">
+      <tr class="table-success">
+        <td></td>
+        <td>Suma dzieci</td>
+        <td></td>
+        <td>{{get_sum_fruitVeg_latest()}}</td>
+        <td>{{get_sum_diary_latest()}}</td>
+      </tr>
+      <tr class="table-info">
+        <td></td>
+        <td>Suma dzieci z umów</td>
+        <td></td>
+        <td>{{get_sum_fruitVeg()}}</td>
+        <td>{{get_sum_diary()}}</td>
+      </tr>
+      <tr class="cursor" *ngFor="let contract of contracts; let i = index;" (click)="onSelectContract(contract)">
         <td>{{ contract.contract_no }}</td>
         <td>{{ contract.school.nick }}</td>
         <td>{{ contract.school.name }}</td>

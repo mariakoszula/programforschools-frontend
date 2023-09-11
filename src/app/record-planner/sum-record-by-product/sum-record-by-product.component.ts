@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ProductStore, Program} from "../../programs/program.model";
 import {RecordDataService} from "../record-data.service";
 import {Contract} from "../../documents/contract.model";
@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
   selector: 'app-sum-record-by-product',
   templateUrl: './sum-record-by-product.component.html'
 })
-export class SumRecordByProductComponent implements OnInit {
+export class SumRecordByProductComponent implements OnInit, OnChanges {
   @Input() records: Record[] = [];
   @Input() contracts: Contract[] = [];
   @Input() fruitVegProducts: ProductStore[] = [];
@@ -42,8 +42,8 @@ export class SumRecordByProductComponent implements OnInit {
 
   private updateTotalAmounts(contract: Contract, amount: number, total: Map<number, number>) {
     let val = amount;
-    if (total.has(contract.id)){
-        val += total.get(contract.id) || 0;
+    if (total.has(contract.id)) {
+      val += total.get(contract.id) || 0;
     }
     total.set(contract.id, val);
   }
@@ -59,19 +59,21 @@ export class SumRecordByProductComponent implements OnInit {
     return 0;
   }
 
-  getColor(amount: number, expected_amount: number | null) {
+  getColor(amount: number | undefined, expected_amount: number | null) {
     if (expected_amount && amount === expected_amount) {
       return '#2ECC71';
     }
-    if (expected_amount && amount > expected_amount) {
+    if (expected_amount && amount && amount > expected_amount) {
       return '#FF4136';
     }
     return 'transparent';
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     this.program = this.recordDataService.getProgram();
-    for(let contract of this.contracts) {
+    this.totalFruitVegAmount.clear();
+    this.totalDairyAmount.clear();
+    for (let contract of this.contracts) {
       for (let fruit of this.fruitVegProducts) {
         this.updateTotalAmounts(contract, this.get_product_amount(fruit, contract), this.totalFruitVegAmount);
       }
@@ -79,6 +81,10 @@ export class SumRecordByProductComponent implements OnInit {
         this.updateTotalAmounts(contract, this.get_product_amount(dairy, contract), this.totalDairyAmount);
       }
     }
+  }
+
+  ngOnInit(): void {
+
   }
 
 

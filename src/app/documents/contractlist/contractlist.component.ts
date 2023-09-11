@@ -70,6 +70,24 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     return contract.annex[0].dairy_products;
   }
 
+  get_sum_fruitVeg() : number{
+    return this.contracts.reduce((total, item: Contract) => total + item.fruitVeg_products, 0);
+  }
+
+  get_sum_diary() : number
+  {
+    return this.contracts.reduce((total, item: Contract) => total + item.dairy_products, 0);
+  }
+
+  get_sum_fruitVeg_latest(): number
+  {
+    return this.contracts.reduce((total, item: Contract) => total + this.get_latest_fruitVeg_product(item), 0);
+  }
+
+  get_sum_diary_latest(): number
+  {
+    return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
+  }
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first

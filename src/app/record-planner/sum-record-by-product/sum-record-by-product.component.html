@@ -35,9 +35,10 @@
             [ngStyle]="{'background-color': getColor(get_product_amount(f, contract), f.min_amount)}">{{get_product_amount(f, contract)}}</td>
         <td *ngFor="let d of dairyProducts"
             [ngStyle]="{'background-color': getColor(get_product_amount(d, contract), d.min_amount)}">{{get_product_amount(d, contract)}}</td>
-        <td
+        <td [ngStyle]="{'background-color': getColor(get_total(totalFruitVegAmount, contract), program.fruitVeg_amount)}"
         >{{get_total(totalFruitVegAmount, contract)}}</td>
-        <td>{{get_total(totalDairyAmount, contract)}}</td>
+        <td [ngStyle]="{'background-color': getColor(get_total(totalDairyAmount, contract), program.dairy_amount)}"
+        >{{get_total(totalDairyAmount, contract)}}</td>
       </tr>
       </tbody>
     </table>
