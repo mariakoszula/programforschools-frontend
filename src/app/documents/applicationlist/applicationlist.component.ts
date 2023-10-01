@@ -59,7 +59,7 @@ export class ApplicationListComponent implements OnInit {
 
     }
     onEditApplication(application: Application) {
-      this.router.navigate(["wnioski/" + application.id + "/edycja"]);
+      this.router.navigate(["dokumenty/wnioski/" + application.id + "/edycja"]);
     }
 
     public get_schools(contracts: Contract[]){
@@ -81,7 +81,7 @@ export class ApplicationListComponent implements OnInit {
       let val = error.school;
       val += ":";
       if (error.type === "WeekInconsistencyError") {
-        val += "Błąd w ilości podań w tygodniu.";
+        val += "Brak produktów w tygodniu.";
       }
       else if (error.type === "KidsInconsistencyError") {
         val += "Liczba dzieci na WZ nie zgadza się z umową lub aneksem.";

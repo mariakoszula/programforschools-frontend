@@ -22,11 +22,18 @@
         </div>
       </div>
     </div>
-    <div class="float-lg-end">
+    <div *ngIf="!this.editMode" class="float-lg-end">
       <button
         [disabled]="!is_data_selected()"
         class="btn-lg btn-outline-info float-lg-end" (click)="addApplication()">Dodaj Wniosek
       </button>
     </div>
+        <div *ngIf="this.editMode" class="float-lg-end">
+      <button
+        [disabled]="!is_data_selected()"
+        class="btn-lg btn-outline-info float-lg-end" (click)="editApplication()">Aktualizuj Wniosek
+      </button>
+    </div>
+
   </div>
 </div>

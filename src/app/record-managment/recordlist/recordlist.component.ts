@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
 import {ADTSettings} from "angular-datatables/src/models/settings";
-import {DAIRY_PRODUCT, FRUIT_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 @Component({
   selector: 'app-recordlist',
@@ -87,6 +87,10 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isDelivered(record: Record) {
     return record.state == RecordStates.DELIVERED;
+  }
+
+  isDeliveredPlanned(record: Record) {
+    return record.state == RecordStates.DELIVERY_PLANNED;
   }
 
   onEditRecord(record: Record) {

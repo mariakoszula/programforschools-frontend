@@ -17,7 +17,7 @@ import {
   GenerateContracts,
   GenerateDelivery, GenerateWeekSummary,
   QueueGeneratingTaskAndStartPolling,
-  UpdateAnnex,
+  UpdateAnnex, UpdateApplication,
   UpdateKidsNo
 } from "./documents.action";
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
@@ -270,8 +270,7 @@ export class DocumentsEffects {
                     if (responseData.documents) {
                       _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
                     }
-                  }
-                  ;
+                  };
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: responseData.progress,
@@ -347,6 +346,34 @@ export class DocumentsEffects {
               contracts: contracts_ids,
               weeks: weeks_ids,
               app_type: type,
+          }).pipe(
+          map((respData) => {
+            return new DocumentsActions.FetchApplication();
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.log(error);
+            return of({type: "Dummy_action"});
+          }));
+      }));
+  });
+
+    onUpdateApplication = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.UPDATE_APPLICATION),
+      switchMap((action: UpdateApplication) => {
+        let contracts_ids: number[] = [];
+        let weeks_ids: number[] = [];
+        for(let contract of action.payload.contracts){
+          contracts_ids.push(contract.id);
+        }
+        for(let week of action.payload.weeks){
+          weeks_ids.push(week.id);
+        }
+        return this.http.put<{ application: Application}>(
+          environment.backendUrl + '/application/' + action.payload.id,
+          {
+              contracts: contracts_ids,
+              weeks: weeks_ids
           }).pipe(
           map((respData) => {
             return new DocumentsActions.FetchApplication();

@@ -12,6 +12,7 @@ export const FRUIT_PRODUCT = "owoce";
 export const VEGETABLE_PRODUCT = "warzywa";
 export const FRUIT_VEG_PRODUCT = VEGETABLE_PRODUCT+"-"+FRUIT_PRODUCT
 export const DAIRY_PRODUCT = "nabiał";
+export const FULL = DAIRY_PRODUCT + " i " + FRUIT_VEG_PRODUCT;
 
 
 
@@ -24,11 +25,11 @@ export const DayColors = [
 ]
 
 export const DayColorsPlannedDelivery = [
-  'rgba(134,246,138,0.53)',
-  'rgba(253,159,228,0.61)',
-  'rgba(99,205,243,0.64)',
-  'rgba(250,143,134,0.7)',
-  'rgba(248,248,132,0.78)'
+  'rgba(171,250,174,0.53)',
+  'rgba(253,188,234,0.61)',
+  'rgba(149,216,245,0.64)',
+  'rgba(241,179,175,0.7)',
+  'rgba(236,236,158,0.78)'
 ]
 
 export interface CommonResponse{

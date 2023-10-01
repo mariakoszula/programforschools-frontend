@@ -19,6 +19,7 @@ export const FETCH_APPLICATION = "[Documents] FETCH_APPLICATION";
 export const GENERATE_APPLICATION = "[Documents] GENERATE_APPLICATION";
 export const SET_APPLICATIONS = "[Documents] SET_APPLICATIONS";
 export const CREATE_APPLICATION = "[Documents] CREATE_APPLICATION";
+export const UPDATE_APPLICATION = "[Documents] UPDATE_APPLICATION";
 export const GENERATE_WEEK_SUMMARY = "[Documents] GENERATE_WEEK_SUMMARY";
 
 export class FetchContracts implements Action {
@@ -50,7 +51,8 @@ export class GenerateRegister implements Action {
 
 export class GenerateApplications implements Action {
   readonly type = GENERATE_APPLICATION;
-  constructor(public payload: {id: number, no: number, app_date: string, is_last: boolean, start_week: number}) {
+
+  constructor(public payload: { id: number, no: number, app_date: string, is_last: boolean, start_week: number }) {
 
   }
 }
@@ -143,6 +145,17 @@ export class CreateApplication implements Action {
   }
 }
 
+export class UpdateApplication implements Action {
+  readonly type = UPDATE_APPLICATION;
+
+  constructor(public payload: {
+    id: number,
+    contracts: Contract[],
+    weeks: Week[]
+  }) {
+  }
+}
+
 export type DocumentsActions =
   SetContracts
   | FetchContracts
@@ -160,4 +173,5 @@ export type DocumentsActions =
   | SetApplications
   | GenerateApplications
   | CreateApplication
+  | UpdateApplication
   | GenerateWeekSummary;
