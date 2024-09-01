@@ -4,11 +4,12 @@
       <div class="row">
         <div class="col-sm-5 form-group">
           <label>Produkt</label>
-           <select formControlName="product_store"
-                    class="form-control custom-select" name="product_store" [(ngModel)]="product_stored">
-              <option *ngIf="!this.edit" selected>Wybierz produkt</option>
-              <option *ngFor="let product of product_storage;" [ngValue]="product">{{getProductString(product.product)}}</option>
-            </select>
+          <select formControlName="product_store"
+                  class="form-control custom-select" name="product_store" [(ngModel)]="product_stored">
+            <option *ngIf="!this.edit" selected>Wybierz produkt</option>
+            <option *ngFor="let product of product_storage;"
+                    [ngValue]="product">{{getProductString(product.product)}}</option>
+          </select>
         </div>
         <div class="col-sm-3 form-group">
           <label for="amount">Ilość</label>
@@ -28,5 +29,47 @@
         </div>
       </div>
     </form>
+  </div>
+  <div *ngIf="this.edit" class="col-xs-12">
+    <form [formGroup]="appForm" (ngSubmit)="onAppSubmit()">
+      <fieldset class="border p-2">
+        <legend class="float-none w-auto">Wnioski</legend>
+        <div *ngFor="let app of applications" class="form-check form-check-inline ml-2">
+          <input formControlName="application_id" class="form-check-input" type="radio" name="application_id" [value]=app.id>
+          <label class="form-check-label">Wniosek nr {{getAppString(app.id)}}</label>
+        </div>
+        <div class="form-group ml-2">
+          <label>Ilość</label><input formControlName="invoiceAmount" class="form-control" name="invoiceAmount">
+        </div>
+        <div class="col-xs-12">
+          <button
+            class="btn btn-warning"
+            type="submit"
+            [disabled]="!appForm.valid">{{ "Dodaj przypisanie" }}</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <br/>
+  <div class="row">
+    <fieldset class="border p-2">
+      <legend class="float-none w-auto">Lista przypisań do wniosku</legend>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Wniosek</th>
+          <th>Ilość</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let iv of invoice_disposals">
+          <td>{{ getAppString(iv.application_id)}}</td>
+          <td>{{ iv.amount }}</td>
+        </tr>
+        </tbody>
+      </table>
+      <p>Przypisane do wniosków: {{ getSumDisp() }}</p>
+      <p>Pozostało: {{  getLeftProducts() }}</p>
+    </fieldset>
   </div>
 </div>

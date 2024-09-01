@@ -27,7 +27,7 @@ export class ContractsGenComponent implements OnInit, OnDestroy {
     this.contractForm = new FormGroup<any>({
       'select_all': new FormControl("", []),
       'contract_date': new FormControl("", [Validators.required]),
-      'schools': new FormArray([], atLeastOneSelected),
+      'schools': new FormArray([], atLeastOneCheckboxSelectedValidator()),
     });
   }
 
@@ -72,18 +72,10 @@ export class ContractsGenComponent implements OnInit, OnDestroy {
 
 }
 
-function atLeastOneSelected() {
-  const validator: ValidatorFn = (formArray: AbstractControl) => {
-    if (formArray instanceof FormArray) {
-      const anySelected = formArray.controls
-        .map(control => {
-          return !control.value.every((v: boolean) => !v);
-        });
-      return anySelected ? {required: false} : {required: true};
-    }
-    ;
-    throw new Error('formArray is not an instance of FormArray');
-  }
-  return validator;
+function atLeastOneCheckboxSelectedValidator(): ValidatorFn {
+  return (formArray: AbstractControl): { [key: string]: boolean } | null => {
+    const selectedCheckbox = formArray.value.some((isChecked: boolean) => isChecked);
+    return selectedCheckbox ? null : { 'atLeastOneCheckboxSelected': true };
+  };
 }
 

@@ -1,27 +1,33 @@
 import {
   ADD_INVOICE,
+  ADD_INVOICE_DISPOSALS,
   ADD_INVOICE_PRODUCT,
   ADD_SUPPLIER,
   FETCH_INVOICE,
+  FETCH_INVOICE_DISPOSALS,
   FETCH_INVOICE_PRODUCTS,
   FETCH_SUPPLIERS,
   InvoiceAction,
   SAVE_INVOICE,
+  SAVE_INVOICE_DISPOSALS,
   SAVE_INVOICE_PRODUCTS,
   SAVE_SUPPLIER,
+  SET_INVOICE_DISPOSALS,
   SET_INVOICE_PRODUCTS,
   SET_INVOICES,
   SET_SUPPLIERS,
   UPDATE_INVOICE,
+  UPDATE_INVOICE_DISPOSALS,
   UPDATE_INVOICE_PRODUCT,
   UPDATE_SUPPLIER
 } from "./invoice.action";
-import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
+import {Invoice, InvoiceDisposal, InvoiceProduct, Supplier} from "../invoice.model";
 
 export interface State {
   suppliers: Supplier[];
   invoices: Invoice[];
   invoicesProduct: InvoiceProduct[];
+  invoiceDisposal: InvoiceDisposal[];
   error: string;
 }
 
@@ -29,6 +35,7 @@ export const initialState = {
   suppliers: [],
   invoices: [],
   invoicesProduct: [],
+  invoiceDisposal: [],
   error: ""
 }
 
@@ -53,6 +60,12 @@ export function invoiceReducer(state: State = initialState, action: InvoiceActio
         invoicesProduct: [],
         error: ""
       }
+    case  FETCH_INVOICE_DISPOSALS:
+      return {
+        ...state,
+        invoiceDisposal: [],
+        error: ""
+      }
     case SET_INVOICES:
       return {
         ...state,
@@ -67,6 +80,11 @@ export function invoiceReducer(state: State = initialState, action: InvoiceActio
       return {
         ...state,
         invoicesProduct: [...action.invoice_products]
+      }
+      case SET_INVOICE_DISPOSALS:
+      return {
+        ...state,
+        invoiceDisposal: [...action.invoice_disposals]
       }
     case SAVE_SUPPLIER: {
       const found_supplier: Supplier | any = state.suppliers.find((_res: Supplier, index) => {
@@ -118,13 +136,41 @@ export function invoiceReducer(state: State = initialState, action: InvoiceActio
     case UPDATE_SUPPLIER:
     case UPDATE_INVOICE:
     case UPDATE_INVOICE_PRODUCT:
+    case UPDATE_INVOICE_DISPOSALS:
     case ADD_INVOICE_PRODUCT:
+    case ADD_INVOICE_DISPOSALS:
     case ADD_INVOICE:
     case ADD_SUPPLIER:
       return {
         ...state
       }
-    case SAVE_INVOICE_PRODUCTS:
+    case SAVE_INVOICE_DISPOSALS:
+      if (action.payload === null) {
+        return {...state, error: action.error}
+      }
+      let found_invoice_disposal: InvoiceDisposal | any = state.invoiceDisposal.find((_res: InvoiceDisposal) => {
+        return _res.id === action.payload!.id;
+      });
+      if (!found_invoice_disposal) {
+        return {
+          ...state,
+          invoiceDisposal: [...state.invoiceDisposal, action.payload],
+          error: ""
+        }
+      }
+      const updated_invoice_disposals = [...state.invoiceDisposal];
+      const updated_invoice_disposal = {
+        ...found_invoice_disposal,
+        ...action.payload
+      }
+      const indexOfUpdateID = state.invoiceDisposal.indexOf(found_invoice_disposal);
+      updated_invoice_disposals[indexOfUpdateID] = updated_invoice_disposal;
+      return {
+        ...state,
+        invoiceDisposal: updated_invoice_disposals,
+        error: ""
+      }
+       case SAVE_INVOICE_PRODUCTS:
       if (action.payload === null) {
         return {...state, error: action.error}
       }

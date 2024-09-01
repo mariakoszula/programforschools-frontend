@@ -9,14 +9,14 @@
     <table datatable [dtOptions]="dtOptions" class="row-border hover">
       <thead>
       <th>Lp</th>
-      <th>Nazwa</th>
+      <th>Nr faktury</th>
       <th>Data</th>
       <th>Dostawca</th>
       <th></th>
       <th></th>
       <th>Produkt</th>
       <th>Ilość</th>
-      <th>Ilość przypisana do tygodni</th>
+      <th>Przypisanie do wniosku</th>
       <th></th>
       </thead>
       <tbody>
@@ -35,21 +35,36 @@
               <a class="btn btn-warning" (click)="onAddProduct(iwp.invoice.id)">
                 <i class="fas fa-cart-plus"></i>
               </a></td>
-            <td>{{ getProduct(iwp.products[0].product_store_id).name }}</td>
-            <td>{{ iwp.products[0].amount }} {{get_weight(iwp)}}</td>
-            <td><!--- Placeholder to fix for product->perwekk ---></td>
+            <td>{{ getProduct(iwp.products[0].product.product_store_id).name }}</td>
+            <td>{{ iwp.products[0].product.amount }} {{get_weight(iwp)}}</td>
+            <td style="white-space: pre-wrap;">{{getDisposalStr(iwp.products[0].disposals)}}
+              <div>
+                <button *ngIf="amountDoesNotEqual(iwp.products[0])" style="cursor:pointer"
+                        class='btn btn-warning btn-sm' [disabled]="true"><i class='fas'></i>Przypisz do wniosku
+                  pozostałe produkty
+                </button>
+              </div>
+            </td>
             <td>
-              <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(iwp.products[0].id)">
+              <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(iwp.products[0].product.id)">
                 <i class="fas fa-pencil-alt"></i>
               </a></td>
           </tr>
           <ng-container *ngFor="let ip of iwp.products; let i= index;">
             <tr *ngIf="i != 0;">
-              <td>{{ getProduct(ip.product_store_id).name }}</td>
-              <td>{{ ip.amount }} {{get_weight(iwp)}}</td>
-              <td><!--- Placeholder to fix for product->perwekk ---></td>
+              <td>{{ getProduct(ip.product.product_store_id).name }}</td>
+              <td>{{ ip.product.amount }} {{get_weight(iwp)}}</td>
+              <td style="white-space: pre-wrap;">{{getDisposalStr(ip.disposals)}}
+                <div>
+                  <button *ngIf="amountDoesNotEqual(ip)" style="cursor:pointer"
+                          class='btn btn-warning btn-sm' [disabled]="true"><i class='fas'></i>Przypisz do wniosku
+                    pozostałe produkty
+                  </button>
+                </div>
+
+              </td>
               <td>
-                <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(ip.id)">
+                <a class="btn btn-outline-warning btn-sm" (click)="onEditInvoiceProduct(ip.product.id)">
                   <i class="fas fa-pencil-alt"></i>
                 </a></td>
             </tr>
@@ -77,11 +92,42 @@
       </tbody>
     </table>
   </div>
+  <div class="card-footer">
+    <a (click)="addInvoice()" class="btn-lg btn-info float-left cursor">
+      <i class="fas fa-sign"></i> Dodaj fakture
+    </a>
+    <br/>
+    <br/>
+  </div>
+
 </div>
-<div class="col-12">
-  <a (click)="addInvoice()" class="btn-lg btn-info float-left cursor">
-    <i class="fas fa-sign"></i> Dodaj fakture
-  </a>
-  <br/>
-  <br/>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Podsumowanie faktur</h1>
+  </div>
+  <div class="card-body">
+    <div class="overlay dark" *ngIf="isGenerating">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form [formGroup]="invoiceSummaryForm" (ngSubmit)="onInvoiceSummary()">
+      <div class="form-group">
+        <div style="text-align: justify" class="form-group">
+          <div class="form-check">
+            <input formControlName="select_all" (change)="checkUncheck()" type="checkbox" class="form-check-input"
+                   id="select_all"/>Zaznacz/Odznacz Wszystkie
+          </div>
+          <div formArrayName="applications" *ngFor="let application of applicationsControls; let i = index;"
+               class="form-check">
+            <input [formControlName]="i"
+                   class="form-check-input" type="checkbox" name="school_ids">
+            <label class="form-check-label">{{getAppString(applications[i].id)}}</label>
+          </div>
+          <br/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!invoiceSummaryForm.valid">
+        <i class="fas fa-check-circle"></i> Generuj
+      </button>
+    </form>
+  </div>
 </div>

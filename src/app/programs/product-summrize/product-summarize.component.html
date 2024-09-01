@@ -10,6 +10,7 @@
           <th>Nazwa</th>
           <th>Ilość podań</th>
           <th>Waga</th>
+          <th>VAT</th>
           <th></th>
         </tr>
         </thead>
@@ -18,6 +19,7 @@
           <td>{{ _product.product.name }}</td>
           <td>{{ _product.min_amount }}</td>
           <td>{{ _product.weight }} {{ _product.product.weight_type }}</td>
+          <td>{{ _product.product.vat }} </td>
           <td><a class="btn btn-info btn-sm" (click)="onEditProduct(_product.id)">
             <i class="fas fa-pencil-alt"></i>Edycja
           </a></td>

@@ -35,7 +35,8 @@ export class Week {
 export class Product {
   constructor(public name: string,
               public weight_type: string,
-              public product_type: string) {
+              public product_type: string,
+              public vat: number) {
   }
 }
 

@@ -21,6 +21,7 @@ export const SET_APPLICATIONS = "[Documents] SET_APPLICATIONS";
 export const CREATE_APPLICATION = "[Documents] CREATE_APPLICATION";
 export const UPDATE_APPLICATION = "[Documents] UPDATE_APPLICATION";
 export const GENERATE_WEEK_SUMMARY = "[Documents] GENERATE_WEEK_SUMMARY";
+export const GENERATE_INVOICE_SUMMARY = "[Documents] GENERATE_INVOICE_SUMMARY";
 
 export class FetchContracts implements Action {
   readonly type = FETCH_CONTRACTS;
@@ -156,6 +157,13 @@ export class UpdateApplication implements Action {
   }
 }
 
+export class GenerateInvoiceSummary implements Action {
+  readonly type = GENERATE_INVOICE_SUMMARY;
+
+  constructor(public payload: { applications: number[]}) {
+  }
+}
+
 export type DocumentsActions =
   SetContracts
   | FetchContracts
@@ -174,4 +182,5 @@ export type DocumentsActions =
   | GenerateApplications
   | CreateApplication
   | UpdateApplication
-  | GenerateWeekSummary;
+  | GenerateWeekSummary
+  | GenerateInvoiceSummary;

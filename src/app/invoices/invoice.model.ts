@@ -23,8 +23,20 @@ export class InvoiceProduct {
   }
 }
 
+export class InvoiceDisposal {
+  constructor(public id: number,
+              public invoice_product_id: number,
+              public application_id: number,
+              public amount: number) {
+  }
+}
+export interface ProductWithDisposal {
+  product: InvoiceProduct,
+  disposals: InvoiceDisposal[]
+}
+
 export interface InvoiceWithProducts {
   invoice: Invoice,
-  products: InvoiceProduct[];
+  products: ProductWithDisposal[]
 }
 

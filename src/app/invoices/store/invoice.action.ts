@@ -1,5 +1,6 @@
 import {Action} from "@ngrx/store";
-import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
+import {Invoice, InvoiceDisposal, InvoiceProduct, Supplier} from "../invoice.model";
+import {GENERATE_CONTRACTS, QUEUE_GENERATING_TASK_AND_START_POLLING} from "../../documents/store/documents.action";
 
 export const FETCH_INVOICE = "[INVOICE] FETCH_INVOICE";
 export const ADD_INVOICE = "[INVOICE] ADD_INVOICE";
@@ -19,6 +20,12 @@ export const ADD_INVOICE_PRODUCT = "[INVOICE] ADD_INVOICE_PRODUCT";
 export const UPDATE_INVOICE_PRODUCT = "[INVOICE] UPDATE_INVOICE_PRODUCT";
 export const SET_INVOICE_PRODUCTS = "[INVOICE] SET_INVOICE_PRODUCTS";
 export const SAVE_INVOICE_PRODUCTS = "[INVOICE] SAVE_INVOICE_PRODUCTS";
+
+export const FETCH_INVOICE_DISPOSALS = "[INVOICE] FETCH_INVOICE_DISPOSALS";
+export const ADD_INVOICE_DISPOSALS = "[INVOICE] ADD_INVOICE_DISPOSALS";
+export const UPDATE_INVOICE_DISPOSALS = "[INVOICE] UPDATE_INVOICE_DISPOSALS";
+export const SET_INVOICE_DISPOSALS = "[INVOICE] SET_INVOICE_DISPOSALS";
+export const SAVE_INVOICE_DISPOSALS = "[INVOICE] SAVE_INVOICE_DISPOSALS";
 
 export class FetchInvoice implements Action {
   readonly type = FETCH_INVOICE;
@@ -119,7 +126,41 @@ export class SaveSupplier implements Action {
   }
 }
 
+
+export class FetchInvoiceDisposal implements Action {
+  readonly type = FETCH_INVOICE_DISPOSALS;
+}
+
+export class SetInvoiceDisposal implements Action {
+  readonly type = SET_INVOICE_DISPOSALS;
+
+  constructor(public invoice_disposals: InvoiceDisposal[]) {
+  }
+}
+
+export class AddInvoiceDisposal implements Action {
+  readonly type = ADD_INVOICE_DISPOSALS;
+  constructor(public payload: InvoiceDisposal) {
+  }
+}
+
+export class UpdateInvoiceDisposal implements Action {
+  readonly type = UPDATE_INVOICE_DISPOSALS;
+
+  constructor(public payload: InvoiceDisposal, public invoice_disposal_id: number) {
+  }
+}
+
+
+export class SaveInvoiceDisposal implements Action {
+  readonly type = SAVE_INVOICE_DISPOSALS;
+
+  constructor(public payload: InvoiceDisposal | null, public error: string) {
+  }
+}
+
 export type InvoiceAction = FetchInvoice |
   AddInvoice | UpdateInvoice | FetchSupplier | AddSupplier | UpdateSupplier |
   SetSuppliers | SetInvoices | FetchInvoiceProducts | AddInvoiceProduct | UpdateInvoiceProduct | SetInvoiceProducts |
-  SaveSupplier | SaveInvoice | SaveInvoiceProduct;
+  SaveSupplier | SaveInvoice | SaveInvoiceProduct |
+  FetchInvoiceDisposal | AddInvoiceDisposal | UpdateInvoiceDisposal | SetInvoiceDisposal | SaveInvoiceDisposal;

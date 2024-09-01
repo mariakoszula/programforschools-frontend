@@ -15,7 +15,7 @@ import {
   FetchApplication,
   FetchContracts, GenerateApplications,
   GenerateContracts,
-  GenerateDelivery, GenerateWeekSummary,
+  GenerateDelivery, GenerateInvoiceSummary, GenerateWeekSummary,
   QueueGeneratingTaskAndStartPolling,
   UpdateAnnex, UpdateApplication,
   UpdateKidsNo
@@ -65,7 +65,7 @@ export class DocumentsEffects {
           "/contracts/" + get_current_program().id + "/all")
           .pipe(
             map(responseData => {
-              localStorage.setItem("currentContract",  JSON.stringify(responseData.contracts));
+              localStorage.setItem("currentContract", JSON.stringify(responseData.contracts));
               return new DocumentsActions.SetContracts({
                 contracts: responseData.contracts,
                 documents: []
@@ -122,7 +122,7 @@ export class DocumentsEffects {
       }));
   });
 
-    onGenerateApplications$ = createEffect(() => {
+  onGenerateApplications$ = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_APPLICATION),
       switchMap((action: GenerateApplications) => {
@@ -137,6 +137,30 @@ export class DocumentsEffects {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
                 id: responseData.task_id,
                 name: "Wniosek:".concat(action.payload.no.toString())
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
+
+  onGenerateInvoiceSummary = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_INVOICE_SUMMARY),
+      switchMap((action: DocumentsActions.GenerateInvoiceSummary) => {
+        return this.http.put<QueuedTaskResponse>(environment.backendUrl +
+          "/create_invoice_disposal", {
+          "applications": action.payload.applications
+        })
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Podsumowanie faktur"
               });
             }),
             catchError(error => {
@@ -233,7 +257,7 @@ export class DocumentsEffects {
       }));
   });
 
-    onGenerateWeekSummary$ = createEffect(() => {
+  onGenerateWeekSummary$ = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_WEEK_SUMMARY),
       switchMap((action: GenerateWeekSummary) => {
@@ -270,7 +294,8 @@ export class DocumentsEffects {
                     if (responseData.documents) {
                       _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
                     }
-                  };
+                  }
+                  ;
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: responseData.progress,
@@ -300,12 +325,12 @@ export class DocumentsEffects {
         })),
     {dispatch: false});
 
-    onFetchApplication$ = createEffect(() => {
+  onFetchApplication$ = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.FETCH_APPLICATION),
       switchMap((action: FetchApplication) => {
-        return this.http.get<{application: Application[]}>(environment.backendUrl +
-          "/application/all?program_id=" +  get_current_program().id)
+        return this.http.get<{ application: Application[] }>(environment.backendUrl +
+          "/application/all?program_id=" + get_current_program().id)
           .pipe(
             map(responseData => {
               return new DocumentsActions.SetApplications(responseData.application)
@@ -318,7 +343,7 @@ export class DocumentsEffects {
       }));
   });
 
-    onAddApplication = createEffect(() => {
+  onAddApplication = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.CREATE_APPLICATION),
       switchMap((action: CreateApplication) => {
@@ -328,10 +353,10 @@ export class DocumentsEffects {
         let contracts_ids: number[] = [];
         let weeks_ids: number[] = [];
         let type: number = 0;
-        for(let contract of action.payload.contracts){
+        for (let contract of action.payload.contracts) {
           contracts_ids.push(contract.id);
         }
-        for(let week of action.payload.weeks){
+        for (let week of action.payload.weeks) {
           weeks_ids.push(week.id);
         }
         if (action.payload.type === DAIRY_PRODUCT) {
@@ -339,13 +364,13 @@ export class DocumentsEffects {
         } else if (action.payload.type === FRUIT_VEG_PRODUCT) {
           type = 2;
         }
-        return this.http.post<{ application: Application}>(
+        return this.http.post<{ application: Application }>(
           environment.backendUrl + '/application',
           {
-              program_id: get_current_program().id,
-              contracts: contracts_ids,
-              weeks: weeks_ids,
-              app_type: type,
+            program_id: get_current_program().id,
+            contracts: contracts_ids,
+            weeks: weeks_ids,
+            app_type: type,
           }).pipe(
           map((respData) => {
             return new DocumentsActions.FetchApplication();
@@ -357,23 +382,23 @@ export class DocumentsEffects {
       }));
   });
 
-    onUpdateApplication = createEffect(() => {
+  onUpdateApplication = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.UPDATE_APPLICATION),
       switchMap((action: UpdateApplication) => {
         let contracts_ids: number[] = [];
         let weeks_ids: number[] = [];
-        for(let contract of action.payload.contracts){
+        for (let contract of action.payload.contracts) {
           contracts_ids.push(contract.id);
         }
-        for(let week of action.payload.weeks){
+        for (let week of action.payload.weeks) {
           weeks_ids.push(week.id);
         }
-        return this.http.put<{ application: Application}>(
+        return this.http.put<{ application: Application }>(
           environment.backendUrl + '/application/' + action.payload.id,
           {
-              contracts: contracts_ids,
-              weeks: weeks_ids
+            contracts: contracts_ids,
+            weeks: weeks_ids
           }).pipe(
           map((respData) => {
             return new DocumentsActions.FetchApplication();
@@ -384,6 +409,7 @@ export class DocumentsEffects {
           }));
       }));
   });
+
   constructor(private action$: Actions, private http: HttpClient,
               private router: Router,
               private store: Store<AppState>) {

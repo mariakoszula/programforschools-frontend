@@ -5,7 +5,7 @@ import {AppState} from "src/app/store/app.reducer";
 import {Store} from "@ngrx/store";
 import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";
-import {Invoice, InvoiceProduct, Supplier} from "../invoice.model";
+import {Invoice, InvoiceDisposal, InvoiceProduct, Supplier} from "../invoice.model";
 import * as InvoiceAction from "./invoice.action";
 import {map} from "rxjs/operators";
 import {get_current_program} from "../../shared/common.functions";
@@ -13,6 +13,13 @@ import {Router} from "@angular/router";
 
 const handleInvoiceProductError = (errorResp: HttpErrorResponse)  => {
       return of(new InvoiceAction.SaveInvoiceProduct(null, errorResp.error.message));
+}
+
+const handleInvoiceDisposalError = (errorResp: HttpErrorResponse)  => {
+      return of(new InvoiceAction.SaveInvoiceDisposal(null, errorResp.error.message));
+}
+interface QueuedTaskResponse {
+  task_id: string;
 }
 
 @Injectable()
@@ -126,6 +133,37 @@ export class InvoiceEffects {
       }));
   });
 
+
+  onAddInvoiceDisposal$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.ADD_INVOICE_DISPOSALS),
+      switchMap((data: InvoiceAction.AddInvoiceDisposal) => {
+        return this.http.post<{ invoice_disposal: InvoiceDisposal }>(
+          environment.backendUrl + '/invoice_disposal',
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoiceDisposal(respData.invoice_disposal, "");
+          }),
+          catchError(error => handleInvoiceProductError(error)));
+      }));
+  });
+
+  onUpdateInvoiceDisposal$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.UPDATE_INVOICE_DISPOSALS),
+      withLatestFrom(this.store$.select('invoice')),
+      switchMap(([currentAction, _]) => {
+        let data: InvoiceAction.UpdateInvoiceDisposal = currentAction;
+        return this.http.put<{ invoice_disposal: InvoiceDisposal }>(
+          environment.backendUrl + '/invoice_disposal/' + data.invoice_disposal_id,
+          {...data.payload}).pipe(
+          map((respData) => {
+            return new InvoiceAction.SaveInvoiceDisposal(respData.invoice_disposal, "Błądne przypisanie ilości do wniosku");
+          }),
+          catchError(error => handleInvoiceDisposalError((error))));
+      }));
+  });
+
   fetchSuppliers$ = createEffect(() => {
     return this.action$.pipe(
       ofType(InvoiceAction.FETCH_SUPPLIERS),
@@ -177,6 +215,22 @@ export class InvoiceEffects {
             return of({type: "Failed on update suppliers"});
           }));
       }));
+  });
+  fetchInvoiceDisposals$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(InvoiceAction.FETCH_INVOICE_DISPOSALS),
+      switchMap((action: InvoiceAction.FetchInvoiceDisposal) => {
+        return this.http.get<{ invoice_disposal: InvoiceDisposal[] }>(
+          environment.backendUrl + '/invoice_disposal/all?program_id=' + get_current_program().id)
+          .pipe(
+            map(responseData => {
+              return new InvoiceAction.SetInvoiceDisposal(responseData.invoice_disposal)
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Error when fetching invoice_disposals"});
+            }))
+      }))
   });
 
   redirectOnSaveSupplier = createEffect(() =>
