@@ -23,7 +23,7 @@ import {
 import {convert_date_to_backend_format} from "../../shared/date_converter.utils";
 import {get_current_program} from "../../shared/common.functions";
 import {
-  FINISHED_TASK_PROGRESS, getQueueEntities, POLLING_INTERVAL
+  FINISHED_TASK_PROGRESS, getQueueEntities, POLLING_INTERVAL, FAILED_TASK_PROGRESS
 } from "./documents.reducer";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
@@ -294,17 +294,20 @@ export class DocumentsEffects {
                     if (responseData.documents) {
                       _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
                     }
-                  }
-                  ;
+                  };
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: responseData.progress,
                     documents: _documents
                   });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                   console.log(error);
-                  return of({type: "Dummy_action"});
+                  return of(new DocumentsActions.SetTaskProgress({
+                    id: action.payload.id,
+                    progress: FAILED_TASK_PROGRESS,
+                    documents: [error.error.message]
+                  }));
                 })
               );
           }),
@@ -318,7 +321,8 @@ export class DocumentsEffects {
         ofType(DocumentsActions.SET_TASK_PROGRESS),
         withLatestFrom(this.store.select("document")),
         tap(([_, state]) => {
-          if (Object.values(getQueueEntities(state)).every(value => value && value.progress === FINISHED_TASK_PROGRESS)) {
+          if (Object.values(getQueueEntities(state)).every(value => value && (value.progress === FINISHED_TASK_PROGRESS ||
+          value.progress === FAILED_TASK_PROGRESS))) {
             this.store.dispatch(new RecordsActions.Fetch());
             this.store.dispatch(new DocumentsActions.StopPolling());
           }
