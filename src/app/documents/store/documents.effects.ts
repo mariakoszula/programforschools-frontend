@@ -304,7 +304,7 @@ export class DocumentsEffects {
                   return of(new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: FAILED_TASK_PROGRESS,
-                    documents: [error.error.message]
+                    documents: ["Coś poszło nie tak: " + error.error.message]
                   }));
                 })
               );
