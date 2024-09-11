@@ -183,9 +183,7 @@ export class DocumentsEffects {
             map(responseData => {
               return new DocumentsActions.SetAnnex({
                 annex: responseData.annex,
-                documents: responseData.documents.filter((document_info: string) => {
-                  return document_info.includes("pdf")
-                })
+                documents: responseData.documents
               });
             }),
             catchError(error => {
@@ -292,7 +290,7 @@ export class DocumentsEffects {
                   let _documents: string[] = [];
                   if (responseData.progress === FINISHED_TASK_PROGRESS) {
                     if (responseData.documents) {
-                      _documents = responseData.documents.filter((document_info: string) => document_info.includes("pdf"));
+                       _documents = responseData.documents;
                     }
                   };
                   return new DocumentsActions.SetTaskProgress({

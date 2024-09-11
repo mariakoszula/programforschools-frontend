@@ -24,6 +24,7 @@ export interface RecordsDemand {
 
 export class Record {
   constructor(public id: number,
+              public no: string,
               public date: string,
               public delivery_date: string | null,
               public delivered_kids_no: number | null,

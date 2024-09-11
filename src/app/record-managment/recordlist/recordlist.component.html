@@ -12,6 +12,7 @@
       <thead>
       <tr>
         <th><i class="fas fa-check"></i></th>
+        <th>Numer</th>
         <th>Data</th>
         <th>Szkoła</th>
         <th>Produkt</th>
@@ -34,6 +35,7 @@
           </a>
         </td>
         <td *ngIf="isDelivered(record);"></td>
+        <td>{{ record.no }}</td>
         <td>{{ record.date }}</td>
         <td>{{ get_school_name(record) }}</td>
         <td>{{ get_product_name(record) }}</td>
