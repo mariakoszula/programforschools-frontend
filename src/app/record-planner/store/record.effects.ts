@@ -120,10 +120,14 @@ export class RecordEffects {
     return this.action$.pipe(
       ofType(RecordActions.DELETE_RECORD),
       switchMap((action: DeleteRecord) => {
-        return this.http.delete<{ deleted_record: number }>(environment.backendUrl +
+        return this.http.delete<{ deleted_record: number, is_in_middle: boolean }>(environment.backendUrl +
           "/record/" + action.id)
           .pipe(
             map(responseData => {
+              if (responseData.is_in_middle)
+              {
+                alert("Usunięto WZ ze środka, przegeneruj ponowanie dokumenty WZ, żeby przywrócić poprawną numeracje");
+              }
               return new RecordActions.DeleteRecordConfirm(responseData.deleted_record);
             }),
             catchError(error => {

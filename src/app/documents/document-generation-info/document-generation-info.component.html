@@ -1,3 +1,12 @@
+<div *ngIf="anyNotifications()" class="callout callout-warning">
+  <h5>Uwaga</h5>
+  <p>Zwróć uwagę na następujące zmiany:</p>
+  <ul>
+    <li>{{this.notification}}</li>
+  </ul>
+</div>
+
+
 <div *ngIf="anyGeneratedDocuments()" class="callout callout-success">
   <h5>Wygenerowano dokumenty pomyślnie!</h5>
   <p> Ostatnio wygnerowane dokumenty:</p>
@@ -9,9 +18,11 @@
     </div>
   </ul>
 </div>
+
 <div *ngIf="!anyGeneratedDocuments()" class="callout callout-info">
   <p> Ostatnio wygnerowane dokumenty:</p>
   <ul>
     <li>Brak dokumentów w sesji</li>
   </ul>
 </div>
+

@@ -51,6 +51,7 @@ interface QueuedTaskResponse {
 
 interface QueuedTaskProgressResponse {
   progress: number;
+  notification: string;
   documents: string[];
 }
 
@@ -288,15 +289,20 @@ export class DocumentsEffects {
               .pipe(
                 map(responseData => {
                   let _documents: string[] = [];
+                  let _notification: string = "";
                   if (responseData.progress === FINISHED_TASK_PROGRESS) {
                     if (responseData.documents) {
                        _documents = responseData.documents;
+                    }
+                    if (responseData.notification) {
+                      _notification = responseData.notification;
                     }
                   };
                   return new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: responseData.progress,
-                    documents: _documents
+                    documents: _documents,
+                    notification: _notification
                   });
                 }),
                 catchError((error: HttpErrorResponse) => {
@@ -304,7 +310,8 @@ export class DocumentsEffects {
                   return of(new DocumentsActions.SetTaskProgress({
                     id: action.payload.id,
                     progress: FAILED_TASK_PROGRESS,
-                    documents: ["Coś poszło nie tak: " + error.error.message]
+                    documents: [],
+                    notification: "Coś poszło nie tak: " + error.error.message
                   }));
                 })
               );

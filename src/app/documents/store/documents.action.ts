@@ -99,7 +99,7 @@ export class GenerateWeekSummary implements Action {
 export class SetTaskProgress implements Action {
   readonly type = SET_TASK_PROGRESS;
 
-  constructor(public payload: { id: string, progress: number, documents: string[] }) {
+  constructor(public payload: { id: string, progress: number, documents: string[], notification: string }) {
   }
 }
 

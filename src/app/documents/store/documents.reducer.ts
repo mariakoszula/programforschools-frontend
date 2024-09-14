@@ -35,6 +35,7 @@ export interface State {
   contracts: Contract[];
   applications: Application[];
   generatedDocuments: string[];
+  notifications: string;
   queuedTasks: QueuedTaskInfoState;
   notificationCounter: number;
   isGenerating: boolean;
@@ -44,6 +45,7 @@ export const initialState = {
   contracts: [],
   applications: [],
   generatedDocuments: [],
+  notifications: "",
   queuedTasks: queuedTaskInfoEntityAdapter.getInitialState(),
   notificationCounter: 0,
   isGenerating: false
@@ -56,6 +58,7 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
         ...state,
         contracts: [],
         generatedDocuments: [],
+        notifications: "",
         isGenerating: false
       }
     case SET_CONTRACTS:
@@ -126,6 +129,7 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
         return {
           ...state,
           generatedDocuments: [...action.payload.documents],
+          notifications: action.payload.notification,
           queuedTasks: queuedTaskInfoEntityAdapter.updateOne({
             id: currentTask.id,
             changes: {progress: action.payload.progress},

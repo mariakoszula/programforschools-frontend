@@ -10,6 +10,7 @@ import {Store} from "@ngrx/store";
 export class DocumentGenerationInfoComponent implements OnInit, OnDestroy {
   contractSub: Subscription | null = null;
   generatedDocuments: { [name: string]: string } = {};
+  notification: string | null = null;
 
   constructor(private store: Store<AppState>) { }
 
@@ -19,7 +20,10 @@ export class DocumentGenerationInfoComponent implements OnInit, OnDestroy {
         const res = document.split(": webViewLink:");
         this.generatedDocuments[res[0]] = res[1];
         }
-      )
+      );
+      if (documentsState.notifications !== "") {
+        this.notification = documentsState.notifications;
+      }
     });
   }
     ngOnDestroy() {
@@ -28,6 +32,10 @@ export class DocumentGenerationInfoComponent implements OnInit, OnDestroy {
 
   anyGeneratedDocuments () {
     return Object.keys(this.generatedDocuments).length !== 0;
+  }
+
+  anyNotifications() {
+    return this.notification !== null;
   }
 
 }
