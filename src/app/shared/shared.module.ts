@@ -8,10 +8,11 @@ import {RecordDisplayComponent} from "./record-display/record-display.component"
 import {CutYearFromDate} from "./cut-date.pipe";
 import {DayName} from "./get-day-name.pipe";
 import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
-import {NotificationsComponent} from "../documents/notifications/notifications.component";
 import {RouterModule} from "@angular/router";
-import {ProgressBarModule} from "angular-progress-bar";
 import {SortArrayPipe} from "./sort-array.pipe";
+import {NotificationsComponent} from "./notifications/notifications.component";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {SortArrayPipe} from "./sort-array.pipe";
     DataTablesModule,
     ReactiveFormsModule,
     RouterModule,
-    ProgressBarModule
+    MatProgressBarModule,
+    MatToolbarModule
   ],
   exports: [
     SimpleAlertComponent,

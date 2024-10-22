@@ -7,7 +7,8 @@ import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataTableDirective} from "angular-datatables";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../shared/namemapping.utils";
-import {ADTSettings} from "angular-datatables/src/models/settings";
+import { Config } from 'datatables.net-dt';
+import 'datatables.net-responsive';
 
 @Component({
   selector: 'app-contractlist',
@@ -17,10 +18,10 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective, {static: false})
   dtElement!: DataTableDirective;
 
-  contractDtOptions: ADTSettings = {};
+  contractDtOptions: Config = {};
   contracts: Contract[] = [];
   programSub: Subscription | null = null;
-  dtTrigger: Subject<ADTSettings> = new Subject();
+  dtTrigger: Subject<Config> = new Subject();
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
 
@@ -50,7 +51,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 50,
       responsive: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"}
+      language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
     };
   }
 
@@ -89,7 +90,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
   }
   rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    this.dtElement.dtInstance.then(dtInstance => {
       // Destroy the table first
       dtInstance.destroy();
       // Call the dtTrigger to rerender again

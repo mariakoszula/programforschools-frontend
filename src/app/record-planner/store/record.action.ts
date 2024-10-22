@@ -13,12 +13,15 @@ export const RECORD_ERROR_HANDLER = "[Program] RECORD_ERROR_HANDLER";
 
 export class Fetch implements Action {
   readonly type = FETCH;
+  constructor(public route: string | null = null) {
+
+  }
 }
 
 export class SetRecords implements Action {
   readonly type = SET_RECORDS;
 
-  constructor(public payload: {records: Record[], recordsFailedResponse: AdditionRecordsResponse | null}) {
+  constructor(public payload: {records: Record[], recordsFailedResponse: AdditionRecordsResponse | null}, public route: string | null = null) {
   }
 }
 

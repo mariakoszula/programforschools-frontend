@@ -32,7 +32,7 @@ export class SchoolslistComponent implements OnInit, OnDestroy {
       order: [[1, 'asc']],
       pageLength: 50,
       responsive: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+      language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
       rowCallback: (row: Node, data: any | Object, _:number) => {
         const self = this;
         $('td', row).off('click');

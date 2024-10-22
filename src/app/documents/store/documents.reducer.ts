@@ -16,7 +16,7 @@ import {
   STOP_POLLING,
   UPDATE_ANNEX
 } from "./documents.action";
-import {QueuedTaskInfo} from "../notifications/notifications.component";
+import {QueuedTaskInfo} from "../../shared/notifications/notifications.component";
 import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 
 const INITIAL_TASK_PROGRESS = 0;
@@ -39,6 +39,7 @@ export interface State {
   queuedTasks: QueuedTaskInfoState;
   notificationCounter: number;
   isGenerating: boolean;
+  route: string | null;
 }
 
 export const initialState = {
@@ -48,7 +49,8 @@ export const initialState = {
   notifications: "",
   queuedTasks: queuedTaskInfoEntityAdapter.getInitialState(),
   notificationCounter: 0,
-  isGenerating: false
+  isGenerating: false,
+  route: null
 }
 
 export function documentsReducer(state: State = initialState, action: DocumentsActions) {
@@ -121,7 +123,8 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
             ...action.payload,
             progress: INITIAL_TASK_PROGRESS
         }, state.queuedTasks),
-        notificationCounter: state.notificationCounter + 1
+        notificationCounter: state.notificationCounter + 1,
+        route: action.route
       };
     case SET_TASK_PROGRESS:
       let currentTask = getQueueEntities(state)[action.payload.id];
@@ -146,7 +149,8 @@ export function documentsReducer(state: State = initialState, action: DocumentsA
       return {
         ...state,
         notificationCounter: state.notificationCounter + 1,
-        isGenerating: false
+        isGenerating: false,
+        route: null
       }
      case FETCH_APPLICATION:
       return {

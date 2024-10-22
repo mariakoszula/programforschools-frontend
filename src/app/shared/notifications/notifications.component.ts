@@ -19,10 +19,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) {
   }
 
-  progressToStr(progress: number) {
-    return progress.toString();
-  }
-
   getNotifications() {
     return Object.values(this.notificationsToDisplay).sort((n1, n2) => n1.progress - n2.progress);
   }

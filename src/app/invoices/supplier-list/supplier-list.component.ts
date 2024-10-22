@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ADTSettings} from "angular-datatables/src/models/settings";
+import { Config } from 'datatables.net-dt';
+import 'datatables.net-responsive';
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import { Store} from "@ngrx/store";
@@ -15,7 +16,7 @@ import {State} from "../store/invoice.reducer";
 })
 export class SupplierListComponent implements OnInit, OnDestroy{
   suppliers: Supplier[] = [];
-  suppliersDtOptions: ADTSettings = {};
+  suppliersDtOptions: Config = {};
   suppliersSub: Subscription | null = null;
 
     constructor(private router: Router,
@@ -38,7 +39,7 @@ export class SupplierListComponent implements OnInit, OnDestroy{
     this.suppliersDtOptions = {
         responsive: false,
         searching: false,
-        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+        language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
       };
 
   }

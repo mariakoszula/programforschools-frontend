@@ -42,8 +42,8 @@ export class RecordEffects {
             map(responseData => {
               return new RecordActions.SetRecords({
                 records: responseData.records,
-                recordsFailedResponse: null
-              })
+                recordsFailedResponse: null,
+              },  action.route)
             }),
             catchError(error => {
               console.log(error);
@@ -143,21 +143,29 @@ export class RecordEffects {
       this.action$.pipe(
         ofType(RecordActions.SET_RECORDS),
         tap((actionResp: RecordActions.SetRecords) => {
-          const failedResp = actionResp.payload.recordsFailedResponse;
-          if (failedResp && failedResp.records.length !== 0) {
-            let date = failedResp.date;
-            let weeks = get_weeks();
-            const week = weeks.find((week: Week) => is_date_in_range(date, week.start_date, week.end_date));
-            if (week) {
-              this.router.navigate(["planowanie/" + week.id + "/" + date + "/wybierz-szkoly"]);
-            }
-          } else if (actionResp.payload.records.length !== 0) {
-            const week_id = actionResp.payload.records[0].week_id;
-            this.router.navigate(["planowanie/" + week_id]);
-          } else {
-            this.router.navigate(["planowanie"]);
+          if (actionResp.route !== null)
+          {
+            this.router.navigate([actionResp.route]);
           }
-        })),
+          else
+          {
+            const failedResp = actionResp.payload.recordsFailedResponse;
+            if (failedResp && failedResp.records.length !== 0) {
+              let date = failedResp.date;
+              let weeks = get_weeks();
+              const week = weeks.find((week: Week) => is_date_in_range(date, week.start_date, week.end_date));
+              if (week) {
+                this.router.navigate(["planowanie/" + week.id + "/" + date + "/wybierz-szkoly"]);
+              }
+            } else if (actionResp.payload.records.length !== 0) {
+              const week_id = actionResp.payload.records[0].week_id;
+              this.router.navigate(["planowanie/" + week_id]);
+            } else {
+              this.router.navigate(["planowanie"]);
+            }
+          }
+
+                  })),
     {dispatch: false});
 
 

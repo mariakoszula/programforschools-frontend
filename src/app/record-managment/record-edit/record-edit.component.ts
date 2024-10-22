@@ -46,6 +46,12 @@ export class RecordEditComponent implements OnInit, OnDestroy {
     this.product = this.products.find(p => p.id === this.currentRecord?.product_store_id);
   }
 
+  private setData() {
+    if (!this.currentRecord) return;
+    let date = formatDate(convert_date_from_backend_format(this.currentRecord.date), "yyyy-MM-dd", 'en');
+    this.recordForm.controls["recordDate"].patchValue(date);
+  }
+
   private setSchool() {
     let res = localStorage.getItem("currentContract");
     if (!res) return;
@@ -78,6 +84,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
       })).subscribe(recordState => {
 
       this.currentRecord = recordState.records.find(r => r.id === this.recordId);
+      this.setData();
       this.setProducts();
       this.setSchool();
       if (!this.currentRecord || !this.products || !this.currentSchool) {

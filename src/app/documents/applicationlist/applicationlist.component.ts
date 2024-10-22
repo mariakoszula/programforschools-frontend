@@ -9,7 +9,8 @@ import {environment} from "../../../environments/environment";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {GenerateApplications} from "../store/documents.action";
 import {Router} from "@angular/router";
-
+import { Config } from 'datatables.net-dt';
+import 'datatables.net-responsive';
 
 interface Error {
   message: string;
@@ -27,7 +28,7 @@ interface CheckErrorResponse {
 export class ApplicationListComponent implements OnInit {
     applications: Application[] = [];
     errors: { [no: string]: Error[] } = {};
-    dtOptions: DataTables.Settings = {};
+    dtOptions: Config = {};
     applicationForm: FormGroup;
 
     constructor(private store: Store<AppState>, private http: HttpClient, private router: Router) {
@@ -40,7 +41,7 @@ export class ApplicationListComponent implements OnInit {
         order: [[1, 'asc']],
         responsive: false,
         searching: false,
-        language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+        language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
       };
     }
     ngOnInit(){

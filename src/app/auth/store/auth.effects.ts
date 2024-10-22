@@ -1,4 +1,4 @@
-import {Actions, createEffect, Effect, ofType} from "@ngrx/effects";
+import {Actions, createEffect, ofType} from "@ngrx/effects";
 import * as  AuthActions from "./auth.actions";
 import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import {environment} from "../../../environments/environment";

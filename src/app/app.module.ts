@@ -11,7 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./auth/auth-interceptor.service";
 import { StoreModule } from '@ngrx/store';
-import {EffectsModule} from "@ngrx/effects";
+import { EffectsModule } from "@ngrx/effects";
 import {AuthEffects} from "./auth/store/auth.effects";
 import {StoreDevtoolsModule} from '@ngrx/store-devtools'
 import {environment} from "../environments/environment";
@@ -23,6 +23,8 @@ import {RecordEffects} from "./record-planner/store/record.effects";
 import {SharedModule} from "./shared/shared.module";
 import {metaReducers, appReducer} from "./store/app.reducer";
 import {InvoiceEffects} from "./invoices/store/invoice.effects";
+import { DataTablesModule } from "angular-datatables";
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -34,9 +36,11 @@ import {InvoiceEffects} from "./invoices/store/invoice.effects";
   ],
     imports: [
         BrowserModule,
+        DataTablesModule,
         RoutingModule,
         ContentModule,
         ReactiveFormsModule,
+        CommonModule,
         HttpClientModule,
         StoreModule.forRoot(appReducer, { metaReducers } ),
         EffectsModule.forRoot([
@@ -49,7 +53,8 @@ import {InvoiceEffects} from "./invoices/store/invoice.effects";
             InvoiceEffects
         ]),
         StoreDevtoolsModule.instrument({logOnly: environment.production}),
-        SharedModule
+        SharedModule,
+
     ],
   providers: [
     {

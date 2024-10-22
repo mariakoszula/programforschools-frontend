@@ -8,7 +8,7 @@ import {ResetNotificationCounter} from "../documents/store/documents.action";
 
 @Component({
   selector: 'app-main-header',
-  templateUrl: './main-header.component.html',
+  templateUrl: './main-header.component.html'
 })
 export class MainHeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;

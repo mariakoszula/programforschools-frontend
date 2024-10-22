@@ -106,7 +106,7 @@ export class SetTaskProgress implements Action {
 export class QueueGeneratingTaskAndStartPolling implements Action {
   readonly type = QUEUE_GENERATING_TASK_AND_START_POLLING;
 
-  constructor(public payload: { id: string, name: string }) {
+  constructor(public payload: { id: string, name: string}, public route: string | null = null) {
   }
 }
 

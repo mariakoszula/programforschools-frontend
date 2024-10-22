@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {InvoiceDisposal, InvoiceProduct, InvoiceWithProducts, ProductWithDisposal, Supplier} from "../invoice.model";
-import {ADTSettings} from "angular-datatables/src/models/settings";
+import { Config } from 'datatables.net-dt';
+import 'datatables.net-responsive';
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
@@ -28,7 +29,7 @@ export class InvoiceListComponent {
   suppliers: Supplier[] = [];
   invoiceWithProducts: InvoiceWithProducts[] = [];
   product_storage: ProductStore[] = [];
-  dtOptions: ADTSettings = {};
+  dtOptions: Config = {};
   sub: Subscription | null = null;
   programSub: Subscription | null = null;
   docSub: Subscription | null = null;
@@ -48,7 +49,7 @@ export class InvoiceListComponent {
     this.dtOptions = {
       responsive: false,
       searching: false,
-      language: {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"},
+      language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
     };
     this.invoiceSummaryForm = new FormGroup<any>({
       'select_all': new FormControl("", []),

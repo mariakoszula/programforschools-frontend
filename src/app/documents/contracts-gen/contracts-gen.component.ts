@@ -13,8 +13,8 @@ import * as DocumentsActions from "../store/documents.action";
 })
 export class ContractsGenComponent implements OnInit, OnDestroy {
   public schools: School[] = [];
-  program: Program | null = null;
-  contractForm: FormGroup;
+  program!: Program;
+  contractForm!: FormGroup;
   programSub: Subscription | null = null;
   contractSub: Subscription | null = null;
   schoolSub: Subscription | null = null;

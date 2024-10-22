@@ -5,7 +5,11 @@
   "projects": {
     "rykosystem-frontend": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "standalone": false
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -25,15 +29,18 @@
             "styles": [
               "node_modules/fontawesome-free/css/all.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/datatables.net-dt/css/jquery.dataTables.min.css",
-              "node_modules/admin-lte/dist/css/alt/adminlte.light.css",
-              "src/styles.css"
+              "node_modules/admin-lte/dist/css/adminlte.css",
+              "src/styles.css",
+              "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
+              "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/datatables.net/js/jquery.dataTables.min.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/dataTables.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/admin-lte/dist/js/adminlte.min.js"
+              "node_modules/admin-lte/dist/js/adminlte.min.js",
+              "node_modules/datatables.net-responsive/js/dataTables.responsive.js"
+
             ]
           },
           "configurations": {

@@ -19,6 +19,7 @@ import {ApplicationAddComponent} from "./application-add/application-add.compone
 import {ApplicationListComponent} from "./applicationlist/applicationlist.component";
 import {SelectAppTypeComponent} from "./select-app-type/select-app-type.component";
 import {AngularDualListBoxModule} from "angular-dual-listbox";
+import { DataTablesModule } from "angular-datatables";
 
 @NgModule(({
   declarations: [
@@ -36,6 +37,7 @@ import {AngularDualListBoxModule} from "angular-dual-listbox";
     ApplicationAddComponent],
   imports: [
     AngularDualListBoxModule,
+    DataTablesModule,
     SharedModule,
     RouterModule.forChild([
       {

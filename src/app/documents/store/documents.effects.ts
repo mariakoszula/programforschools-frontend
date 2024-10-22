@@ -246,7 +246,7 @@ export class DocumentsEffects {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
                 id: responseData.task_id,
                 name: "Dostawa:".concat(action.driver, " ", action.delivery_date)
-              });
+              }, "dokumenty/wydanie-na-zewnatrz");
             }),
             catchError(error => {
               console.log(error);
@@ -328,7 +328,7 @@ export class DocumentsEffects {
         tap(([_, state]) => {
           if (Object.values(getQueueEntities(state)).every(value => value && (value.progress === FINISHED_TASK_PROGRESS ||
           value.progress === FAILED_TASK_PROGRESS))) {
-            this.store.dispatch(new RecordsActions.Fetch());
+            this.store.dispatch(new RecordsActions.Fetch(state.route));
             this.store.dispatch(new DocumentsActions.StopPolling());
           }
         })),

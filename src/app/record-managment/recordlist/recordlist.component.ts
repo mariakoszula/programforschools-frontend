@@ -8,7 +8,8 @@ import {ProductStore} from "../../programs/program.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
-import {ADTSettings} from "angular-datatables/src/models/settings";
+import { Config } from 'datatables.net-dt';
+import 'datatables.net-responsive';
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 
 @Component({
@@ -18,8 +19,8 @@ import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective)
   dtElement?: DataTableDirective;
-  dtOptions:  ADTSettings = {};
-  dtTrigger: Subject<ADTSettings> = new Subject();
+  dtOptions:  Config = {};
+  dtTrigger: Subject<Config> = new Subject();
 
   loading: boolean = false;
   records: Record[] = [];
@@ -43,7 +44,7 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
       pageLength: 50,
       responsive: true,
       destroy: true,
-      language: {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Polish.json"},
+      language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
       stateSave: true,
       stateDuration: -1
     }
@@ -124,7 +125,7 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   rerender(): void {
     if (this.dtElement) {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      this.dtElement.dtInstance.then(dtInstance => {
         // Destroy the table first
         dtInstance.destroy();
         // Call the dtTrigger to rerender again
