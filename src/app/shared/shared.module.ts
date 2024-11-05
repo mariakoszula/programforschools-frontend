@@ -10,8 +10,6 @@ import {WeeksDisplayComponent} from "./weeks-display/weeks-display.component";
 import {RouterModule} from "@angular/router";
 import {SortArrayPipe} from "./sort-array.pipe";
 import {NotificationsComponent} from "./notifications/notifications.component";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatToolbarModule} from "@angular/material/toolbar";
 import {DataTablesModule} from "angular-datatables";
 
 @NgModule({
@@ -29,9 +27,7 @@ import {DataTablesModule} from "angular-datatables";
     CommonModule,
     DataTablesModule,
     ReactiveFormsModule,
-    RouterModule,
-    MatProgressBarModule,
-    MatToolbarModule
+    RouterModule
   ],
   exports: [
     SimpleAlertComponent,

@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Contract} from "../contract.model";
 import {State} from "../store/documents.reducer";
 import {Store} from "@ngrx/store";
@@ -13,9 +13,10 @@ import {ADTSettings} from "angular-datatables/src/models/settings";
   selector: 'app-contractlist',
   templateUrl: './contractlist.component.html'
 })
-export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild(DataTableDirective, {static: false}) dtElement!: DataTableDirective;
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective | undefined;
 
   dtOptions: ADTSettings = {};
   contracts: Contract[] = [];
@@ -31,12 +32,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, 
     this.DAIRY_PRODUCT = DAIRY_PRODUCT;
   }
 
-  ngOnChanges():void {
-    console.log("ngOnChanges");
-    this.dtTrigger.next(this.dtOptions);
-  }
   ngOnDestroy(): void {
-    console.log("ngOnDestroy");
     this.dtTrigger.unsubscribe();
   }
 
@@ -46,7 +42,6 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   ngOnInit(): void {
-    console.log("titit");
     this.dtOptions = {
       paging: true,
       pagingType: 'full_numbers',
@@ -58,7 +53,6 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, 
     this.store.select("document").subscribe(
       (contractState: State) => {
         this.contracts = contractState.contracts;
-        console.log("nginit");
         this.rerender();
       }
     );
@@ -100,12 +94,15 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, 
     return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
   }
   rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next(this.dtOptions);
-    });
+    if (this.dtElement)
+    {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        // Destroy the table first
+        dtInstance.destroy();
+        // Call the dtTrigger to rerender again
+        this.dtTrigger.next(this.dtOptions);
+      });
+    }
   }
   onSelectContract(contract: Contract) {
     this.onEdit(contract.school.id);

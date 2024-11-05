@@ -9,6 +9,9 @@
     "test": "ng test",
     "prod_build": "ng build --configuration production --aot"
   },
+  "resolutions": {
+    "autoprefixer": "10.4.5"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.4",
@@ -26,15 +29,17 @@
     "@types/jquery": "^3.5.32"
   },
   "dependencies": {
+    "@angular/animations": "^18.2.5",
+    "@angular/cdk": "^18.2.4",
     "@angular/cli": "18.2.4",
     "@angular/common": "^18.2.5",
     "@angular/compiler": "^18.2.5",
     "@angular/core": "^18.2.5",
     "@angular/forms": "^18.2.5",
-    "@angular/material": "^18.2.4",
     "@angular/platform-browser": "^18.2.5",
     "@angular/platform-browser-dynamic": "^18.2.5",
     "@angular/router": "^18.2.5",
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "@ngrx/effects": "^18.0.2",
     "@ngrx/entity": "^18.0.2",
     "@ngrx/store": "^18.0.2",

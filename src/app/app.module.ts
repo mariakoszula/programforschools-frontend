@@ -25,6 +25,7 @@ import {metaReducers, appReducer} from "./store/app.reducer";
 import {InvoiceEffects} from "./invoices/store/invoice.effects";
 import { DataTablesModule } from "angular-datatables";
 import { CommonModule } from '@angular/common';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { CommonModule } from '@angular/common';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
       multi: true
-    }
+    },
+    provideAnimationsAsync('noop')
     ],
   bootstrap: [AppComponent]
 })
