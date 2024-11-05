@@ -22,7 +22,7 @@ import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 const INITIAL_TASK_PROGRESS = 0;
 export const FINISHED_TASK_PROGRESS = 100;
 export const FAILED_TASK_PROGRESS = -1;
-export const POLLING_INTERVAL = 10000;
+export const POLLING_INTERVAL = 5000;
 
 export interface QueuedTaskInfoState extends EntityState<QueuedTaskInfo> {
 }

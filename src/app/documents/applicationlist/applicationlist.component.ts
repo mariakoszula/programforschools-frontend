@@ -9,8 +9,6 @@ import {environment} from "../../../environments/environment";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {GenerateApplications} from "../store/documents.action";
 import {Router} from "@angular/router";
-import { Config } from 'datatables.net-dt';
-import 'datatables.net-responsive';
 
 interface Error {
   message: string;
@@ -28,7 +26,7 @@ interface CheckErrorResponse {
 export class ApplicationListComponent implements OnInit {
     applications: Application[] = [];
     errors: { [no: string]: Error[] } = {};
-    dtOptions: Config = {};
+    dtOptions: DataTables.Settings = {};
     applicationForm: FormGroup;
 
     constructor(private store: Store<AppState>, private http: HttpClient, private router: Router) {

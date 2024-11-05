@@ -56,7 +56,7 @@ import { DataTablesModule } from "angular-datatables";
           {
             path: 'wydanie-na-zewnatrz',
             component: RecordGenComponent,
-            resolve: [RecordResolverService]
+            resolve: [ProgramResolverService, ContractResolverService, RecordResolverService]
           },
           {path: 'wnioski', component: ApplicationListComponent, resolve: [ApplicationResolverService]},
           {path: 'wnioski/nowy_wniosek/wybor-typu', component: SelectAppTypeComponent},

@@ -44,6 +44,10 @@ export class RecordGenComponent implements OnInit {
     }
   }
 
+  ngOnChanges()
+  {
+    console.log("on changes");
+  }
   ngOnInit(): void {
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
@@ -71,6 +75,7 @@ export class RecordGenComponent implements OnInit {
     } else {
       this.error = "";
       const comment = this.deliveryForm.value.comment ? this.deliveryForm.value.comment : "";
+
       if (this.isDriverCheck) {
         this.store.dispatch(new DocumentsActions.GenerateDelivery(this.selectedRecords,
           convert_date_to_backend_format(this.deliveryForm.value.delivery_date),
@@ -80,7 +85,8 @@ export class RecordGenComponent implements OnInit {
           convert_date_to_backend_format(this.deliveryForm.value.delivery_date),
           "", comment));
       }
-
+      this.deliveryForm.reset();
+      this.selectedRecords = [];
     }
   }
 
@@ -95,6 +101,7 @@ export class RecordGenComponent implements OnInit {
 
   get_records() {
     if (this.selectedWeek) {
+      console.log("get records");
       return this.records.filter(record => record.week_id == this.selectedWeek?.id);
     }
     return this.records;

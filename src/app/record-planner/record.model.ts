@@ -40,7 +40,8 @@ export enum RecordStates {
   PLANNED = "PLANNED",
   GENERATED = "GENERATED",
   DELIVERED = "DELIVERED",
-  DELIVERY_PLANNED = "DELIVERY_PLANNED"
+  DELIVERY_PLANNED = "DELIVERY_PLANNED",
+  ASSIGN_NUMBER = "ASSIGN_NUMBER"
 }
 
 export function get_state_number(state: string): number {

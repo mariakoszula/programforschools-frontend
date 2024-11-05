@@ -34,24 +34,25 @@
             <i class="fas fa-check"></i>
           </a>
         </td>
-        <td *ngIf="isDelivered(record);"></td>
+        <td *ngIf="isAssignNumber(record)"><a class="btn-warning"><i class="fas fa-list"></i></a></td>
+        <td *ngIf="isDelivered(record)"></td>
         <td>{{ record.no }}</td>
         <td>{{ record.date }}</td>
         <td>{{ get_school_name(record) }}</td>
         <td>{{ get_product_name(record) }}</td>
         <td>{{ get_product_type(record) }}</td>
         <td>{{ record.delivered_kids_no }}</td>
-        <td *ngIf="!isDelivered(record);">
+        <td *ngIf="!isDelivered(record)">
           <a class="btn btn-info btn-sm" (click)="onEditRecord(record)">
             <i class="fas fa-pencil-alt"></i> </a>
         </td>
-        <td *ngIf="!isDelivered(record);">
+        <td *ngIf="!isDelivered(record)">
           <a class="btn btn-danger btn-sm" (click)="onDeleteRecord(record)">
             <i class="fas fa-trash"></i></a>
         </td>
         <!--        Dummy columns for proper alignment-->
-        <td *ngIf="isDelivered(record);"></td>
-        <td *ngIf="isDelivered(record);"></td>
+        <td *ngIf="isDelivered(record)"></td>
+        <td *ngIf="isDelivered(record)"></td>
 
       </tr>
       </tbody>

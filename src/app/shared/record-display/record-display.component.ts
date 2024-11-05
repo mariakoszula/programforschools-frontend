@@ -68,6 +68,7 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("nog on changes");
     this.contracts = changes["contracts"] ? changes["contracts"].currentValue : this.contracts;
     this.fruitVegProducts = changes["fruitVegProducts"] ? changes["fruitVegProducts"].currentValue : this.fruitVegProducts;
     this.dairyProducts = changes["dairyProducts"] ? changes["dairyProducts"].currentValue : this.dairyProducts;
@@ -87,8 +88,10 @@ export class RecordDisplayComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     this.sub = this.recordDataService.datesChanged.subscribe(dates => {
       this.dates = dates;
+      console.log("data changes");
       this.setRecordsInProductStorages();
     });
+    console.log("data changes  no");
     this.setRecordsInProductStorages();
   }
 

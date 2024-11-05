@@ -8,7 +8,7 @@ import {
 import {Product, Week} from "../programs/program.model";
 import {DAIRY_PRODUCT} from "./namemapping.utils";
 
-export const MAXIMUM_RESOLVER_TIMES = 2;
+export const MAXIMUM_RESOLVER_TIMES = 5;
 export const SZT = "SZT";
 
 

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Contract} from "../contract.model";
 import {State} from "../store/documents.reducer";
 import {Store} from "@ngrx/store";
@@ -7,21 +7,21 @@ import {Subject, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataTableDirective} from "angular-datatables";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../shared/namemapping.utils";
-import { Config } from 'datatables.net-dt';
+import { Config } from 'datatables.net';
 import 'datatables.net-responsive';
 
 @Component({
   selector: 'app-contractlist',
   templateUrl: './contractlist.component.html'
 })
-export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement!: DataTableDirective;
+export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-  contractDtOptions: Config = {};
+  @ViewChild(DataTableDirective, {static: false}) dtElement?: DataTableDirective;
+
+  dtOptions: Config = {};
   contracts: Contract[] = [];
   programSub: Subscription | null = null;
-  dtTrigger: Subject<Config> = new Subject();
+  dtTrigger: Subject<Config> = new Subject<Config>();
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
 
@@ -32,27 +32,38 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     this.DAIRY_PRODUCT = DAIRY_PRODUCT;
   }
 
+  ngOnChanges():void {
+    console.log("ngOnChanges");
+    this.dtTrigger.next(this.dtOptions);
+  }
   ngOnDestroy(): void {
+    console.log("ngOnDestroy");
     this.dtTrigger.unsubscribe();
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next(this.contractDtOptions);
+    this.dtTrigger.next(this.dtOptions);
   }
 
 
   ngOnInit(): void {
-    this.store.select("document").subscribe(
-      (contractState: State) => {
-        this.contracts = contractState.contracts;
-      }
-    );
-    this.contractDtOptions = {
+    console.log("titit");
+    this.dtOptions = {
+      paging: true,
       pagingType: 'full_numbers',
       pageLength: 50,
       responsive: true,
+      destroy: true,
       language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
     };
+    this.store.select("document").subscribe(
+      (contractState: State) => {
+        this.contracts = contractState.contracts;
+        console.log("nginit");
+        this.rerender();
+      }
+    );
+
   }
 
   onEdit(school_id: number) {
@@ -90,11 +101,13 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
   }
   rerender(): void {
-    this.dtElement.dtInstance.then(dtInstance => {
+    console.log("eet1");
+    this.dtElement?.dtInstance.then(dtInstance => {
+      console.log("test");
       // Destroy the table first
-      dtInstance.destroy();
+      dtInstance.clear().destroy(false);
       // Call the dtTrigger to rerender again
-      this.dtTrigger.next(this.contractDtOptions);
+      this.dtTrigger.next(this.dtOptions);
     });
   }
 

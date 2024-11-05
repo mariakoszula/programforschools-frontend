@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="contractDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
       <thead>
       <tr>
         <th>Umowa</th>
@@ -18,7 +18,7 @@
         <th>{{DAIRY_PRODUCT | titlecase}}</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody id="tablebody">
       <tr class="table-success">
         <td></td>
         <td>Suma dzieci</td>

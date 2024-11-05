@@ -60,11 +60,13 @@ export class InvoiceproductEditComponent implements OnInit, OnDestroy {
         if (this.edit) {
           const prod_id = this.edit.id;
           this.invoice_disposals = state.invoiceDisposal.filter(id => id.invoice_product_id === prod_id);
+          this.isEditMode = true;
         }
 
       } else {
         this.id = -1;
         this.edit = null;
+        this.isEditMode = false;
       }
     });
     this.initForm();

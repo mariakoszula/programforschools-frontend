@@ -17,8 +17,8 @@ import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
   templateUrl: './recordlist.component.html'
 })
 export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild(DataTableDirective)
-  dtElement?: DataTableDirective;
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective | undefined;
   dtOptions:  Config = {};
   dtTrigger: Subject<Config> = new Subject();
 
@@ -86,6 +86,10 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
     return record.state == RecordStates.GENERATED;
   }
 
+  isAssignNumber(record: Record) {
+    return record.state == RecordStates.ASSIGN_NUMBER;
+  }
+
   isDelivered(record: Record) {
     return record.state == RecordStates.DELIVERED;
   }
@@ -124,12 +128,14 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   rerender(): void {
-    if (this.dtElement) {
+     if (this.dtElement) {
+       //TODO fix if needed
       this.dtElement.dtInstance.then(dtInstance => {
         // Destroy the table first
-        dtInstance.destroy();
+        // dtInstance.destroy();
+
         // Call the dtTrigger to rerender again
-        this.dtTrigger.next(this.dtOptions);
+        // this.dtTrigger.next(this.dtOptions);
       });
     }
   }
