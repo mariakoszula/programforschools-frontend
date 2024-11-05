@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {InvoiceDisposal, InvoiceProduct, InvoiceWithProducts, ProductWithDisposal, Supplier} from "../invoice.model";
-import { Config } from 'datatables.net-dt';
-import 'datatables.net-responsive';
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
@@ -29,7 +27,7 @@ export class InvoiceListComponent {
   suppliers: Supplier[] = [];
   invoiceWithProducts: InvoiceWithProducts[] = [];
   product_storage: ProductStore[] = [];
-  dtOptions: Config = {};
+  dtOptions: DataTables.Settings = {};
   sub: Subscription | null = null;
   programSub: Subscription | null = null;
   docSub: Subscription | null = null;

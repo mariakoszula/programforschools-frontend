@@ -5,8 +5,6 @@ import {Store} from "@ngrx/store";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subscription, switchMap} from "rxjs";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
-import { Config } from 'datatables.net-dt';
-import 'datatables.net-responsive';
 
 @Component({
   selector: 'app-contract-details',
@@ -16,7 +14,7 @@ export class ContractDetailsComponent implements OnInit, OnDestroy {
   contract!: Contract;
   school_id: number = -1;
   sub: Subscription | null = null;
-  dtOptions: Config = {};
+  dtOptions: DataTables.Settings = {};
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
   base_url: string = 'dokumenty/umowy/';

@@ -1,6 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Config } from 'datatables.net-dt';
-import 'datatables.net-responsive';
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import { Store} from "@ngrx/store";
@@ -8,15 +6,13 @@ import * as fromApp from "../../store/app.reducer";
 import {Supplier} from "../invoice.model";
 import {State} from "../store/invoice.reducer";
 
-;
-
 @Component({
   selector: 'app-supplier-list',
   templateUrl: './supplier-list.component.html'
 })
 export class SupplierListComponent implements OnInit, OnDestroy{
   suppliers: Supplier[] = [];
-  suppliersDtOptions: Config = {};
+  suppliersDtOptions: DataTables.Settings = {};
   suppliersSub: Subscription | null = null;
 
     constructor(private router: Router,

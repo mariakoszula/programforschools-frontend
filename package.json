@@ -22,7 +22,7 @@
     "@angular/router": "^18.2.5",
     "@ngrx/store": "^18.0.2",
     "@ngrx/store-devtools": "^18.0.2",
-    "@types/datatables.net": "^1.12.3",
+    "@types/datatables.net": "^1.10.27",
     "@types/jquery": "^3.5.32"
   },
   "dependencies": {
@@ -38,12 +38,12 @@
     "@ngrx/effects": "^18.0.2",
     "@ngrx/entity": "^18.0.2",
     "@ngrx/store": "^18.0.2",
-    "admin-lte": "^4.0.0-beta2",
+    "admin-lte": "3.2",
     "angular-datatables": "^17.0.0",
     "angular-dual-listbox": "^7.0.0",
     "bootstrap": "^5.3.3",
-    "datatables.net": "^2.1.8",
-    "datatables.net-dt": "^2.1.8",
+    "datatables.net": "^1.13.7",
+    "datatables.net-dt": "^1.13.7",
     "fontawesome-free": "^1.0.4",
     "jquery": "^3.7.1"
   }

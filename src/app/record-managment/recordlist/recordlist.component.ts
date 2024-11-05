@@ -8,9 +8,8 @@ import {ProductStore} from "../../programs/program.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
-import { Config } from 'datatables.net-dt';
-import 'datatables.net-responsive';
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
+import {ADTSettings} from "angular-datatables/src/models/settings";
 
 @Component({
   selector: 'app-recordlist',
@@ -19,8 +18,8 @@ import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective | undefined;
-  dtOptions:  Config = {};
-  dtTrigger: Subject<Config> = new Subject();
+  dtOptions:  ADTSettings = {}
+  dtTrigger: Subject<ADTSettings> = new Subject();
 
   loading: boolean = false;
   records: Record[] = [];
@@ -128,14 +127,12 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   rerender(): void {
-     if (this.dtElement) {
-       //TODO fix if needed
-      this.dtElement.dtInstance.then(dtInstance => {
+    if (this.dtElement) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         // Destroy the table first
-        // dtInstance.destroy();
-
+        dtInstance.destroy();
         // Call the dtTrigger to rerender again
-        // this.dtTrigger.next(this.dtOptions);
+        this.dtTrigger.next(this.dtOptions);
       });
     }
   }
