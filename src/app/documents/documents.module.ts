@@ -44,7 +44,7 @@ import { DataTablesModule } from "angular-datatables";
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: DocumentsComponent,
-        resolve: [ProgramResolverService, SchoolResolverService, ContractResolverService],
+        resolve: [ProgramResolverService, SchoolResolverService, ContractResolverService, RecordResolverService],
         children: [
           {path: 'umowy', component: ContractDetailsComponent},
           {path: 'umowy/:school_id', component: ContractDetailsComponent},
@@ -55,8 +55,7 @@ import { DataTablesModule } from "angular-datatables";
           {path: 'generuj_umowy', component: ContractsGenComponent},
           {
             path: 'wydanie-na-zewnatrz',
-            component: RecordGenComponent,
-            resolve: [ProgramResolverService, ContractResolverService, RecordResolverService]
+            component: RecordGenComponent
           },
           {path: 'wnioski', component: ApplicationListComponent, resolve: [ApplicationResolverService]},
           {path: 'wnioski/nowy_wniosek/wybor-typu', component: SelectAppTypeComponent},

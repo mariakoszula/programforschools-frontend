@@ -143,6 +143,7 @@ export class RecordEffects {
       this.action$.pipe(
         ofType(RecordActions.SET_RECORDS),
         tap((actionResp: RecordActions.SetRecords) => {
+          console.log("is route setup", actionResp.route);
           if (actionResp.route !== null)
           {
             this.router.navigate([actionResp.route]);
@@ -161,7 +162,8 @@ export class RecordEffects {
               const week_id = actionResp.payload.records[0].week_id;
               this.router.navigate(["planowanie/" + week_id]);
             } else {
-              this.router.navigate(["planowanie"]);
+              console.log("should navigate to main route");
+              this.router.navigate(["/"]);
             }
           }
 

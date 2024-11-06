@@ -13,9 +13,7 @@ import {
   FormArray,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
+  ValidatorFn
 } from "@angular/forms";
 import * as DocumentsActions from "../../documents/store/documents.action";
 
@@ -27,7 +25,6 @@ export class InvoiceListComponent {
   suppliers: Supplier[] = [];
   invoiceWithProducts: InvoiceWithProducts[] = [];
   product_storage: ProductStore[] = [];
-  dtOptions: DataTables.Settings = {};
   sub: Subscription | null = null;
   programSub: Subscription | null = null;
   docSub: Subscription | null = null;
@@ -44,11 +41,6 @@ export class InvoiceListComponent {
   constructor(private router: Router,
               private activeRoute: ActivatedRoute,
               private store: Store<fromApp.AppState>) {
-    this.dtOptions = {
-      responsive: false,
-      searching: false,
-      language: {url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"},
-    };
     this.invoiceSummaryForm = new FormGroup<any>({
       'select_all': new FormControl("", []),
       'applications': new FormArray([], atLeastOneCheckboxSelectedValidator()),

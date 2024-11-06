@@ -7,7 +7,7 @@ import {
   HttpRequest,
   HttpStatusCode,
 } from "@angular/common/http";
-import {catchError, Observable, Subscription, switchMap, throwError} from "rxjs";
+import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {AuthService} from "./auth.service";
 import {exhaustMap, map, take} from "rxjs/operators";
 import {User} from "./user.model";
@@ -18,7 +18,6 @@ import * as fromApp from "../store/app.reducer"
 
 export class AuthInterceptorService implements HttpInterceptor {
   private isTokenRefreshing = false;
-  refreshTokenSub: Subscription | undefined;
 
   constructor(private authService: AuthService, private store: Store<fromApp.AppState>) {
   }

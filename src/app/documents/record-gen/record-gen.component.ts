@@ -44,10 +44,6 @@ export class RecordGenComponent implements OnInit {
     }
   }
 
-  ngOnChanges()
-  {
-    console.log("on changes");
-  }
   ngOnInit(): void {
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
@@ -62,6 +58,7 @@ export class RecordGenComponent implements OnInit {
         }
       )).subscribe(recordState => {
         this.records = recordState.records;
+        console.log("NgONInit -- clear data here?");
       }
     );
   }
@@ -101,7 +98,6 @@ export class RecordGenComponent implements OnInit {
 
   get_records() {
     if (this.selectedWeek) {
-      console.log("get records");
       return this.records.filter(record => record.week_id == this.selectedWeek?.id);
     }
     return this.records;

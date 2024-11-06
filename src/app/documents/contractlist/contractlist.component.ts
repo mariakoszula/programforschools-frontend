@@ -34,6 +34,10 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    if (this.programSub)
+    {
+      this.programSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit(): void {
