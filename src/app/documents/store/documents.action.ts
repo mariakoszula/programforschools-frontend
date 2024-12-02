@@ -34,7 +34,7 @@ export class FetchContracts implements Action {
 export class SetContracts implements Action {
   readonly type = SET_CONTRACTS;
 
-  constructor(public payload: { contracts: Contract[], documents: string[] }) {
+  constructor(public payload: { contracts: Contract[], documents: string[] }, public skip_navigate: boolean = false) {
 
   }
 }
@@ -68,7 +68,7 @@ export class UpdateAnnex implements Action {
 export class SetAnnex implements Action {
   readonly type = SET_ANNEX;
 
-  constructor(public payload: { annex: Annex, documents: string[] }) {
+  constructor(public payload: { annex: Annex, documents: string[] }, public skip_navigate: boolean = false) {
   }
 }
 

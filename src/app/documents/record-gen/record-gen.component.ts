@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ProductStore, Week} from "../../programs/program.model";
 import {Record} from "../../record-planner/record.model";
@@ -14,7 +14,7 @@ import {convert_date_to_backend_format} from "../../shared/date_converter.utils"
   selector: 'app-record-gen',
   templateUrl: './record-gen.component.html'
 })
-export class RecordGenComponent implements OnInit {
+export class RecordGenComponent implements OnInit, OnDestroy {
   error: string = "";
   isGenerating: boolean = false;
   sub: Subscription | null = null;
@@ -44,11 +44,26 @@ export class RecordGenComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.sub)
+    {
+      this.sub.unsubscribe();
+    }
+    this.recordDataService.resetDates();
+  }
+
   ngOnInit(): void {
     this.sub = this.store.select("program").pipe(
       switchMap(programState => {
         this.fruitVegProducts = programState.fruitVegProducts;
         this.dairyProducts = programState.dairyProducts;
+        if (programState.indexOfSelectedProgram !== -1) {
+          this.recordDataService.setProgram(programState.programs[programState.indexOfSelectedProgram]);
+        }
+        if (this.selectedWeek) {
+            this.recordDataService.setDates(this.selectedWeek);
+          }
+
         return this.store.select("document");
       }),
       switchMap(documentState => {
@@ -58,7 +73,6 @@ export class RecordGenComponent implements OnInit {
         }
       )).subscribe(recordState => {
         this.records = recordState.records;
-        console.log("NgONInit -- clear data here?");
       }
     );
   }
@@ -84,6 +98,7 @@ export class RecordGenComponent implements OnInit {
       }
       this.deliveryForm.reset();
       this.selectedRecords = [];
+      this.selectedWeek = null;
     }
   }
 

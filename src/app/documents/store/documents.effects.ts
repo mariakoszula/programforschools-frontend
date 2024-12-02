@@ -70,7 +70,7 @@ export class DocumentsEffects {
               return new DocumentsActions.SetContracts({
                 contracts: responseData.contracts,
                 documents: []
-              })
+              }, true)
             }),
             catchError(error => {
               console.log(error);
@@ -218,9 +218,11 @@ export class DocumentsEffects {
   redirectOnSet = createEffect(() =>
       this.action$.pipe(
         ofType(DocumentsActions.SET_ANNEX, DocumentsActions.SET_CONTRACTS),
-        tap(() => {
-          this.router.navigate(["/dokumenty/umowy"]).then(() => {
-          });
+        tap((actionResp: DocumentsActions.SetContracts | DocumentsActions.SetAnnex) => {
+          if (!actionResp.skip_navigate)
+          {
+            this.router.navigate(["/dokumenty/umowy"]).then(() => {});
+          }
         })),
     {dispatch: false});
 

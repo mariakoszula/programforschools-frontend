@@ -27,8 +27,8 @@ export class RecordResolverService implements Resolve<Record[]> {
       }),
       switchMap(records => {
         if (records.length === 0 && (this.resolved <= MAXIMUM_RESOLVER_TIMES)) {
-          console.log("resolving");
-          this.store.dispatch(new RecordActions.Fetch());
+          console.log("resolving " + state.url);
+          this.store.dispatch(new RecordActions.Fetch(state.url));
           this.resolved += 1;
           return this.actions$.pipe(
             ofType(SET_RECORDS),
