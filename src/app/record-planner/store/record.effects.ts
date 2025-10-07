@@ -5,7 +5,7 @@ import {environment} from "../../../environments/environment";
 import {map} from "rxjs/operators";
 import * as RecordActions from "./record.action";
 import {HttpClient} from "@angular/common/http";
-import {AddRecords, DeleteRecord, Fetch, UpdateRecord} from "./record.action";
+import {AddRecords, BulkDelete, BulkDeleteConfirm, DeleteRecord, Fetch, UpdateRecord} from "./record.action";
 import {
   AdditionRecordsResponse,
   Record,
@@ -138,6 +138,28 @@ export class RecordEffects {
       }));
   });
 
+    onBulkDelete$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(RecordActions.BULK_DELETE),
+      switchMap((action: BulkDelete) => {
+        return this.http.delete<{ skipped: [], deleted: [] }>(environment.backendUrl +
+          "/records/bulk_delete", {
+          body: {
+            'ids': action.records.map(record => record.id),
+            'program_id': get_current_program().id
+          }
+        })
+          .pipe(
+            map(responseData => {
+              return new RecordActions.BulkDeleteConfirm(responseData.skipped, responseData.deleted);
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
 
   redirectOnSave = createEffect(() =>
       this.action$.pipe(

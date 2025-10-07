@@ -16,6 +16,7 @@
         <th>Nazwa</th>
         <th>{{FRUIT_VEG_PRODUCT | titlecase}}</th>
         <th>{{DAIRY_PRODUCT | titlecase}}</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -25,6 +26,7 @@
         <td></td>
         <td>{{get_sum_fruitVeg_latest()}}</td>
         <td>{{get_sum_diary_latest()}}</td>
+        <td></td>
       </tr>
       <tr class="table-info">
         <td></td>
@@ -32,6 +34,7 @@
         <td></td>
         <td>{{get_sum_fruitVeg()}}</td>
         <td>{{get_sum_diary()}}</td>
+        <td></td>
       </tr>
       <tr class="cursor" *ngFor="let contract of contracts; let i = index;" (click)="onSelectContract(contract)">
         <td>{{ contract.contract_no }}</td>
@@ -39,6 +42,25 @@
         <td>{{ contract.school.name }}</td>
         <td>{{ get_latest_fruitVeg_product(contract) }}</td>
         <td>{{ get_latest_diary_product(contract) }}</td>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Umowy i aneksy
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item disabled"># | Data | Warzywa-owoce | Nabiał</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li  class="bg-success-subtle"><a class="dropdown-item disabled">Um.{{ contract.contract_no }}/{{ contract.contract_year }} | {{ contract.validity_date }} | {{ contract.fruitVeg_products }} | {{ contract.dairy_products }}</a></li>
+              <div *ngFor="let annex of contract.annex">
+                <li><hr class="dropdown-divider"></li>
+                <li  class="bg-warning-subtle"><a class="dropdown-item disabled">An.{{ annex.no }} | {{ annex.validity_date }} | {{ annex.fruitVeg_products }} | {{ annex.dairy_products }}</a></li>
+              </div>
+
+
+
+            </ul>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>

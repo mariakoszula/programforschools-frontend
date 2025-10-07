@@ -112,7 +112,7 @@ export class DocumentsEffects {
             map(responseData => {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
                 id: responseData.task_id,
-                name: "Rejestr"
+                name: "Rejestr umów"
               });
             }),
             catchError(error => {
@@ -122,6 +122,28 @@ export class DocumentsEffects {
           );
       }));
   });
+
+    onGenerateRecordsRegister$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_RECORDS_REGISTER),
+      switchMap((_) => {
+        return this.http.get<QueuedTaskResponse>(environment.backendUrl +
+          "/create_records_register/" + get_current_program().id)
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Rejestr WZ"
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
 
   onGenerateApplications$ = createEffect(() => {
     return this.action$.pipe(

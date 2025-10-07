@@ -1,11 +1,10 @@
-import {AdditionRecordsResponse, Record} from "../record.model";
+import {AdditionRecordsResponse, Record, RecordAddResult} from "../record.model";
 import {
-  ADD_RECORDS,
+  ADD_RECORDS, BULK_DELETE_CONFIRM,
   DELETE_RECORD_CONFIRM,
   FETCH,
   RecordActions,
   SET_RECORDS,
-  UPDATE_RECORD,
   UPDATE_RECORD_CONFIRM
 } from "./record.action";
 
@@ -13,14 +12,16 @@ import {
 export interface State {
   records: Record[];
   recordsFailedResponse: AdditionRecordsResponse | null;
-  isLoading: boolean
+  isLoading: boolean;
+  bulkSkippedInfo: string | null;
 
 }
 
 export const initialState = {
   records: [],
   recordsFailedResponse: null,
-  isLoading: false
+  isLoading: false,
+  bulkSkippedInfo: null,
 }
 
 export function recordReducer(state: State = initialState, action: RecordActions) {
@@ -30,12 +31,14 @@ export function recordReducer(state: State = initialState, action: RecordActions
         ...state,
         records: [],
         recordsFailedResponse: null,
-        isLoading: true
+        isLoading: true,
+        bulkSkippedInfo: null
       }
     case ADD_RECORDS:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        bulkSkippedInfo: null
       }
     case UPDATE_RECORD_CONFIRM:
       // TODO can it be simplified?
@@ -52,7 +55,8 @@ export function recordReducer(state: State = initialState, action: RecordActions
       return {
         ...state,
         records: [...records_after_update],
-        isLoading: false
+        isLoading: false,
+        bulkSkippedInfo: null
       }
     case DELETE_RECORD_CONFIRM:
       let updated_records = [...state.records];
@@ -62,7 +66,23 @@ export function recordReducer(state: State = initialState, action: RecordActions
       }
       return {
         ...state,
-        records: [...updated_records]
+        records: [...updated_records],
+        bulkSkippedInfo: null
+      }
+    case BULK_DELETE_CONFIRM:
+      let recordsToDelete = action.deleted;
+      let updated_records_after_delete = state.records.filter((record: Record) => {
+        return !recordsToDelete.includes(record.id)
+      });
+
+      let skippedRecords = state.records.filter((record: Record) => {
+        return action.skipped.includes(record.id)
+      });
+
+      return {
+        ...state,
+        records: [...updated_records_after_delete],
+        bulkSkippedInfo: skippedRecords.map((record: Record) => { return record.no;}).join(", ")
       }
     case SET_RECORDS:
       let failed = action.payload.recordsFailedResponse;
@@ -77,7 +97,8 @@ export function recordReducer(state: State = initialState, action: RecordActions
         ...state,
         records: [...state.records, ...action.payload.records],
         recordsFailedResponse: updateFailed,
-        isLoading: false
+        isLoading: false,
+        bulkSkippedInfo: null
       }
     default:
       return state;

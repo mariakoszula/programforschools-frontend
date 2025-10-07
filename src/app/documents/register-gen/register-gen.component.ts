@@ -26,6 +26,10 @@ export class RegisterGenComponent implements OnInit {
 
   }
 
+  onGenerateRecordsRegistry() {
+    this.store.dispatch(new DocumentsActions.GenerateRecordsRegister());
+  }
+
   ngOnDestroy() {
     if (this.contractSub) this.contractSub.unsubscribe();
   }

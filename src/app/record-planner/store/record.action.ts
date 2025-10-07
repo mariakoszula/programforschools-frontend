@@ -9,6 +9,8 @@ export const UPDATE_RECORD_CONFIRM = "[Record] UPDATE_RECORD_CONFIRM";
 export const DELETE_RECORD = "[Record] DELETE_RECORD";
 export const DELETE_RECORD_CONFIRM = "[Record] DELETE_RECORD_CONFIRM";
 export const RECORD_ERROR_HANDLER = "[Program] RECORD_ERROR_HANDLER";
+export const BULK_DELETE = "[Program] BULK_DELETE";
+export const BULK_DELETE_CONFIRM = "[Program] BULK_DELETE_CONFIRM";
 
 
 export class Fetch implements Action {
@@ -56,5 +58,17 @@ export class DeleteRecordConfirm implements Action {
   }
 }
 
-export type RecordActions = Fetch | SetRecords | AddRecords | DeleteRecord | UpdateRecord | DeleteRecordConfirm | UpdateRecordConfirmed;
+export class BulkDelete implements  Action
+{
+  readonly type = BULK_DELETE;
+  constructor(public records: Record[]) {
+  }
+}
+
+export class BulkDeleteConfirm implements Action {
+  readonly type = BULK_DELETE_CONFIRM;
+  constructor(public skipped: number[], public deleted: number[]) {
+  }
+}
+export type RecordActions = Fetch | SetRecords | AddRecords | DeleteRecord | UpdateRecord | DeleteRecordConfirm | UpdateRecordConfirmed | BulkDelete | BulkDeleteConfirm;
 

@@ -51,7 +51,7 @@ import { DataTablesModule } from "angular-datatables";
           {path: 'umowy/:school_id/:contract_id/edycja', component: ContractDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/nowy_aneks', component: AnnexDataEditorComponent},
           {path: 'umowy/:school_id/:contract_id/:annex_id/edycja', component: AnnexDataEditorComponent},
-          {path: 'rejestr', component: RegisterGenComponent},
+          {path: 'rejestry', component: RegisterGenComponent},
           {path: 'generuj_umowy', component: ContractsGenComponent},
           {
             path: 'wydanie-na-zewnatrz',

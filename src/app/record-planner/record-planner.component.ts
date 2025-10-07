@@ -9,6 +9,8 @@ import {Record} from "./record.model";
 import {Contract} from "../documents/contract.model";
 import * as RecordActions from "./store/record.action";
 import * as DocumentsActions from "../documents/store/documents.action";
+import {CutYearFromDate} from "../shared/cut-date.pipe";
+import {DAIRY_PRODUCT, FRUIT_PRODUCT, VEGETABLE_PRODUCT} from "../shared/namemapping.utils";
 
 @Component({
   selector: 'app-record-planner',
@@ -23,6 +25,7 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
   dairyProducts: ProductStore[] = [];
   selectedWeek: Week | undefined = undefined;
   selectedWeekId: number | null = null;
+  bulkSkippedInfo: string | null = null;
 
   constructor(private store: Store<AppState>,
               private router: Router,
@@ -71,6 +74,7 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
         this.isLoading = recordState.isLoading;
         this.recordDataService.setFailedRecords(recordState.recordsFailedResponse);
         this.records = recordState.records;
+        this.bulkSkippedInfo = recordState.bulkSkippedInfo
       }
     );
   }
@@ -79,6 +83,7 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedWeek = selectedWeek;
     this.selectedWeekId = selectedWeek.id;
     this.recordDataService.setDates(this.selectedWeek);
+    this.bulkSkippedInfo = null;
     this.router.navigate([this.selectedWeek.id], {relativeTo: this.activeRoute});
   }
 
@@ -90,5 +95,48 @@ export class RecordPlannerComponent implements OnInit, OnDestroy, OnChanges {
     if (this.selectedWeekId && this.selectedWeek){
         this.store.dispatch(new DocumentsActions.GenerateWeekSummary(this.selectedWeek));
     }
+  }
+
+  bulkDeleteFruitVeg()
+  {
+    const pipe = new CutYearFromDate();
+    const start_date = this.selectedWeek?.start_date ? pipe.transform(this.selectedWeek.start_date) : '';
+    const end_date = this.selectedWeek?.end_date ? pipe.transform(this.selectedWeek.end_date) : '';
+
+   if (confirm("Czy chesz usunąć rozpisane warzywa-owoce dla tygodnia: " + this.selectedWeek?.week_no + " " + start_date + "-" + end_date  )) {
+     if (this.selectedWeek) {
+        this.store.dispatch(new RecordActions.BulkDelete(this.records.filter((record: Record) => {
+            return record.week_id === this.selectedWeek?.id && (record.product_type === FRUIT_PRODUCT || record.product_type === VEGETABLE_PRODUCT);
+        })));
+      }
+    }
+  }
+  bulkDeleteDiary()
+  {
+    const pipe = new CutYearFromDate();
+    const start_date = this.selectedWeek?.start_date ? pipe.transform(this.selectedWeek.start_date) : '';
+    const end_date = this.selectedWeek?.end_date ? pipe.transform(this.selectedWeek.end_date) : '';
+
+   if (confirm("Czy chesz usunąć rozpisany nabiał dla tygodnia: " + this.selectedWeek?.week_no + " " + start_date + "-" + end_date  )) {
+      if (this.selectedWeek) {
+          this.store.dispatch(new RecordActions.BulkDelete(this.records.filter((record: Record) => {
+            return record.week_id === this.selectedWeek?.id && record.product_type === DAIRY_PRODUCT;
+        })));
+      }
+    }
+  }
+
+  bulkDelete() {
+      const pipe = new CutYearFromDate();
+      const start_date = this.selectedWeek?.start_date ? pipe.transform(this.selectedWeek.start_date) : '';
+      const end_date = this.selectedWeek?.end_date ? pipe.transform(this.selectedWeek.end_date) : '';
+
+      if (confirm("Czy chesz usunąć rozpisane produkty dla tygodnia: " + this.selectedWeek?.week_no + " " + start_date + "-" + end_date)) {
+          if (this.selectedWeek) {
+              this.store.dispatch(new RecordActions.BulkDelete(this.records.filter((record: Record) => {
+                  return record.week_id === this.selectedWeek?.id;
+              })));
+          }
+      }
   }
 }

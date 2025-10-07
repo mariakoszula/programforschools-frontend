@@ -97,6 +97,7 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   {
     return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
   }
+
   rerender(): void {
     if (this.dtElement)
     {

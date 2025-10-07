@@ -74,11 +74,21 @@ export class SummaryComponent implements OnInit, OnDestroy{
     diff = invoice_amount - amount_for_calc;
     return percent ? diff/amount_for_calc * 100 : diff;
   }
-  getColor(percent: number){
+
+  getColorSimple(percent: number, min_val: number = 0){
     if (percent > 10) return 'rgba(248,248,38,0.78)';
-    if (percent >=0 && percent <= 10) return '#2ECC71';
+    if (percent >= min_val && percent <= 10) return '#2ECC71';
     return '#FF4136'
   }
+
+  getColor(percent: number, product: ProductStore){
+    if (product.product.weight_type === "KG")
+    {
+      return this.getColorSimple(percent, 3);
+    }
+    return this.getColorSimple(percent);
+  }
+
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
   }

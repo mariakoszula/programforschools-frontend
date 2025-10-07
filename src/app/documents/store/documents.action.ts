@@ -8,6 +8,7 @@ export const SET_CONTRACTS = "[Documents] SET_CONTRACTS";
 export const UPDATE_KIDS_NO = "[Documents] UPDATE_KIDS_NO";
 export const GENERATE_CONTRACTS = "[Documents] GENERATE_CONTRACTS";
 export const GENERATE_REGISTER = "[Documents] GENERATE_REGISTER";
+export const GENERATE_RECORDS_REGISTER = "[Documents] GENERATE_RECORDS_REGISTER";
 export const UPDATE_ANNEX = "[Documents] UPDATE_ANNEX";
 export const SET_ANNEX = "[Documents] SET_ANNEX";
 export const GENERATE_DELIVERY = "[Documents] GENERATE_DELIVERY";
@@ -50,6 +51,9 @@ export class GenerateRegister implements Action {
   readonly type = GENERATE_REGISTER;
 }
 
+export class GenerateRecordsRegister implements Action {
+  readonly type = GENERATE_RECORDS_REGISTER;
+}
 export class GenerateApplications implements Action {
   readonly type = GENERATE_APPLICATION;
 
@@ -169,6 +173,7 @@ export type DocumentsActions =
   | FetchContracts
   | GenerateContracts
   | GenerateRegister
+  | GenerateRecordsRegister
   | UpdateAnnex
   | SetAnnex
   | UpdateKidsNo
