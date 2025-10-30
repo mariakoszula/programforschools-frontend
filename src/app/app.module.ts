@@ -63,7 +63,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
       useClass: AuthInterceptorService,
       multi: true
     },
-    provideAnimationsAsync('noop')
+    provideAnimationsAsync('noop'),
+    provideAnimationsAsync()
     ],
   bootstrap: [AppComponent]
 })

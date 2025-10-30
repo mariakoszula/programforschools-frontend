@@ -15,29 +15,27 @@ import { MAXIMUM_RESOLVER_TIMES} from "../shared/common.functions";
 })
 export class ContractResolverService implements Resolve<Contract[]> {
   resolved: number = 0;
-  constructor(private store: Store<AppState>,
-              private actions$: Actions) {
-  }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Contract[]> | Promise<Contract[]> | Contract[] {
+  constructor(private store: Store<AppState>, private actions$: Actions) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Contract[]> {
     return this.store.select("document").pipe(
       take(1),
-      map(contractState => {
-        return contractState.contracts;
-      }),
+      map(contractState => contractState.contracts),
       switchMap(contracts => {
-        if (contracts.length === 0 && (this.resolved <= MAXIMUM_RESOLVER_TIMES)) {
-          const currentProgramJson = localStorage.getItem("currentProgram")
+        if (contracts.length === 0 && this.resolved <= MAXIMUM_RESOLVER_TIMES) {
+          const currentProgramJson = localStorage.getItem("currentProgram");
           if (currentProgramJson) {
             this.store.dispatch(new DocumentsActions.FetchContracts());
             this.resolved += 1;
             return this.actions$.pipe(
               ofType(SET_CONTRACTS),
-              take(1)
-            )
+              take(1),
+              map(() => contracts)  // ← Return contracts after action received
+            );
           }
         }
-        return of(contracts);
+        return of(contracts);  // ← Always return contracts
       })
     );
   }
@@ -48,32 +46,28 @@ export class ContractResolverService implements Resolve<Contract[]> {
 })
 export class ApplicationResolverService implements Resolve<Application[]> {
   resolved: number = 0;
-  constructor(private store: Store<AppState>,
-              private actions$: Actions) {
-  }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application[]> | Promise<Application[]> | Application[] {
+  constructor(private store: Store<AppState>, private actions$: Actions) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application[]> {
     return this.store.select("document").pipe(
       take(1),
-      map(state => {
-        return state.applications;
-      }),
+      map(state => state.applications),
       switchMap(applications => {
-        if (applications.length === 0 && (this.resolved <= MAXIMUM_RESOLVER_TIMES)) {
-          const currentProgramJson = localStorage.getItem("currentProgram")
+        if (applications.length === 0 && this.resolved <= MAXIMUM_RESOLVER_TIMES) {
+          const currentProgramJson = localStorage.getItem("currentProgram");
           if (currentProgramJson) {
             this.store.dispatch(new DocumentsActions.FetchApplication());
             this.resolved += 1;
             return this.actions$.pipe(
               ofType(SET_APPLICATIONS),
-              take(1)
-            )
+              take(1),
+              map(() => applications)  // ← Return applications after action received
+            );
           }
         }
-        return of(applications);
+        return of(applications);  // ← Always return applications
       })
     );
   }
 }
-
-

@@ -3,6 +3,7 @@ import {AppState} from "../../store/app.reducer";
 import {Subscription} from "rxjs";
 import * as DocumentsActions from "../store/documents.action";
 import {Component, OnInit} from '@angular/core';
+import {GenerateSuppliersRegister} from "../store/documents.action";
 
 @Component({
   selector: 'app-register-gen',
@@ -28,6 +29,10 @@ export class RegisterGenComponent implements OnInit {
 
   onGenerateRecordsRegistry() {
     this.store.dispatch(new DocumentsActions.GenerateRecordsRegister());
+  }
+
+  onGenerateSupplierRegistry() {
+    this.store.dispatch(new DocumentsActions.GenerateSuppliersRegister());
   }
 
   ngOnDestroy() {

@@ -95,7 +95,7 @@ export function recordReducer(state: State = initialState, action: RecordActions
       }
       return {
         ...state,
-        records: [...state.records, ...action.payload.records],
+        records: [...action.payload.records],
         recordsFailedResponse: updateFailed,
         isLoading: false,
         bulkSkippedInfo: null

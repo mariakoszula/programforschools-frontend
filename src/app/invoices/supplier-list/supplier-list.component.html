@@ -9,6 +9,9 @@
         <th>Lp</th>
         <th>Skrót</th>
         <th>Nazwa</th>
+        <th>Adres</th>
+        <th>NIP</th>
+        <th>Kontakt</th>
         <th></th>
       </tr>
       </thead>
@@ -17,6 +20,9 @@
         <td>{{ i+1 }}</td>
         <td>{{ supplier.nick }}</td>
         <td>{{ supplier.name }}</td>
+        <td>{{ supplier.address }}</td>
+        <td>{{ supplier.nip }}</td>
+        <td>{{ supplier.contact }}</td>
         <td><a class="btn btn-info btn-sm" (click)="onEditSupplier(supplier.id)">
           <i class="fas fa-pencil-alt"></i>Edycja
         </a></td>

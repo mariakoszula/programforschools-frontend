@@ -1,7 +1,10 @@
 export class Supplier {
   constructor(public id: number,
               public name: string,
-              public nick: string) {
+              public nick: string,
+              public address:string,
+              public nip: string,
+              public contact: string) {
   }
 }
 

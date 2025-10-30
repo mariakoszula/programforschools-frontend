@@ -10,6 +10,7 @@ import * as RecordActions from "../../record-planner/store/record.action";
 import {DataTableDirective} from "angular-datatables";
 import {DAIRY_PRODUCT, FRUIT_VEG_PRODUCT} from "../../shared/namemapping.utils";
 import {ADTSettings} from "angular-datatables/src/models/settings";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-recordlist',
@@ -21,7 +22,7 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
   dtOptions:  ADTSettings = {}
   dtTrigger: Subject<ADTSettings> = new Subject();
 
-  loading: boolean = false;
+  loading: boolean = true;
   records: Record[] = [];
   contracts: Contract[] = [];
   product_storage: ProductStore[] = [];
@@ -48,29 +49,34 @@ export class RecordListComponent implements OnInit, OnDestroy, AfterViewInit {
       stateDuration: -1
     }
     this.sub = this.store.select("program").pipe(
+      take(1),// ← Wait for program data first
       switchMap(programState => {
         this.product_storage = this.product_storage.concat(programState.fruitVegProducts).concat(programState.dairyProducts);
         return this.store.select("record");
       }),
+      take(1),  // ← Wait for records
       switchMap(recordState => {
         this.records = recordState.records;
-        this.rerender();
         return this.store.select("document");
-      })).subscribe(documentState => {
-      this.contracts = documentState.contracts;
+      }),
+      take(1)   // ← Wait for contracts
+     ).subscribe(documentState => {
+        this.contracts = documentState.contracts;
+        this.loading = false;
+        this.rerender();  // ← Only rerender after all data loaded
     });
   }
 
-  get_school_name(record: Record) {
-    return this.contracts.find(contract => contract.id === record.contract_id)!.school.nick;
+  get_school_name(record: Record): string {
+    return this.contracts.find(contract => contract.id === record.contract_id)?.school?.nick ?? 'N/A';
   }
 
-  get_product_name(record: Record) {
-    return this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.name;
+  get_product_name(record: Record): string {
+    return this.product_storage.find(product_store => product_store.id === record.product_store_id)?.product?.name ?? 'N/A';
   }
 
-  get_product_type(record: Record) {
-    const type =  this.product_storage.find(product_store => product_store.id === record.product_store_id)!.product.product_type;
+  get_product_type(record: Record): string {
+    const type = this.product_storage.find(product_store => product_store.id === record.product_store_id)?.product?.product_type;
     if (type === DAIRY_PRODUCT) {
       return DAIRY_PRODUCT;
     }

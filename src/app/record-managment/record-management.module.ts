@@ -9,6 +9,8 @@ import {RecordResolverService} from "../record-planner/record-resolver.service";
 import {NgModule} from "@angular/core";
 import {RecordEditComponent} from "./record-edit/record-edit.component";
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ContractResolverService} from "../documents/documents-resolver.service";
 
 @NgModule({
   declarations: [
@@ -20,12 +22,13 @@ import {ReactiveFormsModule} from "@angular/forms";
     CommonModule,
     SharedModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
     RouterModule.forChild([
       {
         path: '',
         canActivate: [AuthGuard, ProgramSelectedGuard],
         component: RecordManagementComponent,
-        resolve: [ProgramResolverService, RecordResolverService],
+        resolve: [ProgramResolverService, RecordResolverService, ContractResolverService ],
         children: [
           {path: ':id', component: RecordEditComponent}
         ]

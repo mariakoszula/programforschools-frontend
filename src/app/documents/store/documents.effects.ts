@@ -123,6 +123,27 @@ export class DocumentsEffects {
       }));
   });
 
+    onGenerateSuppliers$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(DocumentsActions.GENERATE_SUPPLIER_REGISTER),
+      switchMap((_) => {
+        return this.http.get<QueuedTaskResponse>(environment.backendUrl +
+          "/create_suppliers_register")
+          .pipe(
+            map(responseData => {
+              return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
+                id: responseData.task_id,
+                name: "Rejestr dostawców"
+              });
+            }),
+            catchError(error => {
+              console.log(error);
+              return of({type: "Dummy_action"});
+            })
+          );
+      }));
+  });
+
     onGenerateRecordsRegister$ = createEffect(() => {
     return this.action$.pipe(
       ofType(DocumentsActions.GENERATE_RECORDS_REGISTER),

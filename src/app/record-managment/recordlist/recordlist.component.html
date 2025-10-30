@@ -8,7 +8,8 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <div *ngIf="contracts.length > 0 && product_storage.length > 0; else loading">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
       <thead>
       <tr>
         <th><i class="fas fa-check"></i></th>
@@ -57,6 +58,12 @@
       </tr>
       </tbody>
     </table>
+    </div>
+    <ng-template #loading>
+         <div class="spinner-container">
+          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </div>
+    </ng-template>
   </div>
   <br/>
   <br/>
