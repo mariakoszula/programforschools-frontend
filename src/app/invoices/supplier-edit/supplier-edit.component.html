@@ -1,21 +1,84 @@
-<div class="col-lg-12">
-  <div class="card">
-    <div class="card-header">
-      <h1 *ngIf="!edit" class="card-title">Podaj dane nowego dostawcy</h1>
-      <h1 *ngIf="edit" class="card-title">Edytuj dane dostawcy</h1>
-    </div>
-    <div class="card-body">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label>Nick</label><input formControlName="nick" class="form-control" name="nick">
-          <label>Nazwa</label><input formControlName="name" class="form-control" name="name">
-          <label>Adres</label><input formControlName="address" class="form-control" name="address">
-          <label>NIP</label><input formControlName="nip" class="form-control" name="nip">
-          <label>Kontakt</label><input formControlName="contact" class="form-control" name="contact">
-        </div>
-        <button type="submit" class="btn btn-primary float-lg-right" [disabled]="!form.valid">
-          <i class="fas fa-check-circle"></i> Zatwierdź
-        </button>
-      </form>
-    </div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <!-- Nick (Supplier Code) -->
+  <div class="form-group">
+    <label for="nick">Kod dostawcy</label>
+    <input
+      type="text"
+      class="form-control"
+      id="nick"
+      formControlName="nick"
+      placeholder="Kod dostawcy"
+      required>
+    <small class="form-text text-muted" *ngIf="form.get('nick')?.hasError('required') && form.get('nick')?.touched">
+      Kod dostawcy jest wymagany
+    </small>
   </div>
+
+  <!-- Name -->
+  <div class="form-group">
+    <label for="name">Nazwa dostawcy</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      formControlName="name"
+      placeholder="Nazwa dostawcy">
+  </div>
+
+  <!-- NIP (Tax Number) -->
+  <div class="form-group">
+    <label for="nip">NIP</label>
+    <input
+      type="text"
+      class="form-control"
+      id="nip"
+      formControlName="nip"
+      placeholder="10-cyfrowy NIP">
+    <small class="form-text text-muted">
+      Format: 10 cyfr (np. 1234567890)
+    </small>
+  </div>
+
+  <!-- Address -->
+  <div class="form-group">
+    <label for="address">Adres</label>
+    <textarea
+      class="form-control"
+      id="address"
+      formControlName="address"
+      rows="3"
+      placeholder="Ulica, nr domu, kod pocztowy, miasto">
+    </textarea>
+  </div>
+
+  <!-- Contact (Phone/Email) -->
+  <div class="form-group">
+    <label for="contact">Kontakt</label>
+    <input
+      type="text"
+      class="form-control"
+      id="contact"
+      formControlName="contact"
+      placeholder="Telefon lub email">
+    <small class="form-text text-muted">
+      Telefon lub adres e-mail
+    </small>
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="!form.valid">
+    {{ edit ? 'Aktualizuj dostawcę' : 'Dodaj dostawcę' }}
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-secondary ml-2"
+    (click)="router.navigate(['faktury/dostawcy'])">
+    Anuluj
+  </button>
+
+</form>

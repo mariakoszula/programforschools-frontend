@@ -165,7 +165,6 @@ export class RecordEffects {
       this.action$.pipe(
         ofType(RecordActions.SET_RECORDS),
         tap((actionResp: RecordActions.SetRecords) => {
-          console.log("is route setup", actionResp.route);
           if (actionResp.route !== null)
           {
             this.router.navigate([actionResp.route]);

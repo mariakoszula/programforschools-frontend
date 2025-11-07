@@ -1,5 +1,47 @@
-<a *ngFor="let notification of getNotifications()" class="dropdown-item cursor">
-  <i class="fas fa-file mr-2"></i>{{notification.name}} {{notification.progress}} %
-</a>
-<div class="dropdown-divider"></div>
-<a routerLink="dokumenty" class="dropdown-item dropdown-footer cursor">Ostatnio wygenerowane dokumenty</a>
+<div class="notifications-container">
+  <div class="notifications-list" *ngIf="getNotifications().length > 0">
+    <!-- Notification Item -->
+    <div class="notification-item" *ngFor="let notification of getNotifications()"
+         [ngClass]="getProgressClass(notification.progress)">
+
+      <!-- Header: Task Name and Progress % -->
+      <div class="notification-header">
+        <span class="notification-title">{{ notification.name }}</span>
+        <span class="progress-text">{{ notification.progress }}%</span>
+      </div>
+
+      <!-- Material Progress Bar (replaces visual progress bar) -->
+      <mat-progress-bar
+        [value]="notification.progress >= 0 ? notification.progress : 0"
+        [color]="notification.progress === 100 ? 'accent' :
+                 notification.progress === -1 ? 'warn' : 'primary'"
+        mode="determinate"
+        class="notification-progress-bar">
+      </mat-progress-bar>
+
+      <!-- Status Line -->
+      <div class="notification-status">
+        <span class="status-icon" [ngClass]="{
+          'icon-loading': notification.progress > 0 && notification.progress < 100,
+          'icon-success': notification.progress === 100,
+          'icon-error': notification.progress === -1,
+          'icon-pending': notification.progress === 0
+        }">
+          {{ notification.progress === 100 ? '✓' :
+             notification.progress === -1 ? '✕' :
+             notification.progress > 0 ? '⟳' : '○' }}
+        </span>
+        <span class="status-text">{{ getStatusText(notification.progress) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with divider and link to latest documents -->
+  <div class="notifications-footer">
+    <div class="dropdown-divider"></div>
+    <a routerLink="dokumenty" class="dropdown-item dropdown-footer cursor">
+      <mat-icon>description</mat-icon>
+      Ostatnio wygenerowane dokumenty
+    </a>
+  </div>
+</div>

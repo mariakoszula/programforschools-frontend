@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DataTableDirective} from "angular-datatables";
 import {FRUIT_VEG_PRODUCT, DAIRY_PRODUCT} from "../../shared/namemapping.utils";
 import {ADTSettings} from "angular-datatables/src/models/settings";
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-contractlist',
@@ -24,6 +25,9 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
   dtTrigger: Subject<ADTSettings> = new Subject();
   FRUIT_VEG_PRODUCT: string;
   DAIRY_PRODUCT: string;
+  private rerenderSubject = new Subject<void>();
+  private rerenderSubscription: Subscription | null = null;
+
 
   constructor(private store: Store<fromApp.AppState>,
               private router: Router,
@@ -37,6 +41,9 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.programSub)
     {
       this.programSub.unsubscribe();
+    }
+    if (this.rerenderSubscription) {
+      this.rerenderSubscription.unsubscribe();
     }
   }
 
@@ -57,9 +64,14 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.select("document").subscribe(
       (contractState: State) => {
         this.contracts = contractState.contracts;
-        this.rerender();
+        this.rerenderSubject.next();
       }
     );
+    this.rerenderSubscription = this.rerenderSubject.pipe(
+      debounceTime(300)
+    ).subscribe(() => {
+      this.performRerender();
+    });
 
   }
 
@@ -98,17 +110,37 @@ export class ContractlistComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.contracts.reduce((total, item: Contract) => total + this.get_latest_diary_product(item), 0);
   }
 
-  rerender(): void {
-    if (this.dtElement)
-    {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        // Destroy the table first
-        dtInstance.destroy();
-        // Call the dtTrigger to rerender again
-        this.dtTrigger.next(this.dtOptions);
-      });
-    }
+performRerender(): void {
+  if (!this.dtElement) {
+    console.warn('DataTable element not found');
+    return;
   }
+
+  if (!this.dtElement.dtInstance) {
+    console.warn('DataTable instance not available');
+    return;
+  }
+
+  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    try {
+      if (dtInstance && dtInstance.settings().length > 0) {
+        dtInstance.destroy();
+      }
+    } catch (e) {
+      console.warn('Warning during DataTable destroy:', e);
+    }
+
+    setTimeout(() => {
+      this.dtTrigger.next(this.dtOptions);
+    }, 50);
+
+  }).catch(err => {
+    console.error('Error getting DataTable instance:', err);
+    setTimeout(() => {
+      this.dtTrigger.next(this.dtOptions);
+    }, 50);
+  });
+}
   onSelectContract(contract: Contract) {
     this.onEdit(contract.school.id);
   }

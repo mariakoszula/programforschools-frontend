@@ -11,6 +11,9 @@ import {RouterModule} from "@angular/router";
 import {SortArrayPipe} from "./sort-array.pipe";
 import {NotificationsComponent} from "./notifications/notifications.component";
 import {DataTablesModule} from "angular-datatables";
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import {DataTablesModule} from "angular-datatables";
     CommonModule,
     DataTablesModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatIconModule
   ],
   exports: [
     SimpleAlertComponent,

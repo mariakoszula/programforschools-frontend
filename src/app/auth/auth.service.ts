@@ -122,4 +122,11 @@ export class AuthService {
     });
     return header;
   }
+
+  logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  // Optional: Dispatch logout action if using NgRx
+}
+
 }

@@ -7,7 +7,7 @@ import { ControlSidebarComponent } from './control-sidebar/control-sidebar.compo
 import { MainFooterComponent } from './main-footer/main-footer.component';
 import {RoutingModule} from "./routing.module";
 import {ContentModule} from "./content-wrapper/content.module";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./auth/auth-interceptor.service";
 import { StoreModule } from '@ngrx/store';
@@ -26,6 +26,9 @@ import {InvoiceEffects} from "./invoices/store/invoice.effects";
 import { DataTablesModule } from "angular-datatables";
 import { CommonModule } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -36,12 +39,16 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MainFooterComponent
   ],
     imports: [
+        MatProgressBarModule,
+        MatCardModule,
+        MatIconModule,
         BrowserModule,
         DataTablesModule,
         RoutingModule,
         ContentModule,
         ReactiveFormsModule,
         CommonModule,
+        FormsModule,
         HttpClientModule,
         StoreModule.forRoot(appReducer, { metaReducers } ),
         EffectsModule.forRoot([
@@ -63,7 +70,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
       useClass: AuthInterceptorService,
       multi: true
     },
-    provideAnimationsAsync('noop'),
     provideAnimationsAsync()
     ],
   bootstrap: [AppComponent]

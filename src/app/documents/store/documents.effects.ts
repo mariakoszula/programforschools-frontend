@@ -128,7 +128,7 @@ export class DocumentsEffects {
       ofType(DocumentsActions.GENERATE_SUPPLIER_REGISTER),
       switchMap((_) => {
         return this.http.get<QueuedTaskResponse>(environment.backendUrl +
-          "/create_suppliers_register")
+          "/create_suppliers_register/" + get_current_program().id)
           .pipe(
             map(responseData => {
               return new DocumentsActions.QueueGeneratingTaskAndStartPolling({
